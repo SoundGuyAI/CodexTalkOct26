@@ -36,7 +36,7 @@ Planning references:
 | 8 | Star Mates | `history/star-mates-gdc.jpg` (YT: `eVL2MUwJ9Og`) |
 | 9 | Geekcon | `sidequests/geekcon-steam-engine.jpg` (YT: `b5j8TWnWSU0`) |
 | 9 | Burns | `about/burning-man-sculpture.jpg` |
-| 15–22, 25, 27 | Modern spotlights | LoveLink, Save Point webm, Glasses, Meditation, Feed The Feed, JigTrade, Improv×2, CamSport, Kaiju |
+| 15–27 | Modern spotlights (reordered) | Currency/Car/Show placeholders → Feed The Feed → CamSport → Kaiju → Improv×2 → LoveLink → JigTrade → Glasses → Meditation → Save Point |
 | 47 | QR | Generated from live Pages URL |
 
 ### Slides 4–9 historical collages (fixed wrong reuse)
@@ -150,3 +150,29 @@ CodexTalkOct26/public/assets/
 ```
 
 When you drop a real file, tell the agent the path + which slide/subject it replaces so the placeholder can be swapped and this checklist checked off.
+
+---
+
+## Image repeat audit (2026-10-15 revision)
+
+### Intentional repeats (keep)
+
+| Asset | Where it appears | Why OK |
+|---|---|---|
+| `about/oded-maker.jpg` | Slide 3 orbit + slide 10 mosaic | Mosaic is a summary of earlier eras |
+| `about/oded-burner.jpg` | Slide 3 orbit + slide 10 mosaic | Same summary beat |
+| `history/bolt-riley.jpg` | Slide 6 collage + slide 10 mosaic + chart pin 2013 | Collage subject → mosaic echo → chart pin |
+| `history/brcvr-playa.jpg` | Slide 8 collage + slide 10 mosaic + chart pin 2021 | Same intentional echo pattern |
+| `history/oh-ship-logo.jpg` / trailer | Slide 8 + slot machine + chart pin | Same project, different beats |
+| `projects/lovelink.jpg` | Hook grid + spotlight + chart pin 2025 | Hook teaser → spotlight → chart |
+| `projects/kaiju-qa.png` / hero | Hook/spotlight/slot/chart pin | Same project across beats |
+| `projects/save-point.webm` / itch | Spotlight + $12k evidence + slot | Story continuity for the bill beat |
+| Other modern project thumbs on slide 1 | Also appear in their spotlight slides | Hook collage is a deliberate preview |
+
+### Accidental / wrong-era reuse
+
+None remaining on slides 4–9 after the historical placeholder pass. Do **not** put modern project art on those collages again.
+
+### Still unique placeholders (no shared art)
+
+Knights, Rock Band, Spinning Cube, Larry, Gun N' Blade, Herbert's Quest, Nightmare Playground, community set, StreetWize, Midburn pyro, Imperial March, currency / car / show tracker, TaskSwipe.

@@ -14,44 +14,83 @@ const cards = (items) => items.map((item, index) => `
 const yearlyProjects = [
   [2006, 2], [2007, 6], [2008, 6], [2009, 8], [2010, 11], [2011, 11],
   [2012, 9], [2013, 9], [2014, 10], [2015, 8], [2016, 9], [2017, 10],
-  [2018, 13], [2019, 4], [2020, 9], [2021, 6], [2022, 9], [2023, 14],
+  [2018, 13], [2019, 10], [2020, 9], [2021, 6], [2022, 9], [2023, 14],
   [2024, 6], [2025, 18], [2026, 36],
+];
+
+/** Era labels shown in bar titles / hover bubbles (not every inventory line). */
+const yearHoverLabels = {
+  2006: 'Corbomite',
+  2007: 'Zbang',
+  2009: 'Pizza Morgana',
+  2010: 'Star Shipping',
+  2013: 'Bolt Riley',
+  2014: "Herbert's Quest · Uniform",
+  2016: 'Bolt Riley EA',
+  2018: 'XR + maker years',
+  2020: 'Oh SHIP! · BRCvr',
+  2021: 'BRCvr',
+  2023: 'Oh SHIP! AI',
+  2025: 'LoveLink',
+  2026: 'agent era',
+};
+
+const chartPinCatalog = [
+  { year: 2006, label: 'Corbomite', image: 'history/corbomite-logo.jpg' },
+  { year: 2007, label: 'Zbang', image: 'history/zbang-banner.jpg' },
+  { year: 2009, label: 'Pizza Morgana', image: 'history/pizza-morgana-logo.png' },
+  { year: 2010, label: 'Star Shipping', image: 'history/star-shipping-hd1.jpg' },
+  { year: 2013, label: 'Bolt Riley', image: 'history/bolt-riley.jpg' },
+  { year: 2014, label: "Herbert's Quest", image: 'history/herberts-quest-placeholder.png' },
+  { year: 2020, label: 'Oh SHIP!', image: 'history/oh-ship-logo.jpg' },
+  { year: 2021, label: 'BRCvr', image: 'history/brcvr-playa.jpg' },
+  { year: 2025, label: 'LoveLink', image: 'projects/lovelink.jpg' },
+  { year: 2026, label: 'agent era', image: 'projects/kaiju-qa.png' },
 ];
 
 const yearlyProjectBars = (throughYear, highlightYear = null) => yearlyProjects
   .filter(([year]) => year <= throughYear)
-  .map(([year, count]) => `
+  .map(([year, count]) => {
+    const era = yearHoverLabels[year];
+    const label = era ? `${year}: ${count} projects · ${era}` : `${year}: ${count} projects`;
+    return `
   <button
     type="button"
-    class="year-bar${year === highlightYear ? ' is-current' : ''}"
+    class="year-bar${year === highlightYear ? ' is-current' : ''}${year === 2026 && highlightYear === 2026 ? ' is-smash' : ''}"
     style="--bar-height:${Math.max(11, (count / 36) * 100)}%"
-    aria-label="${year}: ${count} projects"
-    title="${year}: ${count} projects"
+    data-year="${year}"
+    aria-label="${label}"
+    title="${label}"
   >
     <strong class="year-total">${count}</strong>
     <span class="year-label">${year}</span>
-  </button>`).join('');
+    ${era ? `<span class="year-bubble">${era}</span>` : ''}
+  </button>`;
+  }).join('');
 
-const yearlyProjectPins = (throughYear) => `
+const yearlyProjectPins = (throughYear) => {
+  const pins = chartPinCatalog.filter((pin) => pin.year <= throughYear);
+  return `
   <div class="year-project-pins" aria-hidden="true">
-    <figure class="year-project-pin pin-2009" data-depth="2"><img src="./assets/history/bolt-riley.jpg" alt=""><figcaption>Bolt Riley</figcaption></figure>
-    <figure class="year-project-pin pin-2018" data-depth="3"><img src="./assets/history/brcvr-playa.jpg" alt=""><figcaption>XR + maker years</figcaption></figure>
-    ${throughYear >= 2025 ? '<figure class="year-project-pin pin-2025" data-depth="2"><img src="./assets/projects/lovelink.jpg" alt=""><figcaption>LoveLink</figcaption></figure>' : ''}
-    ${throughYear >= 2026 ? '<figure class="year-project-pin pin-2026" data-depth="2"><img src="./assets/projects/kaiju-qa.png" alt=""><figcaption>agent era</figcaption></figure>' : ''}
+    ${pins.map((pin) => `
+      <figure class="year-project-pin pin-${pin.year}" data-depth="2">
+        <img src="./assets/${pin.image}" alt="">
+        <figcaption>${pin.label}</figcaption>
+      </figure>`).join('')}
   </div>`;
+};
 
 const yearlyChart = ({ throughYear, highlightYear = null, phase }) => `
   <section class="yearly-chart" data-interaction="year-bars">
     <header class="yearly-chart__heading">
-      <p>How many things was I actively working on?</p>
-      <h2>Projects / year</h2>
+      <h2>${highlightYear === 2025 ? '2025' : highlightYear === 2026 ? '2026' : 'Projects / year'}</h2>
     </header>
     ${phase ? `<div class="yearly-chart__phase">${phase}</div>` : ''}
     <div class="year-bars" role="img" aria-label="Projects active in each year from 2006 to ${throughYear}">
       ${yearlyProjectBars(throughYear, highlightYear)}
     </div>
     ${yearlyProjectPins(throughYear)}
-    <p class="yearly-chart__hint">hover a bar for the year and total</p>
+    <p class="yearly-chart__hint">hover a bar</p>
   </section>`;
 
 export const part1Slides = [
@@ -76,7 +115,7 @@ export const part1Slides = [
             { label: 'CamSport', image: 'projects/camsport.png' },
           ])}
         </div>
-        ${hotspot('Tilt the multiverse', 'data-action="tilt"')}
+        ${hotspot('Tilt the grid', 'data-action="tilt"')}
       </section>`,
     notes: 'Open with: “How do I manage 19 projects? I do not. But here we are.” Let the pointer tilt the project grid.'
   },
@@ -100,7 +139,7 @@ export const part1Slides = [
         <div class="orbit-mark orbit-mark--corbomite" data-depth="2">${asset('history/corbomite-logo.jpg', 'Corbomite logo')}</div>
         <div class="orbit-mark orbit-mark--adventure" data-depth="2">${asset('history/adventure-mob-logo.jpg', 'Adventure Mob logo')}</div>
         <div class="about-copy" data-depth="1"><h2>Who am I?</h2><p>games · XR · improv · ADHD</p></div>
-        ${hotspot('Pause the orbit', 'data-action="pause-orbit"')}
+        ${hotspot('Pause orbit', 'data-action="pause-orbit"')}
       </section>`,
     notes: 'Thirty years making games. Indie developer, XR creator, improviser, ADHD.'
   },
@@ -192,7 +231,7 @@ export const part1Slides = [
       { label: 'worlds', image: 'history/brcvr-playa.jpg' },
       { label: 'games', image: 'history/bolt-riley.jpg' },
       { label: 'people', image: 'about/oded-burner.jpg' },
-    ])}</div>${hotspot('Pull the tiles back out', 'data-action="pull-tiles"')}</section>`,
+    ])}</div>${hotspot('Pull tiles out', 'data-action="pull-tiles"')}</section>`,
     notes: 'Busy was already normal.'
   },
   {
@@ -201,66 +240,58 @@ export const part1Slides = [
     title: 'Projects / year',
     className: 'slide-chart yearly-projects',
     html: yearlyChart({ throughYear: 2024, phase: '2006–2024' }),
-    notes: 'This is the actual annual inventory from 2006 through 2024. Each bar is the number of projects active during that year, not only projects started that year. The shape is noisy but broadly stable.'
+    notes: 'This is the actual annual inventory from 2006 through 2024. Each bar is projects active that year, not only starts. 2019 is corrected to 10 (inventory undercount). Hover bars for era names: Corbomite, Zbang, Pizza Morgana, Star Shipping, Bolt Riley, Herbert’s Quest, Oh SHIP!, BRCvr.'
   },
   {
     id: 'part1-12-then',
     duration: 5,
     title: '2025',
     className: 'slide-chart yearly-projects yearly-projects--2025',
-    html: yearlyChart({ throughYear: 2025, highlightYear: 2025, phase: '2025 · 18 projects' }),
-    notes: 'Keep the chart fixed and add only the 2025 bar: eighteen active projects. The baseline moved.'
+    html: yearlyChart({ throughYear: 2025, highlightYear: 2025, phase: '18 projects' }),
+    notes: 'Keep the chart fixed and add only the 2025 bar: eighteen active projects. The baseline moved. Big on-screen title: 2025.'
   },
   {
     id: 'part1-13-now',
     duration: 7,
     title: '2026',
     className: 'slide-chart yearly-projects yearly-projects--2026',
-    html: yearlyChart({ throughYear: 2026, highlightYear: 2026, phase: '2026 · 36 projects' }),
-    notes: 'Keep the same chart and add the 2026 bar: thirty-six active projects. The chart almost stops fitting.'
+    html: yearlyChart({ throughYear: 2026, highlightYear: 2026, phase: '36 projects' }),
+    notes: 'Keep the same chart and smash the 2026 bar past the frame: thirty-six active projects. Exact count can stay in the phase pill; the smash is the beat.'
   },
   {
     id: 'part1-14-ai-happened',
     duration: 18,
     title: 'AI Happened',
     className: 'slide-agent-windows',
-    html: `<section class="agent-window-wall" data-interaction="cursor-dominance"><h2 data-depth="1">AI Happened</h2><div class="agent-windows" data-depth="2"><button type="button" class="agent-window" data-agent="research">research</button><button type="button" class="agent-window" data-agent="code">code</button><button type="button" class="agent-window" data-agent="tests">tests</button><button type="button" class="agent-window" data-agent="art">art</button><button type="button" class="agent-window" data-agent="submissions">submissions</button></div>${hotspot('Move the cursor between loops', 'data-action="focus-agent"')}</section>`,
-    notes: 'I stopped being the person doing every keystroke and became the person steering many loops.'
+    html: `<section class="agent-window-wall" data-interaction="cursor-dominance"><h2 data-depth="1">AI Happened</h2><div class="agent-windows" data-depth="2"><button type="button" class="agent-window" data-agent="research">research</button><button type="button" class="agent-window" data-agent="code">code</button><button type="button" class="agent-window" data-agent="tests">tests</button><button type="button" class="agent-window" data-agent="art">art</button><button type="button" class="agent-window" data-agent="submissions">submissions</button></div></section>`,
+    notes: 'I stopped being the person doing every keystroke and became the person steering many loops. Cursor movement already changes which window dominates—no extra chrome bubble.'
   },
   {
-    id: 'part1-15-lovelink',
-    duration: 3,
-    title: 'LoveLink',
-    className: 'slide-project lovelink',
-    html: `<section class="project-feature project-feature--ui" data-interaction="float-ui"><div class="project-image" data-depth="2">${asset('projects/lovelink.jpg', 'LoveLink project')}</div><h2 data-depth="1">LoveLink</h2><div class="commit-ticker" data-depth="3">commit · commit · commit</div></section>`,
-    notes: 'Relationship/love progression game and app.'
+    id: 'part1-15-currency',
+    duration: 2,
+    title: 'Currency converter',
+    className: 'slide-project utility currency',
+    html: `<section class="utility-phone" data-interaction="split-recombine"><div class="phone-shell" data-depth="2">${asset('projects/currency-converter-placeholder.png', 'NEED IMAGE Of CURRENCY CONVERTER HERE')}</div><h2 data-depth="1">Currency converter</h2></section>`,
+    notes: 'An audience-of-one utility. Start the spotlight run with the smallest life tools.'
   },
   {
-    id: 'part1-16-save-point',
-    duration: 3,
-    title: 'Save Point',
-    className: 'slide-project save-point',
-    html: `<section class="project-feature project-feature--game" data-interaction="multiply-windows"><div class="project-image" data-depth="1"><video src="./assets/projects/save-point.webm" muted loop playsinline aria-label="Save Point gameplay"></video></div><h2 data-depth="2">Save Point</h2><div class="tiny-windows" data-depth="3"><span>narrative</span><span>web</span><span>build</span></div></section>`,
-    notes: 'A narrative game—and the project behind the expensive lesson later.'
+    id: 'part1-16-car-appraiser',
+    duration: 2,
+    title: 'Car Appraiser Finder',
+    className: 'slide-project utility car-appraiser',
+    html: `<section class="utility-phone" data-interaction="fan-cards"><div class="phone-shell phone-shell--map" data-depth="2">${asset('projects/car-appraiser-placeholder.png', 'NEED IMAGE Of CAR APPRAISER FINDER HERE')}</div><h2 data-depth="1">Car Appraiser Finder</h2></section>`,
+    notes: 'Another tiny tool for a specific personal need.'
   },
   {
-    id: 'part1-17-glasses',
-    duration: 3,
-    title: 'Where Are My Glasses?',
-    className: 'slide-project glasses',
-    html: `<section class="project-feature project-feature--focus" data-interaction="rack-focus"><div class="project-image" data-depth="2">${asset('projects/where-are-my-glasses.jpg', 'Where Are My Glasses project')}</div><h2 data-depth="1">Where Are My Glasses?</h2>${hotspot('Focus the glasses', 'data-action="rack-focus"')}</section>`,
-    notes: 'Mixed-reality comedy about neurodivergence.'
+    id: 'part1-17-show-tracker',
+    duration: 2,
+    title: 'Show tracker',
+    className: 'slide-project utility show-tracker',
+    html: `<section class="stacked-phone-cards" data-interaction="stack-cards"><div class="phone-shell" data-depth="2">${asset('projects/show-tracker-placeholder.png', 'NEED IMAGE Of SHOW TRACKER HERE')}</div><h2>Show tracker</h2></section>`,
+    notes: 'A tracker because the existing trackers were not mine.'
   },
   {
-    id: 'part1-18-meditation',
-    duration: 3,
-    title: 'Meditation: EXTREME!!!1',
-    className: 'slide-project meditation',
-    html: `<section class="project-feature project-feature--contrast" data-interaction="shake-reduced-motion"><div class="project-image" data-depth="2">${asset('projects/meditation-extreme.jpg', 'Meditation Extreme project')}</div><h2 data-depth="1">Meditation: EXTREME!!!1</h2>${hotspot('Toggle calm / chaos', 'data-action="toggle-chaos"')}</section>`,
-    notes: 'Meditation as an extreme comedy sport. Shake stops in reduced-motion mode.'
-  },
-  {
-    id: 'part1-19-feed-the-feed',
+    id: 'part1-18-feed-the-feed',
     duration: 3,
     title: 'Feed The Feed',
     className: 'slide-project feed-the-feed',
@@ -268,12 +299,20 @@ export const part1Slides = [
     notes: 'A Horizon project, then another project to port it.'
   },
   {
-    id: 'part1-20-jigtrade',
+    id: 'part1-19-camsport',
     duration: 2,
-    title: 'JigTrade',
-    className: 'slide-project jigtrade',
-    html: `<section class="project-feature project-feature--puzzle" data-interaction="swap-tiles"><div class="project-image" data-depth="2">${asset('projects/jigtrade.png', 'JigTrade project')}</div><h2 data-depth="1">JigTrade</h2>${hotspot('Swap the puzzle tiles', 'data-action="swap-tiles"')}</section>`,
-    notes: 'A puzzle collecting, trading, and battle system.'
+    title: 'CamSport',
+    className: 'slide-project camsport',
+    html: `<section class="project-feature project-feature--sports" data-interaction="ball-arc"><div class="project-image" data-depth="2">${asset('projects/camsport.png', 'CamSport')}</div><h2 data-depth="1">CamSport</h2><button type="button" class="ball" data-action="ball-arc" aria-label="Control ball arc">●</button></section>`,
+    notes: 'One short sentence from the local project during build.'
+  },
+  {
+    id: 'part1-20-kaiju-qa',
+    duration: 2,
+    title: 'Kaiju QA',
+    className: 'slide-project kaiju-qa',
+    html: `<section class="kaiju-scene" data-interaction="stamp-pass"><div class="kaiju-art" data-depth="2">${asset('projects/kaiju-qa.png', 'Kaiju QA')}</div><h2 data-depth="1">Kaiju QA</h2><button type="button" class="pass-stamp" data-action="stamp-pass">PASS</button></section>`,
+    notes: 'Built in three days for OpenAI Build Week.'
   },
   {
     id: 'part1-21-improv-dashboard',
@@ -292,44 +331,44 @@ export const part1Slides = [
     notes: 'The Israeli improv calendar—because finding shows was itself a problem.'
   },
   {
-    id: 'part1-23-currency',
-    duration: 2,
-    title: 'Currency converter',
-    className: 'slide-project utility currency',
-    html: `<section class="utility-phone" data-interaction="split-recombine"><div class="phone-shell" data-depth="2">${asset('projects/currency-converter-placeholder.png', 'NEED IMAGE Of CURRENCY CONVERTER HERE')}</div><h2 data-depth="1">Currency converter</h2>${hotspot('Split and recombine', 'data-action="swap-currency"')}</section>`,
-    notes: 'An audience-of-one utility.'
+    id: 'part1-23-lovelink',
+    duration: 3,
+    title: 'LoveLink',
+    className: 'slide-project lovelink',
+    html: `<section class="project-feature project-feature--ui" data-interaction="float-ui"><div class="project-image" data-depth="2">${asset('projects/lovelink.jpg', 'LoveLink project')}</div><h2 data-depth="1">LoveLink</h2><div class="commit-ticker" data-depth="3">commit · commit · commit</div></section>`,
+    notes: 'Relationship/love progression game and app.'
   },
   {
-    id: 'part1-24-car-appraiser',
+    id: 'part1-24-jigtrade',
     duration: 2,
-    title: 'Car Appraiser Finder',
-    className: 'slide-project utility car-appraiser',
-    html: `<section class="utility-phone" data-interaction="fan-cards"><div class="phone-shell phone-shell--map" data-depth="2">${asset('projects/car-appraiser-placeholder.png', 'NEED IMAGE Of CAR APPRAISER FINDER HERE')}</div><h2 data-depth="1">Car Appraiser Finder</h2></section>`,
-    notes: 'Another tiny tool for a specific personal need.'
+    title: 'JigTrade',
+    className: 'slide-project jigtrade',
+    html: `<section class="project-feature project-feature--puzzle" data-interaction="swap-tiles"><div class="project-image" data-depth="2">${asset('projects/jigtrade.png', 'JigTrade project')}</div><h2 data-depth="1">JigTrade</h2>${hotspot('Swap tiles', 'data-action="swap-tiles"')}</section>`,
+    notes: 'A puzzle collecting, trading, and battle system.'
   },
   {
-    id: 'part1-25-camsport',
-    duration: 2,
-    title: 'CamSport',
-    className: 'slide-project camsport',
-    html: `<section class="project-feature project-feature--sports" data-interaction="ball-arc"><div class="project-image" data-depth="2">${asset('projects/camsport.png', 'CamSport')}</div><h2 data-depth="1">CamSport</h2><button type="button" class="ball" data-action="ball-arc" aria-label="Control ball arc">●</button></section>`,
-    notes: 'One short sentence from the local project during build.'
+    id: 'part1-25-glasses',
+    duration: 3,
+    title: 'Where Are My Glasses?',
+    className: 'slide-project glasses',
+    html: `<section class="project-feature project-feature--focus" data-interaction="rack-focus"><div class="project-image" data-depth="2">${asset('projects/where-are-my-glasses.jpg', 'Where Are My Glasses project')}</div><h2 data-depth="1">Where Are My Glasses?</h2>${hotspot('Rack focus', 'data-action="rack-focus"')}</section>`,
+    notes: 'Mixed-reality comedy about neurodivergence.'
   },
   {
-    id: 'part1-26-show-tracker',
-    duration: 2,
-    title: 'Show tracker',
-    className: 'slide-project utility show-tracker',
-    html: `<section class="stacked-phone-cards" data-interaction="stack-cards"><div class="phone-shell" data-depth="2">${asset('projects/show-tracker-placeholder.png', 'NEED IMAGE Of SHOW TRACKER HERE')}</div><h2>Show tracker</h2>${hotspot('Reorder the stack', 'data-action="stack-cards"')}</section>`,
-    notes: 'A tracker because the existing trackers were not mine.'
+    id: 'part1-26-meditation',
+    duration: 3,
+    title: 'Meditation: EXTREME!!!1',
+    className: 'slide-project meditation',
+    html: `<section class="project-feature project-feature--contrast" data-interaction="shake-reduced-motion"><div class="project-image" data-depth="2">${asset('projects/meditation-extreme.jpg', 'Meditation Extreme project')}</div><h2 data-depth="1">Meditation: EXTREME!!!1</h2>${hotspot('Calm / chaos', 'data-action="toggle-chaos"')}</section>`,
+    notes: 'Meditation as an extreme comedy sport. Shake stops in reduced-motion mode.'
   },
   {
-    id: 'part1-27-kaiju-qa',
-    duration: 2,
-    title: 'Kaiju QA',
-    className: 'slide-project kaiju-qa',
-    html: `<section class="kaiju-scene" data-interaction="stamp-pass"><div class="kaiju-art" data-depth="2">${asset('projects/kaiju-qa.png', 'Kaiju QA')}</div><h2 data-depth="1">Kaiju QA</h2><button type="button" class="pass-stamp" data-action="stamp-pass">PASS</button></section>`,
-    notes: 'Built in three days for OpenAI Build Week.'
+    id: 'part1-27-save-point',
+    duration: 3,
+    title: 'Save Point',
+    className: 'slide-project save-point',
+    html: `<section class="project-feature project-feature--game" data-interaction="multiply-windows"><div class="project-image" data-depth="1"><video src="./assets/projects/save-point.webm" muted loop playsinline aria-label="Save Point gameplay"></video></div><h2 data-depth="2">Save Point</h2><div class="tiny-windows" data-depth="3"><span>narrative</span><span>web</span><span>build</span></div></section>`,
+    notes: 'A narrative game—and the project behind the expensive lesson later. Placed last in the spotlight run so the $12k story has an image still fresh.'
   },
   {
     id: 'part1-28-hackathons-funds-talks',
@@ -351,10 +390,11 @@ export const part1Slides = [
     duration: 8,
     title: 'All at once.',
     className: 'slide-swimlane',
-    html: `<section class="swimlane-wall" data-interaction="reorder-lanes"><h2 data-depth="1">All at once.</h2><div class="swimlanes" data-depth="2">${[
-      'LoveLink', 'Save Point', 'Glasses', 'Meditation', 'Feed The Feed', 'JigTrade', 'Improv', 'CamSport', 'Kaiju QA', 'Talks'
-    ].map((label, index) => `<button type="button" class="swimlane swimlane--${index + 1}" data-lane="${label}" data-depth="${index % 3 + 1}"><span>${label}</span><i></i><i></i><i></i></button>`).join('')}</div>${hotspot('Drag to reorder lanes', 'data-action="reorder-lanes"')}</section>`,
-    notes: 'Name only a few collisions, not all nineteen. Transition: “So—how?”'
+    html: `<section class="swimlane-wall" data-interaction="reorder-lanes"><h2 data-depth="1">All at once.</h2><div class="swimlanes swimlanes--chaos" data-depth="2">${[
+      'LoveLink', 'Save Point', 'Glasses', 'Meditation', 'Feed The Feed', 'JigTrade', 'Improv', 'CamSport', 'Kaiju QA',
+      'TaskSwipe', 'Currency', 'Servers', 'Music', 'Submissions', 'Symphony', 'Planning', 'Calendar', 'Talks', 'This deck'
+    ].map((label, index) => `<button type="button" class="swimlane swimlane--${index + 1}" data-lane="${label}" data-depth="${index % 3 + 1}" style="--width:${55 + ((index * 17) % 40)}%"><span>${label}</span></button>`).join('')}</div>${hotspot('Reorder lanes', 'data-action="reorder-lanes"')}</section>`,
+    notes: 'Nineteen concurrent lanes — games, life tools, servers, music uploads, submissions, talks, planning. Drag to prove it is not a static animation. Transition: “So—how?”'
   }
 ];
 

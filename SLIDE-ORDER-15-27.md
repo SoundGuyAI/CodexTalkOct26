@@ -30,7 +30,15 @@ Save Point
 
 ## Scratch / notes
 
-_Reorder ideas, groupings, or “put X earlier” notes go here:_
+**Status (2026-10-15):** Order locked and **applied** in `src/slides/part1.js` + `OUTLINE.md`.
+
+Rationale captured while applying:
+- Life utilities first (currency / car / show tracker)
+- Then production / jam / QA (Feed The Feed, CamSport, Kaiju)
+- Improv pair together
+- LoveLink + JigTrade mid-pack
+- Glasses + Meditation for the interaction beats
+- **Save Point last** so the later $12k story still has a fresh image
 
 -
 -

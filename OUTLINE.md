@@ -21,34 +21,34 @@ The chart visuals use the inventory as a private design source, but the public s
 | 8 | — | Star Mates, BRCvr, Oh SHIP!, StreetWize. | `history/brcvr-playa.jpg` + placeholders | “Then XR added more worlds.” | 2 |
 | 9 | — | Geekcon, pyro, burns, hard-drive Imperial March. | `about/fireworks.jpg`, `about/burning-man-sculpture.jpg` | “And none of the side quests stopped.” | 2 |
 | 10 | **20 years.** | Six collages shrink into one tiny mosaic; user can pull tiles back out briefly. | Slides 4–9 assets | “Busy was already normal.” | 5 |
-| 11 | **Projects / year** | Calm skyline of relative bars across eras. Hover/focus reveals selected project thumbnails; thumbnails can be dragged to inspect. | Code-native chart + historical assets | “For years the shape was noisy, but roughly stable.” Do not recite counts. | 12 |
-| 12 | **Then…** | A late bar jumps; project thumbnails start attaching themselves to it. | Chart + project assets | “In 2025 the baseline moved.” | 5 |
-| 13 | **…now.** | Final bar bursts past the chart frame. Hovering it opens the 2026 swarm; exact count stays off-screen. | Chart + all project assets | “In 2026, the chart stopped fitting.” | 7 |
-| 14 | **Then AI happened.** | Screen subdivides into agent windows: research, code, tests, art, submissions. Cursor movement changes which window is dominant. | Code-native mock terminals | “I stopped being the person doing every keystroke and became the person steering many loops.” | 18 |
-| 15 | **LoveLink** | UI floats in; commit ticker accelerates without making the commit count the claim. | `projects/lovelink.jpg` | Relationship/love progression game and app. | 3 |
-| 16 | **Save Point** | Gameplay loop fills the frame; tiny windows multiply behind it. | `projects/save-point.webm` | “A narrative game—and the project behind the expensive lesson later.” | 3 |
-| 17 | **Where Are My Glasses?** | Glasses art racks focus; background UI blurs. | `projects/where-are-my-glasses.jpg` | “Mixed-reality comedy about neurodivergence.” | 3 |
-| 18 | **Meditation: EXTREME!!!1** | Calm figure versus screen-shaking chaos; shake stops in reduced-motion mode. | `projects/meditation-extreme.jpg` | “Meditation as an extreme comedy sport.” | 3 |
-| 19 | **Feed The Feed** | Studio UI slides in like a creator dashboard. Hover reveals the Three.js port note. | `projects/feed-the-feed.png` | “A Horizon project, then another project to port it.” | 3 |
-| 20 | **JigTrade** | Puzzle tiles trade places under the pointer. | `projects/jigtrade.png` | “A puzzle collecting, trading, and battle system.” | 2 |
-| 21 | **Improv Dashboard** | Phone/toolbox view with a spinning prompt wheel. | `projects/improv-dashboard.png` | “A toolkit for rehearsals, classes, and shows.” | 3 |
-| 22 | **Improv Calendar** | Calendar logo expands into event cards. | `projects/improv-calendar.png` | “The Israeli improv calendar—because finding shows was itself a problem.” | 3 |
-| 23 | **Currency converter** | Generic phone shell; currencies split and recombine. | Code-native placeholder | “An audience-of-one utility.” | 2 |
-| 24 | **Car Appraiser Finder** | Phone map/search placeholder; cards fan out. | Code-native placeholder | “Another tiny tool for a specific personal need.” | 2 |
-| 25 | **CamSport** | Pitch-to-hit interaction; pointer controls the ball arc. | `projects/camsport.png` | One short sentence from the local project during build. | 2 |
-| 26 | **Show tracker** | Phone stack of watched/next cards. | Code-native placeholder | “A tracker because the existing trackers were not mine.” | 2 |
-| 27 | **Kaiju QA** | Kaiju test scene; PASS stamps land with impact. | `projects/kaiju-qa.png` | “Built in three days for OpenAI Build Week.” | 2 |
-| 28 | **Hackathons. Funds. Talks.** | Slot machine of generic submission/talk thumbnails; no private names. Drag lever with pointer. | Current assets + code-native cards | “The software projects generate applications, talks, demos, and deadlines.” | 5 |
-| 29 | **All at once.** | Nineteen-lane 2026 swimlane lights up. Hover isolates a lane; drag reorders lanes, proving the simultaneity is not a static animation. | Code-native + project thumbnails | Name only a few collisions, not all nineteen. Transition: “So—how?” | 8 |
+| 11 | **Projects / year** | Calm skyline of annual bars (2019 = 10). Hover reveals era bubbles; pins mark Corbomite→BRCvr. | Code-native chart + historical assets | “For years the shape was noisy, but roughly stable.” Do not recite every count. | 12 |
+| 12 | **2025** | Chart adds the 2025 bar (18). Era pins + hover bubbles stay on correct years. | Chart + project assets | “In 2025 the baseline moved.” | 5 |
+| 13 | **2026** | 2026 bar smashes past the chart frame (36). | Chart + all project assets | “In 2026, the chart stopped fitting.” | 7 |
+| 14 | **AI Happened** | Agent windows: research, code, tests, art, submissions. Cursor movement changes which window is dominant. | Code-native mock terminals | “I stopped being the person doing every keystroke and became the person steering many loops.” | 18 |
+| 15 | **Currency converter** | Phone placeholder. | `projects/currency-converter-placeholder.png` | “An audience-of-one utility.” | 2 |
+| 16 | **Car Appraiser Finder** | Phone map/search placeholder. | `projects/car-appraiser-placeholder.png` | “Another tiny tool for a specific personal need.” | 2 |
+| 17 | **Show tracker** | Phone stack placeholder. | `projects/show-tracker-placeholder.png` | “A tracker because the existing trackers were not mine.” | 2 |
+| 18 | **Feed The Feed** | Studio UI; port note button. | `projects/feed-the-feed.png` | “A Horizon project, then another project to port it.” | 3 |
+| 19 | **CamSport** | Pitch-to-hit; ball arc. | `projects/camsport.png` | One short sentence from the local project during build. | 2 |
+| 20 | **Kaiju QA** | PASS stamp. | `projects/kaiju-qa.png` | “Built in three days for OpenAI Build Week.” | 2 |
+| 21 | **Improv Dashboard** | Toolbox + prompt wheel. | `projects/improv-dashboard.png` | “A toolkit for rehearsals, classes, and shows.” | 3 |
+| 22 | **Improv Calendar** | Calendar expands into events. | `projects/improv-calendar.png` | “The Israeli improv calendar—because finding shows was itself a problem.” | 3 |
+| 23 | **LoveLink** | UI + commit ticker. | `projects/lovelink.jpg` | Relationship/love progression game and app. | 3 |
+| 24 | **JigTrade** | Puzzle tiles swap. | `projects/jigtrade.png` | “A puzzle collecting, trading, and battle system.” | 2 |
+| 25 | **Where Are My Glasses?** | Rack-focus interaction. | `projects/where-are-my-glasses.jpg` | “Mixed-reality comedy about neurodivergence.” | 3 |
+| 26 | **Meditation: EXTREME!!!1** | Calm / chaos toggle; shake respects reduced motion. | `projects/meditation-extreme.jpg` | “Meditation as an extreme comedy sport.” | 3 |
+| 27 | **Save Point** | Gameplay loop; placed last before hackathons so the $12k beat still has a fresh image. | `projects/save-point.webm` | “A narrative game—and the project behind the expensive lesson later.” | 3 |
+| 28 | **Hackathons. Funds. Talks.** | Slot machine of jam/submission thumbs; no private names. | itch / jam assets | “The software projects generate applications, talks, demos, and deadlines.” | 5 |
+| 29 | **All at once.** | Nineteen concurrent lanes (games + life tools + servers + music + submissions + talks + planning). Drag reorders. | Code-native | Name a few collisions. Transition: “So—how?” | 8 |
 
 ## Part 2 — How, lessons, close (3:40)
 
 | # | On-screen text | Visual and interaction | Asset | Speaker note | Sec |
 |---:|---|---|---|---|---:|
-| 30 | **How?** | Original everything-bagel black hole pulls the nineteen cards inward; pointer bends their paths. | Code-native `swirl-vortex`-inspired visual | “Bad news: I do not manage them. Good news: I built a system that lets me fail in parallel.” | 5 |
-| 31 | **One planning repo.** | Folder tree opens into talks, products, submissions, and life tools. Clicking branches previews sanitized Markdown cards. | Code-native | Explain the single planning hub as external memory and routing, not as a magic project manager. | 19 |
-| 32 | **Markdown handoffs.** | A short brief flies from human lane to agent lane, comes back as decisions/assets/outline. | Code-native | “Context gets written down. The next agent does not need my entire brain or chat history.” | 19 |
-| 33 | **Parallel + adversarial.** | Four interactive panes: Plan, Execute, Check, Supervise. Red-pen critic attacks the output; supervisor sets caps. | Code-native googly-eye agents | “Parallel work is useful only when checks are independent and a supervisor can stop the loop.” | 25 |
+| 30 | **How?** | Bagel vortex + three draggable cards (planning / context / limits). Minimal on-screen copy. | Code-native vortex | Spoken: fail in parallel. | 5 |
+| 31 | **One planning repo.** | Folder tree → Talks / Projects / Submissions / Life tools + Markdown preview. | Code-native | External memory / routing, not a PM tool. | 19 |
+| 32 | **Markdown handoffs.** | HUMAN → flying `BRIEF.md` paper → AGENT diagram. | Code-native | “Context gets written down.” | 19 |
+| 33 | **Parallel + adversarial.** | Four panes: Plan, Execute, Check, Supervise + NOPE stamp. Detail in notes. | Code-native | Independent checks + supervisor stop. | 25 |
 | 34 | **ADHD is a feature.** | Nineteen windows compete for googly-eye attention; hovering one calms the rest. | Code-native | “The urge to switch contexts becomes routing energy—if the state lives outside my head.” | 15 |
 | 35 | **Symphony** | Conductor sends tasks into agent lanes; a Linear board appears beside it; maintenance meters climb. | Code-native | “I tried formal orchestration with Symphony, in tandem with Linear.” | 18 |
 | 36 | **It became project #20.** | Baton tangles into cables; “FREE TIER LIMIT” lands; googly-eyed rocks stare. | Code-native | “It was more work to maintain, became its own project, and did not save orchestration effort. Then I hit Linear's free-tier cap and stopped using it.” | 10 |

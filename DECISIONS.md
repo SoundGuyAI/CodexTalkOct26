@@ -77,3 +77,24 @@ Primary references: [HyperFrames](https://github.com/heygen-com/hyperframes), [H
 ## Timing
 
 The approved speaking plan will total **5:50 (350 seconds)**. The remaining ten seconds are a live-delivery buffer; the on-screen timer still counts down the full 6:00.
+
+## Chart data source
+
+**Source of truth for the Projects / year bars is the inline `yearlyProjects` array in `src/slides/part1.js`**, not a separate `data/projects.json`.
+
+Reasons:
+- The public deck should stay a single static Vite bundle with no fetch race on open.
+- Inventory markdown (`04-PROJECT-INVENTORY-BY-YEAR.md`) is a private design source and undercounts some years (notably **2019**, corrected on-slide from 4 → **10** per speaker revision).
+- Hover labels and pin thumbnails are curated for storytelling, not a full dump of every inventory line.
+
+If the inventory is ever regenerated into JSON for tooling, keep the slide array as the authored override and document deltas here.
+
+## Spotlight order (slides 15–27)
+
+Locked in `SLIDE-ORDER-15-27.md` and applied in `part1.js` / `OUTLINE.md`: utilities first → Feed The Feed / CamSport / Kaiju → improv apps → LoveLink / JigTrade / Glasses / Meditation → **Save Point last** (feeds the later $12k beat).
+
+## Timer hotkeys
+
+- **T** — pause / resume countdown (double-tap T within ~400ms resets to 6:00)
+- **H** — hide / show the corner timer
+- Click on the timer button still toggles pause/resume
