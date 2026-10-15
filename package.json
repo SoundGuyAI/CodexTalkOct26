@@ -1,0 +1,22 @@
+{
+  "name": "codex-talk-oct-2026",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "playwright test"
+  },
+  "dependencies": {
+    "@fontsource/archivo-black": "latest",
+    "@fontsource/inter": "latest",
+    "gsap": "latest",
+    "qrcode": "latest"
+  },
+  "devDependencies": {
+    "@playwright/test": "latest",
+    "vite": "latest"
+  }
+}
