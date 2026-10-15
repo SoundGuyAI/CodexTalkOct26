@@ -415,7 +415,7 @@ Next: write the interaction notes.</code></pre>
           <p class="final-url">Scan to open the deck</p>
           <p class="final-controls">← → / Page Up Page Down / Space</p>
         </div>
-        <div class="qr-placeholder" data-depth="4"><img data-qr alt="QR code to open the live deck"><small>open the live deck</small></div>
+        <a class="qr-placeholder" href="https://soundguyai.github.io/CodexTalkOct26/" target="_blank" rel="noreferrer" data-depth="4"><img data-qr alt="QR code to open the live deck"><small>open the live deck</small></a>
         <div class="final-project-drift" data-depth="2" aria-hidden="true">
           <span data-draggable="true">memory</span><span data-draggable="true">limits</span><span data-draggable="true">handoffs</span>
         </div>

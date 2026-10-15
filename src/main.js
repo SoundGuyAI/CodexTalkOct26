@@ -145,4 +145,5 @@ showSlide(current);
 initInteractions();
 requestAnimationFrame(updateTimer);
 
-QRCode.toDataURL('https://soundguyai.github.io/CodexTalkOct26/', { width: 520, margin: 1, color: { dark: '#09090B', light: '#F6F0E4' } }).then((url) => document.querySelectorAll('[data-qr]').forEach((img) => { img.src = url; }));
+const liveDeckUrl = 'https://soundguyai.github.io/CodexTalkOct26/';
+QRCode.toDataURL(liveDeckUrl, { width: 520, margin: 1, color: { dark: '#09090B', light: '#F6F0E4' } }).then((url) => document.querySelectorAll('[data-qr]').forEach((img) => { img.src = url; img.dataset.qrUrl = liveDeckUrl; }));

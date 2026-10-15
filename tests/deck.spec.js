@@ -35,13 +35,13 @@ async function expectActiveSlide(page, expectedIndex) {
 }
 
 async function goToSlide(page, index) {
-  await page.goto(`/#slide-${index}`);
+  await page.goto(`./#slide-${index}`);
   await expectActiveSlide(page, index);
 }
 
 test.describe('deck verification', () => {
   test('contains 47 slides and keeps the viewport free of horizontal overflow', async ({ page }) => {
-    await page.goto('/#slide-1');
+    await page.goto('./#slide-1');
 
     await expect(slides(page)).toHaveCount(TOTAL_SLIDES);
     await expect(page.locator('[data-testid="countdown-timer"], [aria-label*="countdown" i], .countdown-timer').first()).toBeVisible();
@@ -79,6 +79,13 @@ test.describe('deck verification', () => {
     await goToSlide(page, TOTAL_SLIDES);
     await expect(page).toHaveURL(/#slide-47$/);
     await expectActiveSlide(page, TOTAL_SLIDES);
+  });
+
+  test('final QR points to the deployed deck', async ({ page }) => {
+    await goToSlide(page, TOTAL_SLIDES);
+    const qrLink = page.locator('.qr-placeholder');
+    await expect(qrLink).toHaveAttribute('href', 'https://soundguyai.github.io/CodexTalkOct26/');
+    await expect(qrLink.locator('img[data-qr]')).toHaveAttribute('data-qr-url', 'https://soundguyai.github.io/CodexTalkOct26/');
   });
 
   test('captures one screenshot per slide', async ({ page }) => {
