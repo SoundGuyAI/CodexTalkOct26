@@ -1,35 +1,67 @@
 # Asset sources
 
-All files are copied into this repository so the deck works offline. “User-provided” means the material came from the presenter's own local project files or talks. No film stills from *Everything Everywhere All at Once* are used.
+All files live under `public/assets/` so the deck works offline.  
+“User-provided” = presenter's local project/talk files. No *Everything Everywhere All at Once* film assets.
 
-| Asset | Source | Planned use |
+| Asset | Source | Use |
 |---|---|---|
-| `about/oded-maker.jpg` | User-provided talk: *UnitedXR – Shoestring AI+XR* | About-me photo / maker identity |
-| `about/oded-burner.jpg` | User-provided UnitedXR talk | About-me photo / burner identity |
-| `about/fireworks.jpg` | User-provided UnitedXR talk | Maker/burn historical collage |
-| `about/burning-man-sculpture.jpg` | User-provided UnitedXR talk | Maker/burn historical collage |
-| `history/corbomite-logo.jpg` | User-provided UnitedXR talk | Company-history collage |
-| `history/adventure-mob-logo.jpg` | User-provided UnitedXR talk | Company-history collage |
-| `history/bolt-riley.jpg` | User-provided UnitedXR talk | Adventure-game historical collage |
-| `history/brcvr-playa.jpg` | User-provided UnitedXR talk | XR/BRCvr historical collage |
-| `projects/lovelink.jpg` | User-provided UnitedXR talk; project UI capture | LoveLink project card |
-| `projects/save-point.webm` | User-provided local Save Point build export | Save Point motion card |
-| `projects/where-are-my-glasses.jpg` | User-provided UnitedXR talk | Where Are My Glasses? project card |
-| `projects/meditation-extreme.jpg` | User-provided pitch deck | Meditation: EXTREME!!!1 project card |
-| `projects/feed-the-feed.png` | User-provided local project design reference | Feed The Feed project card |
-| `projects/jigtrade.png` | User-provided local project manual capture | JigTrade project card |
-| `projects/improv-dashboard.png` | User-provided local project social image | Improv Dashboard project card |
-| `projects/improv-calendar.png` | User-provided local project logo | Improv Calendar project card |
-| `projects/camsport.png` | User-provided local project design reference | CamSport project card |
-| `projects/kaiju-qa.png` | User-provided local Build Week submission media | Kaiju QA project card |
+| `about/oded-maker.jpg` | User UnitedXR talk | About |
+| `about/oded-burner.jpg` | User UnitedXR talk | About / burns |
+| `about/fireworks.jpg` | User UnitedXR talk | Side-quest fallback |
+| `about/burning-man-sculpture.jpg` | User UnitedXR talk | Burns collage |
+| `history/corbomite-logo.jpg` | User UnitedXR talk | About |
+| `history/adventure-mob-logo.jpg` | User UnitedXR talk | About |
+| `history/bolt-riley.jpg` | User UnitedXR talk | Collage / chart pin |
+| `history/bolt-riley-itch.jpg` | https://soundguy.itch.io/boltriley (og:image) | Alternate Bolt art |
+| `history/brcvr-playa.jpg` | User UnitedXR talk | XR collage |
+| `history/zbang-banner.jpg` | https://corporate.corbomitegames.com/wp-content/uploads/zbang_banner.jpg | Slide 4 |
+| `history/pizza-morgana-logo.png` | http://corbomitegames.com/images/PizzaLogoSmall.png | Slide 4 |
+| `history/pizza-morgana-banner.jpg` | corporate.corbomitegames.com | Spare |
+| `history/star-shipping-banner.jpg` | corporate.corbomitegames.com | Spare |
+| `history/star-shipping-outnow.jpg` | starshipping.corbomitegames.com | Spare |
+| `history/star-shipping-hd1.jpg` … `hd3.jpg` | starshipping.corbomitegames.com/wp-content/ | Slide 5 (+ spares) |
+| `history/star-shipping-map.jpg` | starshipping gallery | Spare |
+| `history/star-shipping-hangar.jpg` | starshipping gallery | Spare |
+| `history/corbomite-sketch.jpg` | corporate theme art | Spare |
+| `history/avner-itch.jpg` | https://soundguy.itch.io/avner | Slide 6 |
+| `history/oh-ship-logo.jpg` | https://ohshipgame.com/…/Logo_OhShip_AMazeInSpace.jpg | Slide 8 |
+| `history/oh-ship-trailer.jpg` | YouTube `aGywOpo2T90` sddefault | Slot / spare |
+| `history/oh-ship-horizon.jpg` | YouTube `pdmROI1yShc` maxres | Spare |
+| `history/star-mates-gdc.jpg` | YouTube `eVL2MUwJ9Og` maxres | Slide 8 |
+| `sidequests/geekcon-steam-engine.jpg` | YouTube `b5j8TWnWSU0` hqdefault | Slide 9 |
+| `projects/lovelink.jpg` | User UnitedXR / project | Spotlight |
+| `projects/save-point.webm` | User local export | Spotlight |
+| `projects/save-point-itch.jpg` | soundguy.itch.io/save-point | Slot |
+| `projects/where-are-my-glasses.jpg` | User UnitedXR | Spotlight |
+| `projects/where-are-my-glasses-cover.png` | PastProjectsForReference local | Higher-res spare |
+| `projects/meditation-extreme.jpg` | User pitch deck | Spotlight |
+| `projects/feed-the-feed.png` | User MHCP / local | Spotlight |
+| `projects/jigtrade.png` | User local | Spotlight |
+| `projects/improv-dashboard.png` | User local | Spotlight |
+| `projects/improv-calendar.png` | User local | Spotlight |
+| `projects/camsport.png` | CamSport design-ref | Spotlight |
+| `projects/kaiju-qa.png` | User Build Week | Spotlight |
+| `projects/kaiju-qa-hero.png` | OpenAIBuildWeek/videos/kaiju-qa-devpost | Slot |
+| `slot/tricky-potions-itch.jpg` | soundguy.itch.io/tricky-potions | Slot |
+| `slot/freedom-beats-itch.jpg` | soundguy.itch.io/freedom-of-beats-and-music | Slot |
+| `slot/turn-me-on-itch.jpg` | soundguy.itch.io/turn-me-on | Spare |
+| `slot/good-measure-itch.jpg` | soundguy.itch.io/good-measure | Slot (large; compress later if needed) |
 
-## Generated/code-native visuals
+## Placeholders (generated labeled PNGs — replace)
 
-The following will be original SVG/CSS/HTML: multiverse grid, everything-bagel/black-hole motif, googly eyes, project chart, swimlane, agent panes, Markdown handoff, Symphony conductor graphic, Azure cost counter, audience-of-one app split, countdown, navigation controls, and final QR code.
+`history/knights-placeholder.png`, `rock-band-placeholder.png`, `spinning-cube-placeholder.png`, `larry-demo-placeholder.png`, `gun-n-blade-placeholder.png`, `herberts-quest-placeholder.png`, `nightmare-playground-placeholder.png`, `streetwize-placeholder.png`,  
+`community/gdc-stages-placeholder.png`, `game-dev-day-placeholder.png`, `ggj-groups-placeholder.png`, `teaching-placeholder.png`,  
+`sidequests/imperial-march-placeholder.png`, `midburn-pyro-placeholder.png`,  
+`projects/currency-converter-placeholder.png`, `car-appraiser-placeholder.png`, `show-tracker-placeholder.png`, `taskswipe-placeholder.png`.
 
-The QR code will encode the expected GitHub Pages URL: `https://soundguyai.github.io/CodexTalkOct26/`. It will be regenerated and tested only after the live deployment succeeds.
+See `ASSETS-NEEDED.md` for who/what should replace each.
 
-## Web sources reviewed
+## Generated / code-native
 
-The historical links in the planning brief were checked, including Corbomite's Pizza Morgana archive, the public Global Game Jam profile, and the GDC Vault entry/slides for “Development on a Shoestring.” They are useful evidence and image leads, but no third-party web image has been copied into the repo yet: the local/user-provided originals are cleaner and have clearer reuse provenance. If the placeholder historical collage is upgraded, those official pages should be the first source checked.
+Multiverse grid, bagel/vortex, googly eyes, yearly chart, swimlane, agent panes, Symphony conductor, Azure counter, audience-of-one split, countdown, QR (`https://soundguyai.github.io/CodexTalkOct26/`).
 
+## Attempted but blocked
+
+- Devpost project galleries → HTTP 403 from this environment  
+- BRCvr team page → HTTP 403 (local BRCvr photo already used)  
+- MobyGames Pizza Morgana → HTTP 403  

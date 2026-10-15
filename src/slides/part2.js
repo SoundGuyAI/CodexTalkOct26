@@ -352,6 +352,7 @@ Next: write the interaction notes.</code></pre>
         <div class="phone-stage" data-depth="2">
           <div class="phone-shell" data-depth="3">
             <div class="phone-notch"></div>
+            <img class="taskswipe-placeholder" src="./assets/projects/taskswipe-placeholder.png" alt="NEED IMAGE Of TASKSWIPE SWIPE UI HERE" width="320" height="240">
             <div class="task-stack" aria-label="Draggable task cards">
               <article class="task-card task-card--top" data-draggable="true" tabindex="0"><small>today</small><strong>finish the handoff</strong><span>→ planning</span></article>
               <article class="task-card task-card--middle" data-draggable="true" tabindex="0"><small>later</small><strong>capture the screenshot</strong><span>→ check</span></article>

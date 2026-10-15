@@ -110,10 +110,10 @@ export const part1Slides = [
     title: 'Adventure games',
     className: 'slide-collage scrapbook',
     html: `<section class="scrapbook-collage" data-interaction="snap-collage"><h2 class="sr-only">Adventure games</h2>${cards([
-      { label: 'Zbang', image: 'history/adventure-mob-logo.jpg' },
-      { label: 'Pizza Morgana', image: 'projects/where-are-my-glasses.jpg' },
-      { label: 'Knights', image: 'history/bolt-riley.jpg' },
-      { label: 'Rock Band', image: 'about/fireworks.jpg' },
+      { label: 'Zbang', image: 'history/zbang-banner.jpg' },
+      { label: 'Pizza Morgana', image: 'history/pizza-morgana-logo.png' },
+      { label: 'Knights', image: 'history/knights-placeholder.png' },
+      { label: 'Rock Band', image: 'history/rock-band-placeholder.png' },
     ])}</section>`,
     notes: 'Fast chronology. No project descriptions.'
   },
@@ -123,10 +123,10 @@ export const part1Slides = [
     title: 'Different platforms',
     className: 'slide-collage platforms',
     html: `<section class="platform-collage" data-interaction="snap-collage"><h2 class="sr-only">Different platforms</h2>${cards([
-      { label: 'Star Shipping', image: 'projects/camsport.png' },
-      { label: 'Spinning Cube', image: 'projects/jigtrade.png' },
-      { label: "Larry demo", image: 'projects/kaiju-qa.png' },
-      { label: "Gun N' Blade", image: 'projects/save-point.webm' },
+      { label: 'Star Shipping', image: 'history/star-shipping-hd1.jpg' },
+      { label: 'Spinning Cube', image: 'history/spinning-cube-placeholder.png' },
+      { label: "Larry demo", image: 'history/larry-demo-placeholder.png' },
+      { label: "Gun N' Blade", image: 'history/gun-n-blade-placeholder.png' },
     ])}</section>`,
     notes: 'Different platforms, same small team.'
   },
@@ -137,9 +137,9 @@ export const part1Slides = [
     className: 'slide-collage publishing',
     html: `<section class="publishing-collage" data-interaction="snap-collage"><h2 class="sr-only">Adventure games and publishing</h2>${cards([
       { label: 'Bolt Riley', image: 'history/bolt-riley.jpg' },
-      { label: 'Avner', image: 'projects/meditation-extreme.jpg' },
-      { label: "Herbert's Quest", image: 'projects/where-are-my-glasses.jpg' },
-      { label: 'Nightmare Playground', image: 'projects/kaiju-qa.png' },
+      { label: 'Avner', image: 'history/avner-itch.jpg' },
+      { label: "Herbert's Quest", image: 'history/herberts-quest-placeholder.png' },
+      { label: 'Nightmare Playground', image: 'history/nightmare-playground-placeholder.png' },
     ])}</section>`,
     notes: 'Years of adventure games and publishing.'
   },
@@ -149,10 +149,10 @@ export const part1Slides = [
     title: 'Organize, teach, speak, jam',
     className: 'slide-collage community',
     html: `<section class="community-collage" data-interaction="snap-collage"><h2 class="sr-only">Community</h2>${cards([
-      { label: 'GDC stages', image: 'about/oded-maker.jpg' },
-      { label: 'Game Dev Day', image: 'about/oded-burner.jpg' },
-      { label: 'GGJ groups', image: 'about/fireworks.jpg' },
-      { label: 'Teaching', image: 'about/burning-man-sculpture.jpg' },
+      { label: 'GDC stages', image: 'community/gdc-stages-placeholder.png' },
+      { label: 'Game Dev Day', image: 'community/game-dev-day-placeholder.png' },
+      { label: 'GGJ groups', image: 'community/ggj-groups-placeholder.png' },
+      { label: 'Teaching', image: 'community/teaching-placeholder.png' },
     ])}</section>`,
     notes: 'I also organized, taught, spoke, and jammed.'
   },
@@ -162,10 +162,10 @@ export const part1Slides = [
     title: 'XR added more worlds',
     className: 'slide-collage xr',
     html: `<section class="xr-collage" data-interaction="snap-collage"><h2 class="sr-only">XR worlds</h2>${cards([
-      { label: 'Star Mates', image: 'projects/where-are-my-glasses.jpg' },
+      { label: 'Star Mates', image: 'history/star-mates-gdc.jpg' },
       { label: 'BRCvr', image: 'history/brcvr-playa.jpg' },
-      { label: 'Oh SHIP!', image: 'projects/camsport.png' },
-      { label: 'StreetWize', image: 'projects/feed-the-feed.png' },
+      { label: 'Oh SHIP!', image: 'history/oh-ship-logo.jpg' },
+      { label: 'StreetWize', image: 'history/streetwize-placeholder.png' },
     ])}</section>`,
     notes: 'Then XR added more worlds.'
   },
@@ -175,10 +175,10 @@ export const part1Slides = [
     title: 'The side quests did not stop',
     className: 'slide-collage sidequests',
     html: `<section class="sidequest-collage" data-interaction="snap-collage"><h2 class="sr-only">Side quests</h2>${cards([
-      { label: 'Geekcon', image: 'about/oded-burner.jpg' },
-      { label: 'Pyro', image: 'about/fireworks.jpg' },
+      { label: 'Geekcon', image: 'sidequests/geekcon-steam-engine.jpg' },
+      { label: 'Pyro', image: 'sidequests/midburn-pyro-placeholder.png' },
       { label: 'Burns', image: 'about/burning-man-sculpture.jpg' },
-      { label: 'Imperial March', image: 'history/brcvr-playa.jpg' },
+      { label: 'Imperial March', image: 'sidequests/imperial-march-placeholder.png' },
     ])}</section>`,
     notes: 'And none of the side quests stopped.'
   },
@@ -296,7 +296,7 @@ export const part1Slides = [
     duration: 2,
     title: 'Currency converter',
     className: 'slide-project utility currency',
-    html: `<section class="utility-phone" data-interaction="split-recombine"><div class="phone-shell" data-depth="2"><span class="currency-chip">₪</span><span class="swap-arrow">↔</span><span class="currency-chip">$</span></div><h2 data-depth="1">Currency converter</h2>${hotspot('Split and recombine', 'data-action="swap-currency"')}</section>`,
+    html: `<section class="utility-phone" data-interaction="split-recombine"><div class="phone-shell" data-depth="2">${asset('projects/currency-converter-placeholder.png', 'NEED IMAGE Of CURRENCY CONVERTER HERE')}</div><h2 data-depth="1">Currency converter</h2>${hotspot('Split and recombine', 'data-action="swap-currency"')}</section>`,
     notes: 'An audience-of-one utility.'
   },
   {
@@ -304,7 +304,7 @@ export const part1Slides = [
     duration: 2,
     title: 'Car Appraiser Finder',
     className: 'slide-project utility car-appraiser',
-    html: `<section class="utility-phone" data-interaction="fan-cards"><div class="phone-shell phone-shell--map" data-depth="2"><span class="map-dot"></span><span class="map-line"></span><button type="button" class="finder-card" data-action="fan-cards">find</button></div><h2 data-depth="1">Car Appraiser Finder</h2></section>`,
+    html: `<section class="utility-phone" data-interaction="fan-cards"><div class="phone-shell phone-shell--map" data-depth="2">${asset('projects/car-appraiser-placeholder.png', 'NEED IMAGE Of CAR APPRAISER FINDER HERE')}</div><h2 data-depth="1">Car Appraiser Finder</h2></section>`,
     notes: 'Another tiny tool for a specific personal need.'
   },
   {
@@ -320,7 +320,7 @@ export const part1Slides = [
     duration: 2,
     title: 'Show tracker',
     className: 'slide-project utility show-tracker',
-    html: `<section class="stacked-phone-cards" data-interaction="stack-cards"><div class="show-card show-card--1" data-depth="1">watched</div><div class="show-card show-card--2" data-depth="2">next</div><div class="show-card show-card--3" data-depth="3">maybe</div><h2>Show tracker</h2>${hotspot('Reorder the stack', 'data-action="stack-cards"')}</section>`,
+    html: `<section class="stacked-phone-cards" data-interaction="stack-cards"><div class="phone-shell" data-depth="2">${asset('projects/show-tracker-placeholder.png', 'NEED IMAGE Of SHOW TRACKER HERE')}</div><h2>Show tracker</h2>${hotspot('Reorder the stack', 'data-action="stack-cards"')}</section>`,
     notes: 'A tracker because the existing trackers were not mine.'
   },
   {
@@ -337,9 +337,12 @@ export const part1Slides = [
     title: 'Hackathons. Funds. Talks.',
     className: 'slide-slot-machine',
     html: `<section class="slot-machine" data-interaction="drag-lever"><h2 data-depth="1">Hackathons.<br>Funds.<br>Talks.</h2><div class="slot-window" data-depth="2">${cards([
-      { label: 'submission', image: 'projects/kaiju-qa.png' },
-      { label: 'talk', image: 'about/oded-maker.jpg' },
-      { label: 'deadline', image: 'projects/save-point.webm' },
+      { label: 'Kaiju QA', image: 'projects/kaiju-qa-hero.png' },
+      { label: 'Save Point', image: 'projects/save-point-itch.jpg' },
+      { label: 'Good Measure', image: 'slot/good-measure-itch.jpg' },
+      { label: 'Oh SHIP!', image: 'history/oh-ship-trailer.jpg' },
+      { label: 'Tricky Potions', image: 'slot/tricky-potions-itch.jpg' },
+      { label: 'Freedom Beats', image: 'slot/freedom-beats-itch.jpg' },
     ])}</div><button type="button" class="slot-lever" data-action="pull-slot">pull</button></section>`,
     notes: 'The software projects generate applications, talks, demos, and deadlines. No private names.'
   },
