@@ -11,6 +11,25 @@ const cards = (items) => items.map((item, index) => `
     <span>${item.label}</span>
   </button>`).join('');
 
+const yearlyProjects = [
+  [2006, 2], [2007, 6], [2008, 6], [2009, 8], [2010, 11], [2011, 11],
+  [2012, 9], [2013, 9], [2014, 10], [2015, 8], [2016, 9], [2017, 10],
+  [2018, 13], [2019, 4], [2020, 9], [2021, 6], [2022, 9], [2023, 14],
+  [2024, 6], [2025, 18], [2026, 36],
+];
+
+const yearlyProjectBars = () => yearlyProjects.map(([year, count]) => `
+  <button
+    type="button"
+    class="year-bar${year === 2026 ? ' is-current' : ''}"
+    style="--bar-height:${Math.max(11, (count / 36) * 100)}%"
+    aria-label="${year}: ${count} projects"
+    title="${year}: ${count} projects"
+  >
+    <strong class="year-total">${count}</strong>
+    <span class="year-label">${year}</span>
+  </button>`).join('');
+
 export const part1Slides = [
   {
     id: 'part1-01-hook',
@@ -156,22 +175,24 @@ export const part1Slides = [
     id: 'part1-11-projects-year',
     duration: 12,
     title: 'Projects / year',
-    className: 'slide-chart relative-bars',
+    className: 'slide-chart yearly-projects',
     html: `
-      <section class="relative-chart" data-interaction="hover-and-drag">
-        <h2>Projects / year</h2>
-        <div class="chart-plot" role="img" aria-label="Relative project activity across eras">
-          <span class="bar bar--1" data-era="early" data-depth="1"></span><span class="bar bar--2" data-era="middle" data-depth="2"></span><span class="bar bar--3" data-era="XR" data-depth="1"></span><span class="bar bar--4" data-era="AI" data-depth="2"></span><span class="bar bar--5" data-era="now" data-depth="1"></span>
-          <span class="axis-label axis-label--1">early</span><span class="axis-label axis-label--2">XR</span><span class="axis-label axis-label--3">AI</span><span class="axis-label axis-label--4">now</span>
+      <section class="yearly-chart" data-interaction="year-bars">
+        <header class="yearly-chart__heading">
+          <p>How many things was I actively working on?</p>
+          <h2>Projects / year</h2>
+        </header>
+        <div class="year-bars" role="img" aria-label="Projects active in each year from 2006 to 2026">
+          ${yearlyProjectBars()}
         </div>
-        <div class="chart-thumbnails" data-depth="3">${cards([
-          { label: 'BRCvr', image: 'history/brcvr-playa.jpg' },
-          { label: 'Bolt Riley', image: 'history/bolt-riley.jpg' },
-          { label: 'Save Point', image: 'projects/save-point.webm' },
-        ])}</div>
-        ${hotspot('Hover or drag a thumbnail', 'data-action="inspect-chart"')}
+        <div class="year-project-pins" aria-hidden="true">
+          <figure class="year-project-pin pin-2009" data-depth="2"><img src="./assets/history/bolt-riley.jpg" alt=""><figcaption>Bolt Riley</figcaption></figure>
+          <figure class="year-project-pin pin-2018" data-depth="3"><img src="./assets/history/brcvr-playa.jpg" alt=""><figcaption>XR + maker years</figcaption></figure>
+          <figure class="year-project-pin pin-2026" data-depth="2"><img src="./assets/projects/kaiju-qa.png" alt=""><figcaption>agent era</figcaption></figure>
+        </div>
+        <p class="yearly-chart__hint">hover a bar for the year and total</p>
       </section>`,
-    notes: 'For years the shape was noisy, but roughly stable. Do not recite counts.'
+    notes: 'This is the actual annual inventory from 2006 through 2026. Each bar is the number of projects active during that year, not only projects started that year. The shape is noisy but broadly stable until the recent acceleration.'
   },
   {
     id: 'part1-12-then',
