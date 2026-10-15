@@ -18,10 +18,12 @@ const yearlyProjects = [
   [2024, 6], [2025, 18], [2026, 36],
 ];
 
-const yearlyProjectBars = () => yearlyProjects.map(([year, count]) => `
+const yearlyProjectBars = (throughYear, highlightYear = null) => yearlyProjects
+  .filter(([year]) => year <= throughYear)
+  .map(([year, count]) => `
   <button
     type="button"
-    class="year-bar${year === 2026 ? ' is-current' : ''}"
+    class="year-bar${year === highlightYear ? ' is-current' : ''}"
     style="--bar-height:${Math.max(11, (count / 36) * 100)}%"
     aria-label="${year}: ${count} projects"
     title="${year}: ${count} projects"
@@ -29,6 +31,28 @@ const yearlyProjectBars = () => yearlyProjects.map(([year, count]) => `
     <strong class="year-total">${count}</strong>
     <span class="year-label">${year}</span>
   </button>`).join('');
+
+const yearlyProjectPins = (throughYear) => `
+  <div class="year-project-pins" aria-hidden="true">
+    <figure class="year-project-pin pin-2009" data-depth="2"><img src="./assets/history/bolt-riley.jpg" alt=""><figcaption>Bolt Riley</figcaption></figure>
+    <figure class="year-project-pin pin-2018" data-depth="3"><img src="./assets/history/brcvr-playa.jpg" alt=""><figcaption>XR + maker years</figcaption></figure>
+    ${throughYear >= 2025 ? '<figure class="year-project-pin pin-2025" data-depth="2"><img src="./assets/projects/lovelink.jpg" alt=""><figcaption>LoveLink</figcaption></figure>' : ''}
+    ${throughYear >= 2026 ? '<figure class="year-project-pin pin-2026" data-depth="2"><img src="./assets/projects/kaiju-qa.png" alt=""><figcaption>agent era</figcaption></figure>' : ''}
+  </div>`;
+
+const yearlyChart = ({ throughYear, highlightYear = null, phase }) => `
+  <section class="yearly-chart" data-interaction="year-bars">
+    <header class="yearly-chart__heading">
+      <p>How many things was I actively working on?</p>
+      <h2>Projects / year</h2>
+    </header>
+    ${phase ? `<div class="yearly-chart__phase">${phase}</div>` : ''}
+    <div class="year-bars" role="img" aria-label="Projects active in each year from 2006 to ${throughYear}">
+      ${yearlyProjectBars(throughYear, highlightYear)}
+    </div>
+    ${yearlyProjectPins(throughYear)}
+    <p class="yearly-chart__hint">hover a bar for the year and total</p>
+  </section>`;
 
 export const part1Slides = [
   {
@@ -176,52 +200,31 @@ export const part1Slides = [
     duration: 12,
     title: 'Projects / year',
     className: 'slide-chart yearly-projects',
-    html: `
-      <section class="yearly-chart" data-interaction="year-bars">
-        <header class="yearly-chart__heading">
-          <p>How many things was I actively working on?</p>
-          <h2>Projects / year</h2>
-        </header>
-        <div class="year-bars" role="img" aria-label="Projects active in each year from 2006 to 2026">
-          ${yearlyProjectBars()}
-        </div>
-        <div class="year-project-pins" aria-hidden="true">
-          <figure class="year-project-pin pin-2009" data-depth="2"><img src="./assets/history/bolt-riley.jpg" alt=""><figcaption>Bolt Riley</figcaption></figure>
-          <figure class="year-project-pin pin-2018" data-depth="3"><img src="./assets/history/brcvr-playa.jpg" alt=""><figcaption>XR + maker years</figcaption></figure>
-          <figure class="year-project-pin pin-2026" data-depth="2"><img src="./assets/projects/kaiju-qa.png" alt=""><figcaption>agent era</figcaption></figure>
-        </div>
-        <p class="yearly-chart__hint">hover a bar for the year and total</p>
-      </section>`,
-    notes: 'This is the actual annual inventory from 2006 through 2026. Each bar is the number of projects active during that year, not only projects started that year. The shape is noisy but broadly stable until the recent acceleration.'
+    html: yearlyChart({ throughYear: 2024, phase: '2006–2024' }),
+    notes: 'This is the actual annual inventory from 2006 through 2024. Each bar is the number of projects active during that year, not only projects started that year. The shape is noisy but broadly stable.'
   },
   {
     id: 'part1-12-then',
     duration: 5,
-    title: 'Then…',
-    className: 'slide-chart then',
-    html: `<section class="chart-jump" data-interaction="attach-thumbnails"><h2>Then…</h2><div class="chart-bar chart-bar--late" data-depth="2"></div><div class="attaching-thumbnails" data-depth="3">${cards([{ label: 'LoveLink', image: 'projects/lovelink.jpg' }, { label: 'Glasses', image: 'projects/where-are-my-glasses.jpg' }])}</div>${hotspot('Attach a project', 'data-action="attach"')}</section>`,
-    notes: 'In 2025 the baseline moved.'
+    title: '2025',
+    className: 'slide-chart yearly-projects yearly-projects--2025',
+    html: yearlyChart({ throughYear: 2025, highlightYear: 2025, phase: '2025 · 18 projects' }),
+    notes: 'Keep the chart fixed and add only the 2025 bar: eighteen active projects. The baseline moved.'
   },
   {
     id: 'part1-13-now',
     duration: 7,
-    title: '…now.',
-    className: 'slide-chart swarm',
-    html: `<section class="chart-swarm" data-interaction="open-swarm"><h2>…now.</h2><div class="chart-frame"><div class="burst-bar" data-depth="1"></div><div class="swarm-projects" data-depth="3">${cards([
-      { label: 'LoveLink', image: 'projects/lovelink.jpg' },
-      { label: 'Save Point', image: 'projects/save-point.webm' },
-      { label: 'Feed The Feed', image: 'projects/feed-the-feed.png' },
-      { label: 'CamSport', image: 'projects/camsport.png' },
-      { label: 'Kaiju QA', image: 'projects/kaiju-qa.png' },
-    ])}</div></div>${hotspot('Open the 2026 swarm', 'data-action="open-swarm"')}</section>`,
-    notes: 'In 2026, the chart stopped fitting. Keep the exact count off-screen.'
+    title: '2026',
+    className: 'slide-chart yearly-projects yearly-projects--2026',
+    html: yearlyChart({ throughYear: 2026, highlightYear: 2026, phase: '2026 · 36 projects' }),
+    notes: 'Keep the same chart and add the 2026 bar: thirty-six active projects. The chart almost stops fitting.'
   },
   {
     id: 'part1-14-ai-happened',
     duration: 18,
-    title: 'Then AI happened.',
+    title: 'AI Happened',
     className: 'slide-agent-windows',
-    html: `<section class="agent-window-wall" data-interaction="cursor-dominance"><h2 data-depth="1">Then AI happened.</h2><div class="agent-windows" data-depth="2"><button type="button" class="agent-window" data-agent="research">research</button><button type="button" class="agent-window" data-agent="code">code</button><button type="button" class="agent-window" data-agent="tests">tests</button><button type="button" class="agent-window" data-agent="art">art</button><button type="button" class="agent-window" data-agent="submissions">submissions</button></div>${hotspot('Move the cursor between loops', 'data-action="focus-agent"')}</section>`,
+    html: `<section class="agent-window-wall" data-interaction="cursor-dominance"><h2 data-depth="1">AI Happened</h2><div class="agent-windows" data-depth="2"><button type="button" class="agent-window" data-agent="research">research</button><button type="button" class="agent-window" data-agent="code">code</button><button type="button" class="agent-window" data-agent="tests">tests</button><button type="button" class="agent-window" data-agent="art">art</button><button type="button" class="agent-window" data-agent="submissions">submissions</button></div>${hotspot('Move the cursor between loops', 'data-action="focus-agent"')}</section>`,
     notes: 'I stopped being the person doing every keystroke and became the person steering many loops.'
   },
   {
