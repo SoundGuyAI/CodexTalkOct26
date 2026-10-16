@@ -492,7 +492,8 @@ export const part1Slides = [
       };
       const reels = [0, 1, 2].map((reelIndex) => {
         const order = shuffle(unique, reelIndex + 1);
-        const strip = [...order, ...order].map(tile).join('');
+        // Triple the strip so continuous translateY scroll never runs out of tiles mid-spin.
+        const strip = [...order, ...order, ...order].map(tile).join('');
         return `<div class="slot-reel" data-reel="${reelIndex}" data-symbols="${order.length}"><div class="slot-reel__strip">${strip}</div></div>`;
       }).join('');
       return `<section class="slot-machine" data-interaction="drag-lever"><h2 data-depth="1">Hackathons.<br>Funds.<br>Talks.</h2><div class="slot-stage" data-depth="2"><div class="slot-window"><div class="slot-reels">${reels}</div></div><button type="button" class="slot-lever" data-action="pull-slot" aria-label="Pull slot lever">pull</button></div></section>`;

@@ -1,6 +1,9 @@
 /**
  * Slot-machine reels for part1-28 (Hackathons. Funds. Talks.).
  * Kept separate so pull/spin logic does not fight parallax/rickroll edits in main.js.
+ *
+ * Spin model: each reel scrolls a continuous symbol strip (translateY) at its own
+ * speed, then ease-out lands on a symbol with classic left→right stagger.
  */
 
 function sizeReelTiles(machine) {
@@ -21,7 +24,29 @@ function reelMetrics(reel) {
   if (!strip) return null;
   const symbols = Number(reel.dataset.symbols || Math.floor(strip.children.length / 2)) || 1;
   const h = Math.max(1, Math.round(reel.getBoundingClientRect().height));
-  return { strip, symbols, h };
+  return { strip, symbols, h, cycle: symbols * h };
+}
+
+/** Positive modulo for wrapping strip position into one symbol cycle. */
+function wrapY(y, cycle) {
+  if (cycle <= 0) return 0;
+  const mod = ((-y) % cycle + cycle) % cycle;
+  return -mod;
+}
+
+function currentIndex(y, h, symbols) {
+  if (h <= 0 || symbols <= 0) return 0;
+  const idx = Math.round(-y / h);
+  return ((idx % symbols) + symbols) % symbols;
+}
+
+/** Next absolute tile index (>= pos + minTravel) that shows `land`. */
+function landingEndPos(pos, land, symbols, minTravel) {
+  let endPos = Math.ceil(pos + minTravel);
+  while (((endPos % symbols) + symbols) % symbols !== land) {
+    endPos += 1;
+  }
+  return endPos;
 }
 
 /**
@@ -47,8 +72,8 @@ export function spinSlotReels(root, { gsap, reducedMotion = false } = {}) {
       lever,
       { rotate: 0 },
       {
-        rotate: 32,
-        duration: 0.2,
+        rotate: 36,
+        duration: 0.22,
         yoyo: true,
         repeat: 1,
         transformOrigin: '50% 8%',
@@ -73,32 +98,74 @@ export function spinSlotReels(root, { gsap, reducedMotion = false } = {}) {
       done();
       return;
     }
-    const { strip, symbols, h } = metrics;
+    const { strip, symbols, h, cycle } = metrics;
 
     gsap.killTweensOf(strip);
-    const startY = Number(gsap.getProperty(strip, 'y')) || 0;
-    const startIndex = Math.round(Math.abs(startY) / h) % symbols;
-    gsap.set(strip, { y: -startIndex * h });
+    if (strip._slotProxy) gsap.killTweensOf(strip._slotProxy);
 
-    const loops = 2 + (i % 3);
+    const startIndex = currentIndex(Number(gsap.getProperty(strip, 'y')) || 0, h, symbols);
+    const startY = -startIndex * h;
+    gsap.set(strip, { y: startY });
+
     const land = Math.floor(Math.random() * symbols);
-    const targetY = -((loops * symbols) + land) * h;
 
     if (reducedMotion) {
       gsap.set(strip, { y: -land * h });
+      reel.classList.remove('is-spinning', 'is-stopping');
       done();
       return;
     }
 
-    gsap.to(strip, {
-      y: targetY,
-      duration: 1.15 + i * 0.32,
-      ease: 'power4.out',
+    // Per-reel personality: different speeds + staggered stop windows.
+    const tilesPerSec = 22 + i * 7; // reel 0 slowest, reel 2 fastest
+    const spinSeconds = 1.05 + i * 0.42; // constant-speed phase length (stagger)
+    const stopSeconds = 0.85 + i * 0.12; // ease-out length after that
+    const coastTiles = symbols * (2 + i) + 3; // travel during decelerate
+
+    const spinDistance = tilesPerSec * h * spinSeconds;
+    const yAfterSpin = startY - spinDistance;
+    const endPos = landingEndPos(-yAfterSpin / h, land, symbols, coastTiles);
+    const targetY = -endPos * h;
+
+    const proxy = { y: startY };
+    strip._slotProxy = proxy;
+
+    const applyWrapped = () => {
+      gsap.set(strip, { y: wrapY(proxy.y, cycle) });
+    };
+
+    reel.classList.add('is-spinning');
+    reel.classList.remove('is-stopping');
+
+    const tl = gsap.timeline({
       onComplete() {
-        const again = reelMetrics(reel);
-        const tileH = again?.h || h;
-        gsap.set(strip, { y: -land * tileH });
+        gsap.set(strip, { y: -land * h });
+        proxy.y = -land * h;
+        reel.classList.remove('is-spinning', 'is-stopping');
+        strip._slotProxy = null;
         done();
+      },
+    });
+
+    // Phase 1 — constant-velocity strip scroll (motion blur via CSS).
+    tl.to(proxy, {
+      y: yAfterSpin,
+      duration: spinSeconds,
+      ease: 'none',
+      onUpdate: applyWrapped,
+    });
+
+    // Phase 2 — ease-out onto the chosen symbol.
+    tl.add(() => {
+      reel.classList.add('is-stopping');
+    });
+    tl.to(proxy, {
+      y: targetY,
+      duration: stopSeconds,
+      ease: 'power3.out',
+      onUpdate: applyWrapped,
+      onComplete() {
+        reel.classList.remove('is-spinning', 'is-stopping');
       },
     });
   });
@@ -112,6 +179,7 @@ export function wireSlotMachine(root, { gsap, reducedMotion = false } = {}) {
   machine.dataset.slotWired = 'true';
 
   const resize = () => {
+    if (machine.dataset.slotSpinning === 'true') return;
     const strips = [...machine.querySelectorAll('.slot-reel__strip')];
     const lands = strips.map((strip, index) => {
       const reel = machine.querySelectorAll('.slot-reel')[index];
