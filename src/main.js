@@ -6,6 +6,7 @@ import { Draggable } from 'gsap/Draggable';
 import QRCode from 'qrcode';
 import { part1Slides } from './slides/part1.js';
 import { part2Slides } from './slides/part2.js';
+import { wireSlotMachine, spinSlotReels } from './slot-machine.js';
 import './styles.css';
 import './slides.css';
 
@@ -166,6 +167,8 @@ function showSlide(index, direction = 1) {
   } catch (error) {
     console.warn('slide interaction wiring failed', error);
   }
+  // Re-apply pointer offsets after slide change so layers are not stuck at 0,0.
+  if (!parallaxRaf) parallaxRaf = requestAnimationFrame(applyParallax);
 }
 
 function navigate(delta) { showSlide(current + delta, delta); }
@@ -398,8 +401,13 @@ function wireSlideInteractions(slideEl) {
         type: 'x,y',
         bounds: root,
         inertia: false,
-        onPress: () => gsap.to(node, { scale: 1.06, duration: .15 }),
-        onRelease: () => gsap.to(node, { scale: 1, duration: .25, ease: 'back.out(2)' }),
+        onPress() {
+          gsap.to(node, { scale: 1.06, duration: .15, zIndex: 30 });
+        },
+        onRelease() {
+          gsap.to(node, { scale: 1, duration: .25, ease: 'back.out(2)' });
+        },
+
       });
     });
   }
@@ -408,6 +416,7 @@ function wireSlideInteractions(slideEl) {
   wireTaskSwipe(root);
   wireTypeShift(root);
   wireRepoPreview(root);
+  wireSlotMachine(root, { gsap, reducedMotion: prefersReducedMotion() });
 }
 
 function runAction(action, trigger) {
@@ -460,8 +469,7 @@ function runAction(action, trigger) {
     gsap.fromTo(trigger, { scale: .6, rotate: -20, opacity: 0 }, { scale: 1, rotate: -7, opacity: 1, duration: .35, ease: 'back.out(2)' });
   }
   if (action === 'pull-slot') {
-    const windowEl = root.querySelector('.slot-window');
-    if (windowEl) gsap.fromTo(windowEl, { y: 0 }, { y: reduced ? 0 : 18, duration: .12, yoyo: true, repeat: 5 });
+    spinSlotReels(root, { gsap, reducedMotion: reduced });
   }
   if (action === 'reorder-lanes') {
     const lanes = root.querySelector('.swimlanes');
@@ -478,23 +486,36 @@ function runAction(action, trigger) {
   }
 }
 
+function parallaxSkipped(node) {
+  if (!node || node.classList.contains('is-gone')) return true;
+  if (node.matches('[data-draggable], .kanban-card, .taskswipe-card, .swimlane, .year-bar, .chart-callout, .year-project-pin, .slot-reel__strip, .slot-tile, .slot-lever')) return true;
+  if (node.closest('[data-draggable], .kanban-card, .taskswipe-card, .chart-callout, .slot-reel')) return true;
+  return false;
+}
+
+/**
+ * Pointer parallax for [data-depth] layers.
+ * Uses CSS --parallax-x/y + the independent `translate` property (see styles.css)
+ * so it composes with CSS `transform` (about-copy centering, hover scale) and is
+ * not wiped by slide-transition clearProps / GSAP xPercent on the parent .slide.
+ * Matches the original d01d8c5/dee20f5 feel (smooth follow, always on — not gated
+ * by prefers-reduced-motion, which was blocking the talk deck on some Windows setups).
+ */
 function applyParallax() {
   parallaxRaf = 0;
-  if (prefersReducedMotion()) return;
   const root = slideEls[current];
   if (!root) return;
   const x = pointerX;
   const y = pointerY;
+  document.documentElement.style.setProperty('--pointer-x', x.toFixed(4));
+  document.documentElement.style.setProperty('--pointer-y', y.toFixed(4));
   root.querySelectorAll('[data-depth]').forEach((node) => {
-    if (node.classList.contains('is-gone')) return;
-    if (node.matches('[data-draggable], .kanban-card, .taskswipe-card, .swimlane, .year-bar')) return;
-    if (node.closest('[data-draggable], .kanban-card, .taskswipe-card')) return;
+    if (parallaxSkipped(node)) return;
     const depth = Number(node.dataset.depth || 1);
-    gsap.set(node, {
-      x: x * depth * 22,
-      y: y * depth * 16,
-      force3D: true,
-    });
+    const px = x * depth * 28;
+    const py = y * depth * 20;
+    node.style.setProperty('--parallax-x', `${px.toFixed(2)}px`);
+    node.style.setProperty('--parallax-y', `${py.toFixed(2)}px`);
   });
   const agents = root.querySelectorAll('.agent-window, .era-pane');
   if (agents.length) {
@@ -504,22 +525,29 @@ function applyParallax() {
       const cy = rect.top + rect.height / 2;
       const dist = Math.hypot((pointerX + .5) * innerWidth - cx, (pointerY + .5) * innerHeight - cy);
       const dominance = Math.max(0.4, 1.2 - dist / 650);
-      gsap.set(windowEl, {
+      gsap.to(windowEl, {
         filter: `brightness(${dominance}) saturate(${0.75 + dominance * 0.4})`,
         scale: 0.94 + dominance * 0.08,
         zIndex: Math.round(dominance * 10),
+        duration: .25,
+        overwrite: 'auto',
       });
     });
   }
 }
 
 function initInteractions() {
+  // Always listen — pointer parallax is intentional presenter feedback (original behavior).
   document.addEventListener('pointermove', (event) => {
     pointerX = event.clientX / innerWidth - .5;
     pointerY = event.clientY / innerHeight - .5;
-    if (!parallaxRaf && !prefersReducedMotion()) {
-      parallaxRaf = requestAnimationFrame(applyParallax);
-    }
+    if (!parallaxRaf) parallaxRaf = requestAnimationFrame(applyParallax);
+  }, { passive: true });
+  // Also catch mouseenter-from-outside so first move after focus still updates.
+  document.addEventListener('mousemove', (event) => {
+    pointerX = event.clientX / innerWidth - .5;
+    pointerY = event.clientY / innerHeight - .5;
+    if (!parallaxRaf) parallaxRaf = requestAnimationFrame(applyParallax);
   }, { passive: true });
 
   document.documentElement.classList.toggle('reduced-motion', prefersReducedMotion());
