@@ -432,26 +432,70 @@ export const part1Slides = [
     title: 'Hackathons. Funds. Talks.',
     className: 'slide-slot-machine',
     html: (() => {
+      // One image per project — deduped paths from public/assets (no placeholders / -raw).
       const slotSymbols = [
-        { label: 'Kaiju QA', image: 'projects/kaiju-qa-hero.png' },
-        { label: 'Save Point', image: 'projects/save-point-itch.jpg' },
-        { label: 'Good Measure', image: 'slot/good-measure-itch.jpg' },
+        { label: 'Corbomite', image: 'history/corbomite-logo.jpg' },
+        { label: 'Zbang', image: 'history/zbang-banner.jpg' },
+        { label: 'Pizza Morgana', image: 'history/pizza-morgana-banner.jpg' },
+        { label: 'Star Shipping', image: 'history/star-shipping-banner.jpg' },
+        { label: 'Spinning Cube', image: 'history/spinning-cube-logo.png' },
+        { label: 'Bolt Riley', image: 'history/bolt-riley-intro.jpg' },
+        { label: "Herbert's Quest", image: 'history/herberts-quest.jpg' },
+        { label: 'Uniform', image: 'history/uniform-logo.jpg' },
+        { label: 'Avner', image: 'history/avner-itch.jpg' },
+        { label: 'Kisa', image: 'history/kisa-logo.png' },
+        { label: 'Heavenly Hell', image: 'history/heavenly-hell-logo.png' },
         { label: 'Oh SHIP!', image: 'history/oh-ship-trailer.jpg' },
+        { label: 'BRCvr', image: 'history/brcvr-playa.jpg' },
+        { label: 'Adventure Mob', image: 'history/adventure-mob-logo.jpg' },
+        { label: 'Star Mates', image: 'history/star-mates-gdc.jpg' },
+        { label: 'LoveLink', image: 'projects/lovelink.jpg' },
+        { label: 'Save Point', image: 'projects/save-point-itch.jpg' },
+        { label: 'Glasses', image: 'projects/where-are-my-glasses-cover.png' },
+        { label: 'Meditation', image: 'projects/meditation-extreme.jpg' },
+        { label: 'Kaiju QA', image: 'projects/kaiju-qa-hero.png' },
+        { label: 'Improv Dash', image: 'projects/improv-dashboard.png' },
+        { label: 'Improv Cal', image: 'projects/improv-calendar.png' },
+        { label: 'Feed The Feed', image: 'projects/feed-the-feed.png' },
+        { label: 'JigTrade', image: 'projects/jigtrade.png' },
+        { label: 'CamSport', image: 'projects/camsport.png' },
+        { label: 'Good Measure', image: 'slot/good-measure-itch.jpg' },
         { label: 'Tricky Potions', image: 'slot/tricky-potions-itch.jpg' },
         { label: 'Freedom Beats', image: 'slot/freedom-beats-itch.jpg' },
+        { label: 'Turn Me On', image: 'slot/turn-me-on-itch.jpg' },
+        { label: 'Steam Engine', image: 'sidequests/geekcon-steam-engine.jpg' },
+        { label: 'Imperial March', image: 'sidequests/imperial-march-hdd.jpg' },
+        { label: 'Burner', image: 'about/oded-burner.jpg' },
+        { label: 'Maker', image: 'about/oded-maker.jpg' },
+        { label: 'Sculpture', image: 'about/burning-man-sculpture.jpg' },
       ];
+      // Dedupe by image path (keep first label).
+      const seen = new Set();
+      const unique = slotSymbols.filter((item) => {
+        if (seen.has(item.image)) return false;
+        seen.add(item.image);
+        return true;
+      });
       const tile = (item) => `
         <div class="slot-tile" data-project="${item.label}">
-          ${asset(item.image, item.label)}
+          <img src="./assets/${item.image}" alt="${item.label}" loading="eager" draggable="false">
           <span>${item.label}</span>
         </div>`;
-      // Three columns; each reel gets a rotated order so reels look distinct at rest.
+      // Deterministic shuffle so each reel cycles a different order.
+      const shuffle = (list, salt) => {
+        const copy = [...list];
+        for (let i = copy.length - 1; i > 0; i -= 1) {
+          const j = Math.abs((i * 17 + salt * 31) % (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      };
       const reels = [0, 1, 2].map((reelIndex) => {
-        const order = [...slotSymbols.slice(reelIndex), ...slotSymbols.slice(0, reelIndex)];
+        const order = shuffle(unique, reelIndex + 1);
         const strip = [...order, ...order].map(tile).join('');
         return `<div class="slot-reel" data-reel="${reelIndex}" data-symbols="${order.length}"><div class="slot-reel__strip">${strip}</div></div>`;
       }).join('');
-      return `<section class="slot-machine" data-interaction="drag-lever"><h2 data-depth="1">Hackathons.<br>Funds.<br>Talks.</h2><div class="slot-window" data-depth="2"><div class="slot-reels">${reels}</div></div><button type="button" class="slot-lever" data-action="pull-slot" aria-label="Pull slot lever">pull</button></section>`;
+      return `<section class="slot-machine" data-interaction="drag-lever"><h2 data-depth="1">Hackathons.<br>Funds.<br>Talks.</h2><div class="slot-stage" data-depth="2"><div class="slot-window"><div class="slot-reels">${reels}</div></div><button type="button" class="slot-lever" data-action="pull-slot" aria-label="Pull slot lever">pull</button></div></section>`;
     })(),
     notes: 'The software projects generate applications, talks, demos, and deadlines. No private names.'
   },
