@@ -31,23 +31,29 @@ let pointerY = 0;
 let parallaxRaf = 0;
 
 /**
- * Never Gonna Give You Up — chorus hook (transposed to G for a clear beep register).
- * One note per slide change; index only moves forward (left/right both advance).
- * MIDI: G4=67 A4=69 Bb4=70 Eb4=63 D4=62
+ * Never Gonna Give You Up — full chorus (song key / Bb–Db family).
+ * One note per slide change; index only moves forward (←/→ both advance).
+ * MIDI: Ab4=68 Bb4=70 C5=72 C#5=73 Eb5=75 F5=77 Ab5=80
  */
 const RICKROLL_MIDI = [
-  // Never gonna give you up  (Ne-ver = G G)
-  67, 67, 69, 70, 70, 69, 67, 63,
-  // Never gonna let you down
-  67, 67, 69, 70, 70, 69, 67, 62, 63,
-  // Never gonna run around and desert you
-  67, 67, 69, 70, 70, 69, 67, 63, 67, 63, 62,
-  // Never gonna make you cry
-  67, 67, 69, 70, 70, 69, 67, 63,
-  // Never gonna say goodbye
-  67, 67, 69, 70, 70, 69, 67, 62, 63,
-  // Never gonna tell a lie and hurt you
-  67, 67, 69, 70, 70, 69, 67, 63, 67, 63, 62,
+  // never gonna give you up
+  // Ne Bb · ver Bb · gon Ab · na Ab · give F · you F · up Eb
+  70, 70, 68, 68, 77, 77, 75,
+  // never gonna let you down
+  // Ne Bb · ver Bb · gon Ab · na Ab · let Eb · you Eb · down C# · (down) C · (down) Bb
+  70, 70, 68, 68, 75, 75, 73, 72, 70,
+  // never gonna run around and desert you
+  // Ne C# · ver C# · gon C# · na C# · run C# · a- Eb · -round C · (round) Bb · and Ab · de- Ab · -sert Ab · you Eb · (you) C#
+  73, 73, 73, 73, 73, 75, 72, 70, 68, 68, 68, 75, 73,
+  // never gonna make you cry
+  // Ne Bb · ver Bb · gon Ab · na Ab · make F · you F · cry Eb
+  70, 70, 68, 68, 77, 77, 75,
+  // never gonna say goodbye
+  // Ne Bb · ver Bb · gon Ab · na Ab · say Ab5 · good C · -bye C# · (bye) C · (bye) Bb
+  70, 70, 68, 68, 80, 72, 73, 72, 70,
+  // never gonna tell a lie and hurt you
+  // Ne C# · ver C# · gon C# · na C# · tell C# · a Eb · lie C · (lie) Bb · and Ab · hurt Ab · you Eb · (you) C#
+  73, 73, 73, 73, 73, 75, 72, 70, 68, 68, 75, 73,
 ];
 const midiToHz = (n) => 440 * (2 ** ((n - 69) / 12));
 
