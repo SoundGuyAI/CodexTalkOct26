@@ -48,14 +48,18 @@ const chartPinCatalog = [
   { year: 2026, label: 'AI Agents', image: 'projects/kaiju-qa.png' },
 ];
 
-/** Left-side callouts on the 2026 smash chart (point toward the tall bar). */
+const chartPinByYear = Object.fromEntries(chartPinCatalog.map((pin) => [pin.year, pin]));
+
+/** Image bubbles left of the 2026 smash bar (lines point at that column). */
 const chart2026Callouts = [
-  { label: 'LoveLink', y: 18 },
-  { label: 'Save Point', y: 32 },
-  { label: 'Improv Dashboard', y: 46 },
-  { label: 'TaskSwipe', y: 60 },
-  { label: 'Kaiju QA', y: 74 },
+  { label: 'LoveLink', image: 'projects/lovelink.jpg', y: 16 },
+  { label: 'Save Point', image: 'projects/save-point-itch.jpg', y: 32 },
+  { label: 'Improv Dashboard', image: 'projects/improv-dashboard.png', y: 48 },
+  { label: 'TaskSwipe', image: 'projects/taskswipe-placeholder.png', y: 64 },
+  { label: 'Kaiju QA', image: 'projects/kaiju-qa.png', y: 80 },
 ];
+
+const barHeightPct = (count) => Math.max(11, (count / 36) * 100);
 
 const yearlyProjectBars = (throughYear, highlightYear = null) => yearlyProjects
   .filter(([year]) => year <= throughYear)
@@ -65,8 +69,8 @@ const yearlyProjectBars = (throughYear, highlightYear = null) => yearlyProjects
     return `
   <button
     type="button"
-    class="year-bar${year === highlightYear ? ' is-current' : ''}${year === 2026 && highlightYear === 2026 ? ' is-smash' : ''}"
-    style="--bar-height:${Math.max(11, (count / 36) * 100)}%"
+    class="year-bar${year === highlightYear ? ' is-current' : ''}${year === 2026 && highlightYear === 2026 ? ' is-smash' : ''}${chartPinByYear[year] ? ' has-pin' : ''}"
+    style="--bar-height:${barHeightPct(count)}%"
     data-year="${year}"
     aria-label="${label}"
     title="${label}"
@@ -77,16 +81,25 @@ const yearlyProjectBars = (throughYear, highlightYear = null) => yearlyProjects
   </button>`;
   }).join('');
 
-const yearlyProjectPins = (throughYear) => {
-  const pins = chartPinCatalog.filter((pin) => pin.year <= throughYear);
-  return `
-  <div class="year-project-pins" aria-hidden="true">
-    ${pins.map((pin) => `
-      <figure class="year-project-pin pin-${pin.year}" data-depth="2">
-        <img src="./assets/${pin.image}" alt="">
-        <figcaption>${pin.label}</figcaption>
-      </figure>`).join('')}
-  </div>`;
+/** Pins sit in a grid matching the bars so each bubble hangs just above its tip. */
+const yearlyProjectPins = (throughYear, highlightYear = null) => {
+  const slots = yearlyProjects
+    .filter(([year]) => year <= throughYear)
+    .map(([year, count]) => {
+      const pin = chartPinByYear[year];
+      // On the agents smash slide, 2026 uses left callouts instead of a tip pin.
+      const showPin = pin && !(year === 2026 && highlightYear === 2026);
+      return `
+    <div class="year-pin-slot" style="--bar-height:${barHeightPct(count)}%" data-year="${year}">
+      ${showPin ? `
+        <figure class="year-project-pin pin-${pin.year}" data-draggable="true" data-year="${pin.year}">
+          <img src="./assets/${pin.image}" alt="" draggable="false">
+          <figcaption>${pin.label}</figcaption>
+          <i class="year-project-pin__stem" aria-hidden="true"></i>
+        </figure>` : ''}
+    </div>`;
+    }).join('');
+  return `<div class="year-project-pins" aria-hidden="true">${slots}</div>`;
 };
 
 const yearlyChart = ({ throughYear, highlightYear = null, phase }) => `
@@ -99,16 +112,19 @@ const yearlyChart = ({ throughYear, highlightYear = null, phase }) => `
     <div class="year-bars" role="img" aria-label="Projects active in each year from 2006 to ${throughYear}">
       ${yearlyProjectBars(throughYear, highlightYear)}
     </div>
-    ${yearlyProjectPins(throughYear)}
+    ${yearlyProjectPins(throughYear, highlightYear)}
     ${highlightYear === 2026 ? `
-      <div class="chart-callouts" aria-hidden="true">
+      <div class="chart-callouts" aria-label="Projects in the AI Agents year">
         ${chart2026Callouts.map((item) => `
-          <div class="chart-callout" style="--callout-y:${item.y}%">
-            <span>${item.label}</span>
-            <i></i>
+          <div class="chart-callout" style="--callout-y:${item.y}%" data-draggable="true">
+            <figure class="chart-callout__bubble">
+              <img src="./assets/${item.image}" alt="" draggable="false">
+              <figcaption>${item.label}</figcaption>
+            </figure>
+            <i class="chart-callout__line" aria-hidden="true"></i>
           </div>`).join('')}
       </div>` : ''}
-    <p class="yearly-chart__hint">hover a bar</p>
+    <p class="yearly-chart__hint">hover a bar · drag bubbles</p>
   </section>`;
 
 export const part1Slides = [
@@ -415,14 +431,28 @@ export const part1Slides = [
     duration: 5,
     title: 'Hackathons. Funds. Talks.',
     className: 'slide-slot-machine',
-    html: `<section class="slot-machine" data-interaction="drag-lever"><h2 data-depth="1">Hackathons.<br>Funds.<br>Talks.</h2><div class="slot-window" data-depth="2">${cards([
-      { label: 'Kaiju QA', image: 'projects/kaiju-qa-hero.png' },
-      { label: 'Save Point', image: 'projects/save-point-itch.jpg' },
-      { label: 'Good Measure', image: 'slot/good-measure-itch.jpg' },
-      { label: 'Oh SHIP!', image: 'history/oh-ship-trailer.jpg' },
-      { label: 'Tricky Potions', image: 'slot/tricky-potions-itch.jpg' },
-      { label: 'Freedom Beats', image: 'slot/freedom-beats-itch.jpg' },
-    ])}</div><button type="button" class="slot-lever" data-action="pull-slot">pull</button></section>`,
+    html: (() => {
+      const slotSymbols = [
+        { label: 'Kaiju QA', image: 'projects/kaiju-qa-hero.png' },
+        { label: 'Save Point', image: 'projects/save-point-itch.jpg' },
+        { label: 'Good Measure', image: 'slot/good-measure-itch.jpg' },
+        { label: 'Oh SHIP!', image: 'history/oh-ship-trailer.jpg' },
+        { label: 'Tricky Potions', image: 'slot/tricky-potions-itch.jpg' },
+        { label: 'Freedom Beats', image: 'slot/freedom-beats-itch.jpg' },
+      ];
+      const tile = (item) => `
+        <div class="slot-tile" data-project="${item.label}">
+          ${asset(item.image, item.label)}
+          <span>${item.label}</span>
+        </div>`;
+      // Three columns; each reel gets a rotated order so reels look distinct at rest.
+      const reels = [0, 1, 2].map((reelIndex) => {
+        const order = [...slotSymbols.slice(reelIndex), ...slotSymbols.slice(0, reelIndex)];
+        const strip = [...order, ...order].map(tile).join('');
+        return `<div class="slot-reel" data-reel="${reelIndex}" data-symbols="${order.length}"><div class="slot-reel__strip">${strip}</div></div>`;
+      }).join('');
+      return `<section class="slot-machine" data-interaction="drag-lever"><h2 data-depth="1">Hackathons.<br>Funds.<br>Talks.</h2><div class="slot-window" data-depth="2"><div class="slot-reels">${reels}</div></div><button type="button" class="slot-lever" data-action="pull-slot" aria-label="Pull slot lever">pull</button></section>`;
+    })(),
     notes: 'The software projects generate applications, talks, demos, and deadlines. No private names.'
   },
   {
