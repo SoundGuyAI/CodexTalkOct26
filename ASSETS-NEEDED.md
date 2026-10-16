@@ -36,30 +36,30 @@ Planning references:
 | 8 | Star Mates | `history/star-mates-gdc.jpg` (YT: `eVL2MUwJ9Og`) |
 | 9 | Geekcon | `sidequests/geekcon-steam-engine.jpg` (YT: `b5j8TWnWSU0`) |
 | 9 | Burns | `about/burning-man-sculpture.jpg` |
-| 15–27 | Modern spotlights (reordered) | Currency/Car/Show placeholders → Feed The Feed → CamSport → Kaiju → Improv×2 → LoveLink → JigTrade → Glasses → Meditation → Save Point |
+| 15–27 | Modern spotlights (reordered) | Currency/Car/Show placeholders → Feed The Feed → CamSport → Kaiju → **Improv Dashboard/Calendar real UI screenshots** → LoveLink → JigTrade → Glasses → Meditation → Save Point |
 | 47 | QR | Generated from live Pages URL |
 
 ### Slides 4–9 historical collages (fixed wrong reuse)
 
 | Slide | Subject | Status | File / next step |
 |---:|---|---|---|
-| 4 | Zbang | **HAVE** | `history/zbang-banner.jpg` from corporate.corbomitegames.com |
-| 4 | Pizza Morgana | **HAVE** | `history/pizza-morgana-logo.png` (+ banner) |
-| 4 | Knights in Shining Armor | **PLACEHOLDER · YOU** | Prefer cover / press art. Lead: Dec 2009 Corbomite press about Fluff Entertainment collab |
-| 4 | Rock Band songs | **PLACEHOLDER · YOU** | Prefer a Rock Band Network screenshot / song art from your archive |
-| 5 | Star Shipping | **HAVE** | `history/star-shipping-hd1.jpg` (+ map/hangar/outnow/hd2/hd3) |
-| 5 | Spinning Cube | **PLACEHOLDER · YOU** | Lead: May 2010 Corbomite post — no public screenshot found |
+| 4 | Zbang | **HAVE** | `history/zbang-logo.png` framed from Corbomite zbangoLogo |
+| 4 | Pizza Morgana | **HAVE** | `history/pizza-morgana-tile.png` framed from pizzalogo1.png |
+| 4 | KISA (Knights In Shining Armor) | **HAVE** | `history/kisa-logo.png` from Corbomite KISA_LOGO.png |
+| 4 | Heavenly Hell | **HAVE** | `history/heavenly-hell-logo.png` (Rock Band removed from this slide) |
+| 5 | Star Shipping | **HAVE** | `history/star-shipping-logo.png` framed Corbomite logo |
+| 5 | Spinning Cube | **HAVE** | `history/spinning-cube-logo.png` from CubeSpinLogo.png |
 | 5 | Leisure Suit Larry demo | **PLACEHOLDER · YOU** | Private / LinkedIn-era; need your capture |
 | 5 | Gun N' Blade | **PLACEHOLDER · YOU** | Lead: [SlideShare Gun N' Blade talk](http://www.slideshare.net/soundguy/gun-n-blade-oded-sharon-israeli-game-day-2013) — export a slide image, or send a still |
-| 6 | Herbert's Quest | **PLACEHOLDER · YOU** | Lead: YouTube portfolio “Herbert's Quest teaser” — drop the video URL or a frame |
-| 6 | Nightmare Playground | **PLACEHOLDER · YOU** | No public art found |
+| 6 | Herbert's Quest | **HAVE** | `history/herberts-quest.jpg` from adventuremob screenshot |
+| 6 | Uniform (was Nightmare Playground) | **HAVE** | `history/uniform-logo.jpg` from adventuremob.com/uniform |
 | 7 | GDC stages | **PLACEHOLDER · YOU** | Photo of you on a GDC stage / Vault session still (your photo) |
 | 7 | Game Dev Day | **PLACEHOLDER · YOU** | Crowd / stage photo from Israeli Game Dev Day |
 | 7 | GGJ groups | **PLACEHOLDER · YOU** | Group photo; GGJ site archive limited |
 | 7 | Teaching | **PLACEHOLDER · YOU** | Classroom / workshop photo |
-| 8 | StreetWize | **PLACEHOLDER · YOU** | Work was client/private — any sanitized screenshot or logo |
-| 9 | Midburn pyro | **PLACEHOLDER · YOU** | Lead: Midburn 2016 YouTube (send URL if not the steam-engine one) — `about/fireworks.jpg` exists as a weaker stand-in |
-| 9 | Imperial March HDD | **PLACEHOLDER · YOU** | Lead: ~Dec 2017 YouTube / Patreon — send URL or still |
+| 8 | Oh SHIP! Time to Escape | **HAVE** | `history/oh-ship-time-to-escape.jpg` (user YT-style thumb; replaces StreetWize) |
+| 9 | Midburn pyro | **HAVE (relabeled)** | Uses `about/burning-man-sculpture.jpg` (was mislabeled Burns) + fireworks |
+| 9 | Imperial March HDD | **HAVE** | `sidequests/imperial-march-hdd.jpg` from YT “yet another hard drive playing Imperial March” (Oded Sharon); letterboxed 16:10 |
 
 ### Modern / Part 1 utilities & slots
 
@@ -76,9 +76,11 @@ Planning references:
 
 | Slide | Subject | Status | Notes |
 |---:|---|---|---|
-| 35–36 | Symphony / Linear | **OPTIONAL · YOU** | Anonymized UI if you want realism; otherwise keep code-native conductor |
+| 21 | Improv Dashboard | **HAVE** | `projects/improv-dashboard.png` from `ImprovDashboard/.screenshots/IMPDASH-35/01_homepage_en.png` (Host Console). Spare runner: `improv-dashboard-runner.png` |
+| 22 | Improv Calendar | **HAVE** | `projects/improv-calendar.png` from `ImprovCALIL` english home screenshot. Spare month: `improv-calendar-month.png` |
+| 35–36 | Symphony / Linear | **HAVE (mock)** | Interactive kanban mock on slide 35 — optional anonymized Linear screenshot still nice |
 | 37–38 | Azure bill | **OPTIONAL · YOU** | Redacted cost graph only — no account IDs. Kinetic `$12,000` already works |
-| 43 | TaskSwipe | **PLACEHOLDER · YOU** | `CalendarSwipeTasks/mockups/` only has a README — need a swipe screenshot or short screen recording. Local app: `C:\UnityProj\TaskSwipe` |
+| 43 | TaskSwipe | **HAVE (interactive mock)** | In-deck swipe mock styled after `C:\UnityProj\TaskSwipe`. Optional: still drop a real portrait screenshot → `projects/taskswipe.*` |
 
 ### Explicitly not needed / do not send
 
@@ -112,13 +114,16 @@ Devpost gallery pages blocked automated download (HTTP 403). BRCvr team page als
 
 ### Must-have before talk day
 
-1. **TaskSwipe** — portrait screenshot or 5–8s mute WebM of a left/right swipe → `public/assets/projects/taskswipe.*`
-2. **Currency converter** — phone screenshot → `projects/currency-converter.*`
-3. **Car Appraiser Finder** — phone screenshot → `projects/car-appraiser.*`
-4. **Show tracker** — phone screenshot → `projects/show-tracker.*`
-5. **Herbert's Quest** still or trailer URL
-6. **Gun N' Blade** still (or confirm SlideShare export is OK)
-7. **One community photo set** — any mix of GDC / Game Dev Day / GGJ / teaching (even 2–3 photos covers slide 7)
+1. **Currency converter** — phone screenshot → `projects/currency-converter.*`
+2. **Car Appraiser Finder** — phone screenshot → `projects/car-appraiser.*`
+3. **Show tracker** — phone screenshot → `projects/show-tracker.*`
+4. **Herbert's Quest** still or trailer URL
+5. **Gun N' Blade** still (or confirm SlideShare export is OK)
+6. **One community photo set** — any mix of GDC / Game Dev Day / GGJ / teaching (even 2–3 photos covers slide 7)
+
+### Nice polish (no longer blocking)
+
+7. **TaskSwipe** — optional real portrait screenshot/WebM (interactive mock already in deck)
 
 ### Nice-to-have
 
@@ -128,7 +133,7 @@ Devpost gallery pages blocked automated download (HTTP 403). BRCvr team page als
 11. Nightmare Playground still  
 12. StreetWize logo/screenshot  
 13. Rock Band Network song art  
-14. Midburn pyro / Imperial March HDD video URLs or frames  
+14. Midburn pyro still (better than sculpture stand-in) — Imperial March HDD now HAVE  
 15. Redacted Azure cost screenshot  
 16. Symphony/Linear anonymized screenshot  
 
@@ -175,4 +180,4 @@ None remaining on slides 4–9 after the historical placeholder pass. Do **not**
 
 ### Still unique placeholders (no shared art)
 
-Knights, Rock Band, Spinning Cube, Larry, Gun N' Blade, Herbert's Quest, Nightmare Playground, community set, StreetWize, Midburn pyro, Imperial March, currency / car / show tracker, TaskSwipe.
+Knights, Rock Band, Spinning Cube, Larry, Gun N' Blade, Herbert's Quest, Nightmare Playground, community set, Midburn pyro (better still), currency / car / show tracker, TaskSwipe. (StreetWize replaced by Oh SHIP Time to Escape; Imperial March HDD HAVE.)

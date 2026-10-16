@@ -22,16 +22,16 @@ export const part2Slides = [
     title: 'How?',
     className: 'slide--how slide--vortex',
     html: `
-      <section class="slide-content slide-content--center" aria-labelledby="part2-how-title">
-        <div class="vortex" data-depth="1" aria-hidden="true"><span></span><span></span><span></span></div>
+      <section class="slide-content slide-content--how" aria-labelledby="part2-how-title">
+        <div class="how-void" data-depth="1" aria-hidden="true"></div>
         <h1 id="part2-how-title" data-depth="5">How?</h1>
-        <div class="vortex-orbit" data-depth="2" aria-label="Movable project cards">
-          ${card({ label: 'memory', title: 'planning', tone: 'cyan', depth: 2 })}
-          ${card({ label: 'handoff', title: 'context', tone: 'lime', depth: 3 })}
-          ${card({ label: 'guardrail', title: 'limits', tone: 'orange', depth: 2 })}
+        <div class="how-pillars" data-depth="2" aria-label="Three system pillars">
+          ${card({ label: '01', title: 'memory', tone: 'cyan', depth: 2, draggable: true })}
+          ${card({ label: '02', title: 'handoffs', tone: 'lime', depth: 3, draggable: true })}
+          ${card({ label: '03', title: 'limits', tone: 'orange', depth: 2, draggable: true })}
         </div>
       </section>`,
-    notes: 'Bad news: I do not manage them. Good news: I built a system that lets me fail in parallel. Spoken lede (off-screen): I do not manage the projects — I make it possible to fail in parallel. Drag a card into the void.'
+    notes: 'Bad news: I do not manage them. Good news: I built a system that lets me fail in parallel. Three pillars: memory, handoffs, limits. Drag a card if you want.'
   },
   {
     id: 'part2-planning-repo',
@@ -39,31 +39,36 @@ export const part2Slides = [
     title: 'One planning repo.',
     className: 'slide--planning-repo slide--dark-paper',
     html: `
-      <section class="slide-content slide-content--split" aria-labelledby="part2-planning-title">
+      <section class="slide-content slide-content--split slide-content--repo" aria-labelledby="part2-planning-title">
         <header class="slide-heading" data-depth="5">
           <h2 id="part2-planning-title">One planning repo.</h2>
         </header>
         <nav class="repo-tree" aria-label="Planning repository branches" data-depth="2">
-          <button class="repo-tree__node repo-tree__node--root" type="button" data-draggable="true">ProjectPlanningAndIdeas</button>
+          <button class="repo-tree__node repo-tree__node--root" type="button" data-branch="Projects">ProjectPlanningAndIdeas</button>
           <ul>
-            <li><button type="button" data-draggable="true">Talks</button></li>
-            <li><button type="button" data-draggable="true">Projects</button></li>
-            <li><button type="button" data-draggable="true">Submissions</button></li>
-            <li><button type="button" data-draggable="true">Life tools</button></li>
+            <li><button type="button" data-branch="Talks">Talks</button></li>
+            <li><button type="button" data-branch="Projects">Projects</button></li>
+            <li><button type="button" data-branch="Games">Games</button></li>
+            <li><button type="button" data-branch="Submissions">Submissions</button></li>
+            <li><button type="button" data-branch="Life tools">Life tools</button></li>
           </ul>
         </nav>
         <aside class="repo-preview" data-depth="4" aria-live="polite">
           <div class="repo-preview__bar"><span></span><span></span><span></span><small>selected context</small></div>
-          <pre><code># next handoff
+          <pre><code data-repo-preview># games/
 
-Goal: make the graph generic.
-Keep: three thumbnails.
-Avoid: private counts.
+- Oh SHIP!
+- Bolt Riley
+- Meditation EXTREME
+- Where Are My Glasses?
 
-Next: write the interaction notes.</code></pre>
+# also life tools + talks</code></pre>
+          <div class="repo-game-chips" aria-label="Games in the planning repo">
+            <span>Oh SHIP!</span><span>Save Point</span><span>Glasses</span><span>Meditation</span>
+          </div>
         </aside>
       </section>`,
-    notes: 'External memory / routing layer for attention — not a project manager. Branches: Talks, Projects, Submissions, Life tools. Click a branch to preview its sanitized Markdown card.'
+    notes: 'External memory / routing layer — not a project manager. Includes games (Oh SHIP!, Save Point, Glasses, Meditation), talks, submissions, life tools. Click a branch to preview.'
   },
   {
     id: 'part2-markdown-handoffs',
@@ -106,14 +111,14 @@ Next: write the interaction notes.</code></pre>
           <h2 id="part2-parallel-title">Parallel + adversarial.</h2>
         </header>
         <div class="system-grid" data-depth="2">
-          <article class="system-pane system-pane--plan" data-draggable="true"><span>PLAN</span><strong>state the claim</strong></article>
-          <article class="system-pane system-pane--execute" data-draggable="true"><span>EXECUTE</span><strong>make the thing</strong></article>
-          <article class="system-pane system-pane--check" data-draggable="true"><span>CHECK</span><strong>try to break it</strong></article>
-          <article class="system-pane system-pane--supervise" data-draggable="true"><span>SUPERVISE</span><strong>stop the loop</strong></article>
+          <article class="system-pane system-pane--plan" data-draggable="true"><span>PLAN</span><strong>Cursor</strong><em>state the claim</em></article>
+          <article class="system-pane system-pane--execute" data-draggable="true"><span>EXECUTE</span><strong>Claude</strong><em>make the thing</em></article>
+          <article class="system-pane system-pane--check" data-draggable="true"><span>CHECK</span><strong>Antigravity</strong><em>try to break it</em></article>
+          <article class="system-pane system-pane--supervise" data-draggable="true"><span>REVIEW PRS</span><strong>Codex + Cursor</strong><em>both review</em></article>
         </div>
         <div class="critic-stamp" data-depth="4" aria-label="Independent critic">NOPE.</div>
       </section>`,
-    notes: 'Speed only counts when another loop can disagree. PLAN = brief/outline/acceptance. EXECUTE = code/assets/experiments. CHECK = screenshots/tests/red pen. SUPERVISE = time/tokens/cost/exit. Critic stamp: prove it. Hover a pane; drag it out of alignment.'
+    notes: 'Plan = Cursor. Execute = Claude. Check = Antigravity. Review PRs = both Codex and Cursor. Speed only counts when another loop can disagree. Critic stamp: prove it.'
   },
   {
     id: 'part2-adhd-feature',
@@ -126,41 +131,56 @@ Next: write the interaction notes.</code></pre>
           <h2 id="part2-adhd-title">ADHD is a feature.</h2>
         </header>
         <div class="attention-field" data-depth="2" aria-label="Project windows">
-          ${['talk', 'game', 'XR', 'calendar', 'submission', 'tool', 'experiment'].map((name, index) => `
-            <button class="attention-window attention-window--${index + 1}" type="button" data-draggable="true" data-depth="${index % 3 + 1}">
-              <span>${esc(name)}</span>
+          ${[
+            ['talk', 'cyan'],
+            ['game', 'pink'],
+            ['XR', 'lime'],
+            ['calendar', 'orange'],
+            ['submission', 'cyan'],
+            ['tool', 'pink'],
+            ['experiment', 'lime'],
+          ].map(([name, tone], index) => `
+            <button class="attention-window attention-window--${tone} attention-window--${index + 1}" type="button" data-draggable="true" data-depth="${index % 3 + 1}">
+              <small>window ${index + 1}</small>
+              <strong>${esc(name)}</strong>
             </button>`).join('')}
           <div class="attention-eye" data-depth="5" aria-hidden="true">◉</div>
         </div>
       </section>`,
-    notes: 'Context switching becomes useful when state lives outside my head. The urge to switch becomes routing energy. Hover one window to calm the rest and move the eye.'
+    notes: 'Context switching becomes useful when state lives outside my head. The urge to switch becomes routing energy. Drag a window; the rest stay readable.'
   },
   {
     id: 'part2-symphony',
     duration: 18,
-    title: 'Symphony',
+    title: 'Symphony + Linear',
     className: 'slide--symphony slide--paper',
     html: `
       <section class="slide-content slide-content--symphony" aria-labelledby="part2-symphony-title">
         <header class="slide-heading" data-depth="5">
-          <h2 id="part2-symphony-title">Symphony</h2>
+          <h2 id="part2-symphony-title">Symphony + Linear</h2>
         </header>
-        <div class="conductor-stage" data-depth="2">
-          <div class="conductor-baton" data-draggable="true" aria-label="Movable conductor baton">⌁</div>
-          <div class="agent-lanes" aria-label="Agent lanes">
-            <div class="agent-lane" data-draggable="true"><span>research</span><i></i></div>
-            <div class="agent-lane" data-draggable="true"><span>build</span><i></i></div>
-            <div class="agent-lane" data-draggable="true"><span>check</span><i></i></div>
+        <div class="kanban-board" data-interaction="symphony-kanban" data-depth="2" aria-label="Drag tasks across columns">
+          <div class="kanban-col" data-kanban-col="idea">
+            <header>Idea</header>
+            <article class="kanban-card" tabindex="0">deck polish</article>
+            <article class="kanban-card" tabindex="0">TaskSwipe mock</article>
           </div>
-          <aside class="linear-board" data-depth="4" aria-label="Planning board companion">
-            <div class="linear-board__top"><span></span><strong>planning board</strong></div>
-            <div class="linear-board__card">context</div>
-            <div class="linear-board__card">handoff</div>
-            <div class="linear-board__card">review</div>
-          </aside>
+          <div class="kanban-col" data-kanban-col="todo">
+            <header>Todo</header>
+            <article class="kanban-card" tabindex="0">chart callouts</article>
+          </div>
+          <div class="kanban-col" data-kanban-col="agent">
+            <header>Agent</header>
+            <article class="kanban-card kanban-card--agent" tabindex="0">wiring handoffs</article>
+          </div>
+          <div class="kanban-col" data-kanban-col="review">
+            <header>Review</header>
+            <article class="kanban-card" tabindex="0">screenshot pass</article>
+          </div>
         </div>
+        <p class="kanban-hint">drag cards → Idea · Todo · Agent · Review</p>
       </section>`,
-    notes: 'I tried formal orchestration with Symphony, in tandem with Linear. Use the baton to send work into the lanes, then point out the maintenance meter climbing.'
+    notes: 'Symphony + Linear: orchestration became another board to maintain. Demo: drag cards Idea → Todo → Agent → Review. Then the free-tier limit story.'
   },
   {
     id: 'part2-project-20',
@@ -240,17 +260,16 @@ Next: write the interaction notes.</code></pre>
     html: `
       <section class="slide-content slide-content--type-shift" aria-labelledby="part2-software-changing-title">
         <h2 id="part2-software-changing-title" data-depth="5">Software is changing.</h2>
-        <div class="type-shift" aria-label="Changing roles" data-depth="2">
-          <span class="type-shift__word type-shift__word--old">user</span>
-          <span class="type-shift__arrow">→</span>
-          <span class="type-shift__word type-shift__word--new">modifier</span>
-          <span class="type-shift__arrow">→</span>
-          <span class="type-shift__word type-shift__word--new">builder</span>
-          <span class="type-shift__arrow">→</span>
-          <span class="type-shift__word type-shift__word--new">maintainer</span>
+        <div class="type-shift" aria-label="Click a role to strike it" data-depth="2">
+          <button type="button" class="type-shift__word" data-strike-word>User</button>
+          <span class="type-shift__arrow" aria-hidden="true">→</span>
+          <button type="button" class="type-shift__word" data-strike-word>Builder</button>
+          <span class="type-shift__arrow" aria-hidden="true">→</span>
+          <button type="button" class="type-shift__word" data-strike-word>Modifier</button>
         </div>
+        <p class="type-shift__hint">click to strike</p>
       </section>`,
-    notes: 'Open source plus agents changes who gets to change software. The tool is no longer the finished product — it is material.'
+    notes: 'Open source plus agents changes who gets to change software. Click User / Builder / Modifier to strike them live. The tool is material, not a finished product.'
   },
   {
     id: 'part2-everyone-developer',
@@ -300,21 +319,47 @@ Next: write the interaction notes.</code></pre>
         <header class="slide-heading" data-depth="5">
           <h2 id="part2-taskswipe-title">TaskSwipe</h2>
         </header>
-        <div class="phone-stage" data-depth="2">
-          <div class="phone-shell" data-depth="3">
-            <div class="phone-notch"></div>
-            <img class="taskswipe-placeholder" src="./assets/projects/taskswipe-placeholder.png" alt="NEED IMAGE Of TASKSWIPE SWIPE UI HERE" width="320" height="240">
-            <div class="task-stack" aria-label="Draggable task cards">
-              <article class="task-card task-card--top" data-draggable="true" tabindex="0"><strong>finish the handoff</strong></article>
-              <article class="task-card task-card--middle" data-draggable="true" tabindex="0"><strong>capture the screenshot</strong></article>
-              <article class="task-card task-card--bottom" data-draggable="true" tabindex="0"><strong>make the tiny tool</strong></article>
+        <div class="taskswipe-stage" data-interaction="taskswipe" data-depth="2">
+          <div class="taskswipe-shell" data-depth="3">
+            <div class="taskswipe-topbar">
+              <strong>TaskSwipe</strong>
+              <span class="taskswipe-badge">DEMO</span>
+              <span class="taskswipe-week">This week</span>
             </div>
-            <div class="swipe-actions"><button type="button" aria-label="Send task left">←</button><button type="button" aria-label="Send task right">→</button></div>
+            <p class="taskswipe-count" data-swipe-status>3 left</p>
+            <div class="taskswipe-deck-area">
+              <div class="taskswipe-hint taskswipe-hint--keep">KEEP</div>
+              <div class="taskswipe-hint taskswipe-hint--postpone">POSTPONE</div>
+              <div class="taskswipe-stack" aria-label="Swipeable task cards">
+                <article class="taskswipe-card" style="--card-tint:#3d6ea8">
+                  <div class="taskswipe-card__header"><span>PROJECTS</span><time>Tue 14:00</time></div>
+                  <h3>Polish chart callouts</h3>
+                  <p>Codex meetup deck · 25m</p>
+                </article>
+                <article class="taskswipe-card is-behind" style="--card-tint:#8a4b9a">
+                  <div class="taskswipe-card__header"><span>GAMES</span><time>Wed 10:30</time></div>
+                  <h3>Save Point build check</h3>
+                  <p>narrative web pass · 40m</p>
+                </article>
+                <article class="taskswipe-card is-behind" style="--card-tint:#2f7a62">
+                  <div class="taskswipe-card__header"><span>IMPROV</span><time>Thu 19:00</time></div>
+                  <h3>Rehearsal console dry run</h3>
+                  <p>Improv Dashboard · 1h</p>
+                </article>
+              </div>
+            </div>
+            <div class="taskswipe-actions">
+              <button type="button" data-swipe="keep" aria-label="Keep task">← Keep</button>
+              <button type="button" data-swipe="postpone" aria-label="Postpone task">Postpone →</button>
+            </div>
           </div>
-          <div class="lane-destinations" data-depth="4"><span>PLAN</span><span>CHECK</span><span>EXPERIMENT</span></div>
+          <aside class="taskswipe-legend" data-depth="4">
+            <p><strong>← keep</strong> today</p>
+            <p><strong>postpone →</strong> later</p>
+          </aside>
         </div>
       </section>`,
-    notes: 'The practical version: I changed task software to match how my brain sorts work. Placeholder phone UI until a real screenshot lands. Drag or use the two buttons to send cards toward their lanes.'
+    notes: 'Interactive mock (no Google backend). Drag left = keep, drag right = postpone — same idea as TaskSwipe. Sample tasks only.'
   },
   {
     id: 'part2-everything',

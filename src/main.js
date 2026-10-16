@@ -25,6 +25,31 @@ let pausedTotal = 0;
 let muted = true;
 let audioContext;
 let lastTKeyAt = 0;
+let melodyIndex = 0;
+let pointerX = 0;
+let pointerY = 0;
+let parallaxRaf = 0;
+
+/**
+ * Never Gonna Give You Up — chorus hook (transposed to G for a clear beep register).
+ * One note per slide change; index only moves forward (left/right both advance).
+ * MIDI: G4=67 A4=69 Bb4=70 Eb4=63 D4=62
+ */
+const RICKROLL_MIDI = [
+  // Never gonna give you up  (Ne-ver = G G)
+  67, 67, 69, 70, 70, 69, 67, 63,
+  // Never gonna let you down
+  67, 67, 69, 70, 70, 69, 67, 62, 63,
+  // Never gonna run around and desert you
+  67, 67, 69, 70, 70, 69, 67, 63, 67, 63, 62,
+  // Never gonna make you cry
+  67, 67, 69, 70, 70, 69, 67, 63,
+  // Never gonna say goodbye
+  67, 67, 69, 70, 70, 69, 67, 62, 63,
+  // Never gonna tell a lie and hurt you
+  67, 67, 69, 70, 70, 69, 67, 63, 67, 63, 62,
+];
+const midiToHz = (n) => 440 * (2 ** ((n - 69) / 12));
 
 deck.innerHTML = `
   <div class="stage" id="stage">
@@ -59,37 +84,82 @@ const timerEl = document.querySelector('.timer');
 function beep(frequency = 330, duration = 0.045) {
   if (muted) return;
   audioContext ||= new AudioContext();
+  if (audioContext.state === 'suspended') audioContext.resume();
   const oscillator = audioContext.createOscillator();
   const gain = audioContext.createGain();
+  oscillator.type = 'triangle';
   oscillator.frequency.value = frequency;
-  gain.gain.setValueAtTime(0.035, audioContext.currentTime);
+  gain.gain.setValueAtTime(0.04, audioContext.currentTime);
   gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + duration);
   oscillator.connect(gain).connect(audioContext.destination);
-  oscillator.start(); oscillator.stop(audioContext.currentTime + duration);
+  oscillator.start();
+  oscillator.stop(audioContext.currentTime + duration);
+}
+
+function playTransitionTone() {
+  // Always forward through the chorus — direction of navigation does not matter.
+  const midi = RICKROLL_MIDI[melodyIndex % RICKROLL_MIDI.length];
+  melodyIndex = (melodyIndex + 1) % RICKROLL_MIDI.length;
+  const hz = midiToHz(midi);
+  const isBill = current === 37;
+  beep(isBill ? hz * 0.5 : hz, isBill ? 0.16 : 0.07);
+}
+
+function pauseInactiveVideos(activeSlide) {
+  document.querySelectorAll('video').forEach((video) => {
+    if (activeSlide?.contains(video)) return;
+    try { video.pause(); } catch { /* ignore */ }
+  });
+}
+
+function playActiveVideos(slideEl) {
+  if (!slideEl) return;
+  slideEl.querySelectorAll('video').forEach((video) => {
+    video.muted = true;
+    video.playsInline = true;
+    video.loop = true;
+    const tryPlay = () => {
+      const result = video.play();
+      if (result?.catch) result.catch(() => { /* autoplay may need a gesture */ });
+    };
+    if (video.readyState >= 2) tryPlay();
+    else video.addEventListener('loadeddata', tryPlay, { once: true });
+  });
 }
 
 function showSlide(index, direction = 1) {
   const nextIndex = Math.max(0, Math.min(slides.length - 1, index));
-  if (nextIndex === current && slideEls[current].classList.contains('is-active')) return;
+  if (nextIndex === current && slideEls[current]?.classList.contains('is-active')) return;
   const old = slideEls[current];
+  const changed = nextIndex !== current;
   current = nextIndex;
   slideEls.forEach((el, i) => {
     el.classList.toggle('is-active', i === current);
     el.setAttribute('aria-hidden', i === current ? 'false' : 'true');
+    // Opacity only — never clearProps transform here (that killed child parallax offsets).
+    if (i !== current) gsap.set(el, { opacity: 0 });
   });
   if (!prefersReducedMotion()) {
     if (old && old !== slideEls[current]) gsap.set(old, { opacity: 0, xPercent: direction > 0 ? -3 : 3 });
-    gsap.fromTo(slideEls[current], { opacity: 0, xPercent: direction > 0 ? 5 : -5, scale: .985 }, { opacity: 1, xPercent: 0, scale: 1, duration: .48, ease: 'power3.out', clearProps: 'transform' });
+    // clearProps only xPercent/scale so child [data-depth] x/y parallax survives.
+    gsap.fromTo(slideEls[current], { opacity: 0, xPercent: direction > 0 ? 5 : -5, scale: .985 }, { opacity: 1, xPercent: 0, scale: 1, duration: .48, ease: 'power3.out', clearProps: 'xPercent,scale' });
   } else {
     gsap.set(slideEls[current], { opacity: 1, xPercent: 0, scale: 1 });
   }
   counter.textContent = `${current + 1} / ${slides.length}`;
-  history.replaceState(null, '', `#slide-${current + 1}`);
+  const nextHash = `#slide-${current + 1}`;
+  if (location.hash !== nextHash) history.replaceState(null, '', nextHash);
   document.querySelector('.notes-position').textContent = `Slide ${current + 1} of ${slides.length} · ${slides[current].duration}s`;
   document.querySelector('.notes-copy').innerHTML = slides[current].notes || '—';
   if (timerStartedAt === null && current > 0) timerStartedAt = performance.now();
-  beep(current === 37 ? 110 : 330 + (current % 5) * 25, current === 37 ? .22 : .045);
-  wireSlideInteractions(slideEls[current]);
+  if (changed) playTransitionTone();
+  pauseInactiveVideos(slideEls[current]);
+  playActiveVideos(slideEls[current]);
+  try {
+    wireSlideInteractions(slideEls[current]);
+  } catch (error) {
+    console.warn('slide interaction wiring failed', error);
+  }
 }
 
 function navigate(delta) { showSlide(current + delta, delta); }
@@ -137,33 +207,201 @@ function activeRoot() {
   return slideEls[current]?.querySelector('.slide-inner');
 }
 
+function wireKanban(root) {
+  const board = root.querySelector('[data-interaction="symphony-kanban"]');
+  if (!board || board.dataset.kanbanWired === 'true') return;
+  board.dataset.kanbanWired = 'true';
+  const columns = [...board.querySelectorAll('[data-kanban-col]')];
+  columns.forEach((col) => {
+    [...col.querySelectorAll('.kanban-card')].forEach((card) => {
+      Draggable.create(card, {
+        type: 'x,y',
+        bounds: board,
+        inertia: false,
+        onPress() { gsap.to(card, { scale: 1.05, duration: .12, zIndex: 20 }); },
+        onRelease() {
+          const rect = card.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          let target = col;
+          let best = Infinity;
+          columns.forEach((candidate) => {
+            const r = candidate.getBoundingClientRect();
+            const dist = Math.hypot(cx - (r.left + r.width / 2), cy - (r.top + r.height / 2));
+            if (dist < best) { best = dist; target = candidate; }
+          });
+          target.appendChild(card);
+          gsap.set(card, { x: 0, y: 0, scale: 1, zIndex: 1 });
+          beep(midiToHz(72), .04);
+        },
+      });
+    });
+  });
+}
+
+function wireTaskSwipe(root) {
+  const stage = root.querySelector('[data-interaction="taskswipe"]');
+  if (!stage || stage.dataset.swipeWired === 'true') return;
+  stage.dataset.swipeWired = 'true';
+  const stack = stage.querySelector('.taskswipe-stack');
+  if (!stack) return;
+
+  const status = stage.querySelector('[data-swipe-status]');
+  const cards = () => [...stack.querySelectorAll('.taskswipe-card:not(.is-gone)')];
+
+  const fly = (card, dir) => {
+    const label = dir < 0 ? 'keep' : 'postpone';
+    if (status) status.textContent = label;
+    stage.classList.toggle('is-keep', dir < 0);
+    stage.classList.toggle('is-postpone', dir > 0);
+    gsap.to(card, {
+      x: dir * 520,
+      rotate: dir * 18,
+      opacity: 0,
+      duration: prefersReducedMotion() ? 0.05 : 0.28,
+      ease: 'power2.in',
+      onComplete() {
+        card.classList.add('is-gone');
+        card.remove();
+        stage.classList.remove('is-keep', 'is-postpone');
+        const remaining = cards();
+        remaining.forEach((node, i) => {
+          node.classList.toggle('is-top', i === 0);
+          node.classList.toggle('is-behind', i > 0);
+          gsap.set(node, { zIndex: remaining.length - i });
+        });
+        if (!remaining.length && status) status.textContent = 'inbox clear';
+      },
+    });
+    beep(dir < 0 ? midiToHz(64) : midiToHz(58), .05);
+  };
+
+  const bindTop = () => {
+    const top = cards()[0];
+    if (!top || top.dataset.bound === 'true') return;
+    top.dataset.bound = 'true';
+    top.classList.add('is-top');
+    Draggable.create(top, {
+      type: 'x,y',
+      bounds: stage,
+      inertia: false,
+      onDrag() {
+        const x = this.x;
+        top.style.setProperty('--tilt', `${x / 18}deg`);
+        stage.classList.toggle('is-keep', x < -40);
+        stage.classList.toggle('is-postpone', x > 40);
+      },
+      onRelease() {
+        if (this.x <= -110) fly(top, -1);
+        else if (this.x >= 110) fly(top, 1);
+        else {
+          gsap.to(top, { x: 0, y: 0, duration: .25, ease: 'back.out(1.6)' });
+          top.style.setProperty('--tilt', '0deg');
+          stage.classList.remove('is-keep', 'is-postpone');
+        }
+      },
+    });
+  };
+
+  stage.querySelector('[data-swipe="keep"]')?.addEventListener('click', () => {
+    const top = cards()[0];
+    if (top) fly(top, -1);
+  });
+  stage.querySelector('[data-swipe="postpone"]')?.addEventListener('click', () => {
+    const top = cards()[0];
+    if (top) fly(top, 1);
+  });
+
+  const observer = new MutationObserver(bindTop);
+  observer.observe(stack, { childList: true });
+  cards().forEach((node, i) => {
+    node.classList.toggle('is-top', i === 0);
+    node.classList.toggle('is-behind', i > 0);
+    gsap.set(node, { zIndex: cards().length - i });
+  });
+  bindTop();
+}
+
+function wireTypeShift(root) {
+  const words = root.querySelectorAll('[data-strike-word]');
+  if (!words.length || root.dataset.strikeWired === 'true') return;
+  root.dataset.strikeWired = 'true';
+  words.forEach((word) => {
+    word.addEventListener('click', () => {
+      word.classList.toggle('is-struck');
+      beep(midiToHz(word.classList.contains('is-struck') ? 55 : 67), .04);
+    });
+  });
+}
+
+function wireRepoPreview(root) {
+  const tree = root.querySelector('.repo-tree');
+  const preview = root.querySelector('[data-repo-preview]');
+  if (!tree || !preview || tree.dataset.previewWired === 'true') return;
+  tree.dataset.previewWired = 'true';
+  const snippets = {
+    Talks: '# talks/\n\n- Codex meetup deck\n- United XR notes\n- Next: polish slides',
+    Projects: '# projects/\n\n- LoveLink\n- Save Point\n- Improv Dashboard\n- TaskSwipe',
+    Games: '# games/\n\n- Oh SHIP!\n- Bolt Riley\n- Meditation EXTREME\n- Where Are My Glasses?',
+    Submissions: '# submissions/\n\n- funds\n- accelerators\n- festival workshops',
+    'Life tools': '# life-tools/\n\n- currency\n- car appraiser\n- show tracker\n- calendar',
+  };
+  tree.querySelectorAll('button[data-branch]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.branch;
+      preview.textContent = snippets[key] || snippets.Projects;
+      tree.querySelectorAll('button').forEach((b) => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+    });
+  });
+}
+
 function wireSlideInteractions(slideEl) {
   if (!slideEl) return;
   const root = slideEl.querySelector('.slide-inner');
-  if (!root || root.dataset.wired === 'true') return;
-  root.dataset.wired = 'true';
+  if (!root) return;
 
-  const swimlanes = root.querySelector('.swimlanes');
-  if (swimlanes) {
-    [...swimlanes.querySelectorAll('.swimlane')].forEach((lane) => {
-      Draggable.create(lane, {
-        type: 'y',
-        bounds: swimlanes,
+  if (root.dataset.wired !== 'true') {
+    root.dataset.wired = 'true';
+
+    const swimlanes = root.querySelector('.swimlanes');
+    if (swimlanes) {
+      [...swimlanes.querySelectorAll('.swimlane')].forEach((lane) => {
+        Draggable.create(lane, {
+          type: 'y',
+          bounds: swimlanes,
+          inertia: false,
+          onDragEnd() {
+            const ordered = [...swimlanes.querySelectorAll('.swimlane')]
+              .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
+            ordered.forEach((node) => swimlanes.appendChild(node));
+            gsap.set(ordered, { x: 0, y: 0 });
+          },
+        });
+      });
+    }
+
+    const handoffPaper = root.querySelector('.handoff-paper');
+    if (handoffPaper && !prefersReducedMotion()) {
+      gsap.fromTo(handoffPaper, { x: -40, opacity: .55 }, { x: 40, opacity: 1, duration: 1.6, ease: 'power1.inOut', yoyo: true, repeat: -1 });
+    }
+
+    root.querySelectorAll('[data-draggable="true"]').forEach((node) => {
+      if (node.closest('[data-interaction="symphony-kanban"], [data-interaction="taskswipe"]')) return;
+      Draggable.create(node, {
+        type: 'x,y',
+        bounds: root,
         inertia: false,
-        onDragEnd() {
-          const ordered = [...swimlanes.querySelectorAll('.swimlane')]
-            .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
-          ordered.forEach((node) => swimlanes.appendChild(node));
-          gsap.set(ordered, { x: 0, y: 0 });
-        },
+        onPress: () => gsap.to(node, { scale: 1.06, duration: .15 }),
+        onRelease: () => gsap.to(node, { scale: 1, duration: .25, ease: 'back.out(2)' }),
       });
     });
   }
 
-  const handoffPaper = root.querySelector('.handoff-paper');
-  if (handoffPaper && !prefersReducedMotion()) {
-    gsap.fromTo(handoffPaper, { x: -40, opacity: .55 }, { x: 40, opacity: 1, duration: 1.6, ease: 'power1.inOut', yoyo: true, repeat: -1 });
-  }
+  wireKanban(root);
+  wireTaskSwipe(root);
+  wireTypeShift(root);
+  wireRepoPreview(root);
 }
 
 function runAction(action, trigger) {
@@ -227,38 +465,56 @@ function runAction(action, trigger) {
       gsap.from(kids, { x: reduced ? 0 : 24, opacity: .4, stagger: .03, duration: .3 });
     }
   }
+  if (action === 'multiply-windows') {
+    const windows = root.querySelector('.tiny-windows');
+    if (windows) gsap.fromTo(windows.children, { scale: .7, opacity: .4 }, { scale: 1, opacity: 1, stagger: .08, duration: .35, ease: 'back.out(1.8)' });
+    playActiveVideos(slideEls[current]);
+  }
+}
+
+function applyParallax() {
+  parallaxRaf = 0;
+  if (prefersReducedMotion()) return;
+  const root = slideEls[current];
+  if (!root) return;
+  const x = pointerX;
+  const y = pointerY;
+  root.querySelectorAll('[data-depth]').forEach((node) => {
+    if (node.classList.contains('is-gone')) return;
+    if (node.matches('[data-draggable], .kanban-card, .taskswipe-card, .swimlane, .year-bar')) return;
+    if (node.closest('[data-draggable], .kanban-card, .taskswipe-card')) return;
+    const depth = Number(node.dataset.depth || 1);
+    gsap.set(node, {
+      x: x * depth * 22,
+      y: y * depth * 16,
+      force3D: true,
+    });
+  });
+  const agents = root.querySelectorAll('.agent-window, .era-pane');
+  if (agents.length) {
+    agents.forEach((windowEl) => {
+      const rect = windowEl.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dist = Math.hypot((pointerX + .5) * innerWidth - cx, (pointerY + .5) * innerHeight - cy);
+      const dominance = Math.max(0.4, 1.2 - dist / 650);
+      gsap.set(windowEl, {
+        filter: `brightness(${dominance}) saturate(${0.75 + dominance * 0.4})`,
+        scale: 0.94 + dominance * 0.08,
+        zIndex: Math.round(dominance * 10),
+      });
+    });
+  }
 }
 
 function initInteractions() {
-  document.querySelectorAll('[data-draggable]').forEach((node) => Draggable.create(node, {
-    type: 'x,y',
-    bounds: node.closest('.slide-inner'),
-    inertia: false,
-    onPress: () => gsap.to(node, { scale: 1.06, duration: .15 }),
-    onRelease: () => gsap.to(node, { scale: 1, duration: .25, ease: 'back.out(2)' }),
-  }));
-
-  if (!prefersReducedMotion()) {
-    document.addEventListener('pointermove', (event) => {
-      const x = event.clientX / innerWidth - .5;
-      const y = event.clientY / innerHeight - .5;
-      slideEls[current]?.querySelectorAll('[data-depth]').forEach((node) => {
-        const depth = Number(node.dataset.depth || 1);
-        gsap.to(node, { x: x * depth * 20, y: y * depth * 14, duration: .6, overwrite: true });
-      });
-      const agents = slideEls[current]?.querySelectorAll('.agent-window');
-      if (agents?.length) {
-        agents.forEach((windowEl) => {
-          const rect = windowEl.getBoundingClientRect();
-          const cx = rect.left + rect.width / 2;
-          const cy = rect.top + rect.height / 2;
-          const dist = Math.hypot(event.clientX - cx, event.clientY - cy);
-          const dominance = Math.max(0.35, 1.15 - dist / 700);
-          gsap.to(windowEl, { filter: `brightness(${dominance})`, scale: 0.96 + dominance * 0.06, duration: .25, overwrite: true });
-        });
-      }
-    });
-  }
+  document.addEventListener('pointermove', (event) => {
+    pointerX = event.clientX / innerWidth - .5;
+    pointerY = event.clientY / innerHeight - .5;
+    if (!parallaxRaf && !prefersReducedMotion()) {
+      parallaxRaf = requestAnimationFrame(applyParallax);
+    }
+  }, { passive: true });
 
   document.documentElement.classList.toggle('reduced-motion', prefersReducedMotion());
 }
@@ -269,17 +525,38 @@ document.addEventListener('click', (event) => {
   if (action === 'next') navigate(1);
   else if (action === 'previous') navigate(-1);
   else if (action === 'timer') toggleTimer();
-  else if (action === 'mute') { muted = !muted; actionButton.textContent = muted ? 'Sound off' : 'Sound on'; beep(440, .08); }
+  else if (action === 'mute') {
+    muted = !muted;
+    actionButton.textContent = muted ? 'Sound off' : 'Sound on';
+    if (!muted) {
+      audioContext ||= new AudioContext();
+      audioContext.resume();
+      beep(midiToHz(RICKROLL_MIDI[melodyIndex % RICKROLL_MIDI.length]), .08);
+    }
+  }
   else if (action === 'help') { const d = document.querySelector('.help-dialog'); d.open ? d.close() : d.showModal(); }
   else if (action === 'notes') { const d = document.querySelector('.notes-dialog'); d.open ? d.close() : d.showModal(); }
   else if (action) runAction(action, actionButton);
 });
 
 document.addEventListener('keydown', (event) => {
-  if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); navigate(1); }
-  if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) { event.preventDefault(); navigate(-1); }
-  if (event.key === 'Home') showSlide(0, -1);
-  if (event.key === 'End') showSlide(slides.length - 1, 1);
+  if (event.defaultPrevented) return;
+  if (event.target?.closest?.('input, textarea, [contenteditable="true"]')) return;
+  const inDialog = event.target?.closest?.('dialog');
+  if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(event.key)) {
+    if (inDialog) return;
+    event.preventDefault();
+    navigate(1);
+    return;
+  }
+  if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) {
+    if (inDialog) return;
+    event.preventDefault();
+    navigate(-1);
+    return;
+  }
+  if (event.key === 'Home') { event.preventDefault(); showSlide(0, -1); }
+  if (event.key === 'End') { event.preventDefault(); showSlide(slides.length - 1, 1); }
   if (event.key.toLowerCase() === 'f') document.documentElement.requestFullscreen?.();
   if (event.key.toLowerCase() === 'p') document.querySelector('[data-action="notes"]').click();
   if (event.key.toLowerCase() === 'm') document.querySelector('[data-action="mute"]').click();

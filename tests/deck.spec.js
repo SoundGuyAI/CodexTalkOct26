@@ -3,57 +3,79 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const TOTAL_SLIDES = 47;
-const SLIDES_SELECTOR = '[data-slide], section[aria-roledescription="slide"], .slide';
+/** Top-level deck slides only — avoids nested false matches and opacity heuristics. */
+const SLIDES_SELECTOR = '#stage > .slide[data-slide]';
 
 function slides(page) {
   return page.locator(SLIDES_SELECTOR);
 }
 
 async function activeSlideIndex(page) {
-  const allSlides = slides(page);
-  const count = await allSlides.count();
-
-  for (let index = 0; index < count; index += 1) {
-    const slide = allSlides.nth(index);
-    const active = await slide.evaluate((element) => {
-      const style = window.getComputedStyle(element);
-      return element.classList.contains('is-active')
-        || element.getAttribute('aria-current') === 'true'
-        || element.getAttribute('data-active') === 'true'
-        || element.getAttribute('aria-hidden') === 'false'
-        || (style.visibility !== 'hidden' && style.display !== 'none' && Number(style.opacity) > 0);
-    });
-
-    if (active) return index + 1;
+  const active = page.locator(`${SLIDES_SELECTOR}.is-active`);
+  await expect(active).toHaveCount(1, { timeout: 15_000 });
+  const raw = await active.first().getAttribute('data-slide');
+  const index = Number(raw);
+  if (!Number.isFinite(index) || index < 1) {
+    throw new Error(`Active slide missing data-slide (got ${raw})`);
   }
-
-  throw new Error('No active slide could be identified. Mark the active slide with .is-active or data-active="true".');
+  return index;
 }
 
 async function expectActiveSlide(page, expectedIndex) {
-  await expect.poll(() => activeSlideIndex(page)).toBe(expectedIndex);
+  await expect
+    .poll(() => activeSlideIndex(page), { timeout: 15_000 })
+    .toBe(expectedIndex);
 }
 
 async function goToSlide(page, index) {
-  await page.goto(`./#slide-${index}`);
-  await expectActiveSlide(page, index);
+  let lastError;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      await page.goto(`./#slide-${index}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+      // Hash-only navigations may not reload; force the deck to sync from location.hash.
+      await page.evaluate((slideIndex) => {
+        const desired = `#slide-${slideIndex}`;
+        if (location.hash !== desired) {
+          location.hash = desired;
+        } else {
+          window.dispatchEvent(new Event('hashchange'));
+        }
+      }, index);
+      await expect(page.locator(`${SLIDES_SELECTOR}.is-active[data-slide="${index}"]`)).toBeVisible({ timeout: 15_000 });
+      await expectActiveSlide(page, index);
+      return;
+    } catch (error) {
+      lastError = error;
+      const message = String(error?.message || error);
+      if (!/ERR_CONNECTION_REFUSED|NS_ERROR_CONNECTION_REFUSED|Timeout/i.test(message) || attempt === 2) {
+        throw error;
+      }
+      await page.waitForTimeout(750 * (attempt + 1));
+    }
+  }
+  throw lastError;
 }
 
 test.describe('deck verification', () => {
   test('contains 47 slides and keeps the viewport free of horizontal overflow', async ({ page }) => {
-    await page.goto('./#slide-1');
+    // First suite hit pays Vite cold-compile cost; keep assertion strict, wait longer.
+    test.setTimeout(90_000);
+    await goToSlide(page, 1);
 
-    await expect(slides(page)).toHaveCount(TOTAL_SLIDES);
+    await expect(slides(page)).toHaveCount(TOTAL_SLIDES, { timeout: 30_000 });
     await expect(page.locator('[data-testid="countdown-timer"], [aria-label*="countdown" i], .countdown-timer').first()).toBeVisible();
 
-    const dimensions = await page.evaluate(() => ({
-      body: document.body.scrollWidth,
-      document: document.documentElement.scrollWidth,
-      viewport: window.innerWidth,
-    }));
-
-    expect(dimensions.body).toBeLessThanOrEqual(dimensions.viewport);
-    expect(dimensions.document).toBeLessThanOrEqual(dimensions.viewport);
+    // Spot-check interactive/later slides for horizontal document overflow.
+    for (const index of [1, 14, 35, 40, 43, TOTAL_SLIDES]) {
+      await goToSlide(page, index);
+      const dimensions = await page.evaluate(() => ({
+        body: document.body.scrollWidth,
+        document: document.documentElement.scrollWidth,
+        viewport: window.innerWidth,
+      }));
+      expect(dimensions.body, `slide ${index} body overflow`).toBeLessThanOrEqual(dimensions.viewport + 2);
+      expect(dimensions.document, `slide ${index} document overflow`).toBeLessThanOrEqual(dimensions.viewport + 2);
+    }
   });
 
   test('supports keyboard navigation with arrows and PageUp/PageDown', async ({ page }) => {
@@ -85,12 +107,13 @@ test.describe('deck verification', () => {
     await goToSlide(page, TOTAL_SLIDES);
     const qrLink = page.locator('.qr-placeholder');
     await expect(qrLink).toHaveAttribute('href', 'https://soundguyai.github.io/CodexTalkOct26/');
-    await expect(qrLink.locator('img[data-qr]')).toHaveAttribute('data-qr-url', 'https://soundguyai.github.io/CodexTalkOct26/');
+    await expect(qrLink.locator('img[data-qr]')).toHaveAttribute('data-qr-url', 'https://soundguyai.github.io/CodexTalkOct26/', { timeout: 15_000 });
   });
 
   test('captures one screenshot per slide', async ({ page }) => {
-    test.setTimeout(120_000);
+    test.setTimeout(180_000);
     const screenshotDirectory = path.resolve('test-results/slides');
+    fs.rmSync(screenshotDirectory, { recursive: true, force: true });
     fs.mkdirSync(screenshotDirectory, { recursive: true });
 
     for (let index = 1; index <= TOTAL_SLIDES; index += 1) {

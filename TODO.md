@@ -46,7 +46,7 @@ Show only era-correct project images, chronologically, **no image reuse** across
 | 5 | Mobile / console | Star Shipping, Spinning Cube, Larry demo, Gun N' Blade |
 | 6 | Adventure + publishing | Bolt Riley, Avner, Herbert's Quest, Nightmare Playground |
 | 7 | Community | GDC stages, Game Dev Day, GGJ groups (+ teaching if kept) |
-| 8 | XR | Star Mates, BRCvr, Oh SHIP!, StreetWize |
+| 8 | XR | Star Mates, BRCvr, Oh SHIP!, Time to Escape |
 | 9 | Side quests | Geekcon, pyro, burns, Imperial March / hard-drive bit |
 
 - [x] Replace wrong / reused project assets on slides 4–9 with real images or placeholders
@@ -54,7 +54,7 @@ Show only era-correct project images, chronologically, **no image reuse** across
 - [x] List every missing image in [`ASSETS-NEEDED.md`](./ASSETS-NEEDED.md)
 - [x] First scrape pass from Corbomite / Star Shipping / Oh SHIP / itch / YouTube (see `assets/SOURCES.md`)
 
-**Still PLACEHOLDER (need you):** Knights, Rock Band, Spinning Cube, Larry demo, Gun N' Blade, Herbert's Quest, Nightmare Playground, GDC/Game Dev Day/GGJ/Teaching, StreetWize, Midburn pyro, Imperial March HDD — plus currency / car / show tracker / TaskSwipe (see `ASSETS-NEEDED.md`).
+**Still PLACEHOLDER (need you):** Knights, Rock Band, Spinning Cube, Larry demo, Gun N' Blade, Herbert's Quest, Nightmare Playground, GDC/Game Dev Day/GGJ/Teaching, Midburn pyro — plus currency / car / show tracker / TaskSwipe (see `ASSETS-NEEDED.md`). Imperial March HDD: HAVE.
 
 ---
 
@@ -114,9 +114,15 @@ Pins: Corbomite 2006, Zbang 2007, Pizza Morgana 2009, Star Shipping 2010, Bolt R
 - [x] Slides 12–13 big **2025** / **2026** titles + 2026 smash bar
 - [x] Swimlane expanded to 19 lanes (incl. servers / music / submissions / talks / planning)
 - [x] Chart data decision documented in `DECISIONS.md` (inline `yearlyProjects` wins; 2019=10)
-- [ ] TaskSwipe real mock — **blocked on speaker asset** (placeholder kept; ask in ASSETS-NEEDED)
+- [x] TaskSwipe interactive mock (no backend) — left=keep / right=postpone; styled after TaskSwipe repo
 - [x] Timer hotkeys **T** (pause / double-T reset) and **H** (hide)
 - [x] Global reduced-motion (CSS + skip parallax / continuous spins in JS)
+- [x] Restore mouse parallax + Save Point / slide video autoplay on enter
+- [x] Chart labels sit above bars; slide 13 AI Agents callouts
+- [x] Slide 14 AI era transition redesign
+- [x] Improv Dashboard / Calendar real screenshots (from local project `.screenshots/`)
+- [x] Slides 30/31/34/35/40 polish (How, planning+games, ADHD contrast, Symphony+Linear kanban, User/Builder/Modifier strike)
+- [x] Transition SFX: rapid advances play Never Gonna Give You Up chorus melody
 - [ ] Commit + push coherent chunk — **ask before commit/push**
 
 ---

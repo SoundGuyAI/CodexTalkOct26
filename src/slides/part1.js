@@ -32,7 +32,7 @@ const yearHoverLabels = {
   2021: 'BRCvr',
   2023: 'Oh SHIP! AI',
   2025: 'LoveLink',
-  2026: 'agent era',
+  2026: 'AI Agents',
 };
 
 const chartPinCatalog = [
@@ -41,11 +41,20 @@ const chartPinCatalog = [
   { year: 2009, label: 'Pizza Morgana', image: 'history/pizza-morgana-logo.png' },
   { year: 2010, label: 'Star Shipping', image: 'history/star-shipping-hd1.jpg' },
   { year: 2013, label: 'Bolt Riley', image: 'history/bolt-riley.jpg' },
-  { year: 2014, label: "Herbert's Quest", image: 'history/herberts-quest-placeholder.png' },
+  { year: 2014, label: "Herbert's Quest", image: 'history/herberts-quest.jpg' },
   { year: 2020, label: 'Oh SHIP!', image: 'history/oh-ship-logo.jpg' },
   { year: 2021, label: 'BRCvr', image: 'history/brcvr-playa.jpg' },
   { year: 2025, label: 'LoveLink', image: 'projects/lovelink.jpg' },
-  { year: 2026, label: 'agent era', image: 'projects/kaiju-qa.png' },
+  { year: 2026, label: 'AI Agents', image: 'projects/kaiju-qa.png' },
+];
+
+/** Left-side callouts on the 2026 smash chart (point toward the tall bar). */
+const chart2026Callouts = [
+  { label: 'LoveLink', y: 18 },
+  { label: 'Save Point', y: 32 },
+  { label: 'Improv Dashboard', y: 46 },
+  { label: 'TaskSwipe', y: 60 },
+  { label: 'Kaiju QA', y: 74 },
 ];
 
 const yearlyProjectBars = (throughYear, highlightYear = null) => yearlyProjects
@@ -81,15 +90,24 @@ const yearlyProjectPins = (throughYear) => {
 };
 
 const yearlyChart = ({ throughYear, highlightYear = null, phase }) => `
-  <section class="yearly-chart" data-interaction="year-bars">
+  <section class="yearly-chart${highlightYear === 2026 ? ' yearly-chart--agents' : ''}" data-interaction="year-bars">
     <header class="yearly-chart__heading">
       <h2>${highlightYear === 2025 ? '2025' : highlightYear === 2026 ? '2026' : 'Projects / year'}</h2>
+      ${highlightYear === 2026 ? '<p class="yearly-chart__era">AI Agents</p>' : ''}
     </header>
     ${phase ? `<div class="yearly-chart__phase">${phase}</div>` : ''}
     <div class="year-bars" role="img" aria-label="Projects active in each year from 2006 to ${throughYear}">
       ${yearlyProjectBars(throughYear, highlightYear)}
     </div>
     ${yearlyProjectPins(throughYear)}
+    ${highlightYear === 2026 ? `
+      <div class="chart-callouts" aria-hidden="true">
+        ${chart2026Callouts.map((item) => `
+          <div class="chart-callout" style="--callout-y:${item.y}%">
+            <span>${item.label}</span>
+            <i></i>
+          </div>`).join('')}
+      </div>` : ''}
     <p class="yearly-chart__hint">hover a bar</p>
   </section>`;
 
@@ -148,39 +166,39 @@ export const part1Slides = [
     duration: 2,
     title: 'Adventure games',
     className: 'slide-collage scrapbook',
-    html: `<section class="scrapbook-collage" data-interaction="snap-collage"><h2 class="sr-only">Adventure games</h2>${cards([
-      { label: 'Zbang', image: 'history/zbang-banner.jpg' },
-      { label: 'Pizza Morgana', image: 'history/pizza-morgana-logo.png' },
-      { label: 'Knights', image: 'history/knights-placeholder.png' },
-      { label: 'Rock Band', image: 'history/rock-band-placeholder.png' },
+    html: `<section class="scrapbook-collage collage--logos" data-interaction="snap-collage"><h2 class="sr-only">Adventure games</h2>${cards([
+      { label: 'Zbang', image: 'history/zbang-logo.png' },
+      { label: 'Pizza Morgana', image: 'history/pizza-morgana-tile.png' },
+      { label: 'KISA', image: 'history/kisa-logo.png' },
+      { label: 'Heavenly Hell', image: 'history/heavenly-hell-logo.png' },
     ])}</section>`,
-    notes: 'Fast chronology. No project descriptions.'
+    notes: 'Fast chronology: Zbang, Pizza Morgana, Knights In Shining Armor (KISA), Heavenly Hell. No Rock Band here.'
   },
   {
     id: 'part1-05-platforms',
     duration: 2,
     title: 'Different platforms',
     className: 'slide-collage platforms',
-    html: `<section class="platform-collage" data-interaction="snap-collage"><h2 class="sr-only">Different platforms</h2>${cards([
-      { label: 'Star Shipping', image: 'history/star-shipping-hd1.jpg' },
-      { label: 'Spinning Cube', image: 'history/spinning-cube-placeholder.png' },
+    html: `<section class="platform-collage collage--logos" data-interaction="snap-collage"><h2 class="sr-only">Different platforms</h2>${cards([
+      { label: 'Star Shipping', image: 'history/star-shipping-logo.png' },
+      { label: 'Spinning Cube', image: 'history/spinning-cube-logo.png' },
       { label: "Larry demo", image: 'history/larry-demo-placeholder.png' },
       { label: "Gun N' Blade", image: 'history/gun-n-blade-placeholder.png' },
     ])}</section>`,
-    notes: 'Different platforms, same small team.'
+    notes: 'Star Shipping + Spinning Cube logos from Corbomite. Larry demo and Gun N’ Blade still need your captures.'
   },
   {
     id: 'part1-06-adventure-publishing',
     duration: 2,
     title: 'Adventure games and publishing',
     className: 'slide-collage publishing',
-    html: `<section class="publishing-collage" data-interaction="snap-collage"><h2 class="sr-only">Adventure games and publishing</h2>${cards([
-      { label: 'Bolt Riley', image: 'history/bolt-riley.jpg' },
-      { label: 'Avner', image: 'history/avner-itch.jpg' },
-      { label: "Herbert's Quest", image: 'history/herberts-quest-placeholder.png' },
-      { label: 'Nightmare Playground', image: 'history/nightmare-playground-placeholder.png' },
+    html: `<section class="publishing-collage collage--logos" data-interaction="snap-collage"><h2 class="sr-only">Adventure games and publishing</h2>${cards([
+      { label: 'Bolt Riley', image: 'history/bolt-riley-intro.jpg' },
+      { label: 'Avner', image: 'history/avner-icon.jpg' },
+      { label: "Herbert's Quest", image: 'history/herberts-quest.jpg' },
+      { label: 'Uniform', image: 'history/uniform-logo.jpg' },
     ])}</section>`,
-    notes: 'Years of adventure games and publishing.'
+    notes: 'Bolt Riley, Avner, Herbert’s Quest, Uniform (replaced Nightmare Playground).'
   },
   {
     id: 'part1-07-community',
@@ -200,13 +218,13 @@ export const part1Slides = [
     duration: 2,
     title: 'XR added more worlds',
     className: 'slide-collage xr',
-    html: `<section class="xr-collage" data-interaction="snap-collage"><h2 class="sr-only">XR worlds</h2>${cards([
+    html: `<section class="xr-collage collage--logos" data-interaction="snap-collage"><h2 class="sr-only">XR worlds</h2>${cards([
       { label: 'Star Mates', image: 'history/star-mates-gdc.jpg' },
       { label: 'BRCvr', image: 'history/brcvr-playa.jpg' },
       { label: 'Oh SHIP!', image: 'history/oh-ship-logo.jpg' },
-      { label: 'StreetWize', image: 'history/streetwize-placeholder.png' },
+      { label: 'Time to Escape', image: 'history/oh-ship-time-to-escape.jpg' },
     ])}</section>`,
-    notes: 'Then XR added more worlds.'
+    notes: 'XR worlds: Star Mates, BRCvr, Oh SHIP! logo, Oh SHIP! Time to Escape trailer still (replaces StreetWize; logo was not on Corbomite).'
   },
   {
     id: 'part1-09-sidequests',
@@ -215,11 +233,11 @@ export const part1Slides = [
     className: 'slide-collage sidequests',
     html: `<section class="sidequest-collage" data-interaction="snap-collage"><h2 class="sr-only">Side quests</h2>${cards([
       { label: 'Geekcon', image: 'sidequests/geekcon-steam-engine.jpg' },
-      { label: 'Pyro', image: 'sidequests/midburn-pyro-placeholder.png' },
-      { label: 'Burns', image: 'about/burning-man-sculpture.jpg' },
-      { label: 'Imperial March', image: 'sidequests/imperial-march-placeholder.png' },
+      { label: 'Midburn pyro', image: 'about/burning-man-sculpture.jpg' },
+      { label: 'Fireworks', image: 'about/fireworks.jpg' },
+      { label: 'Imperial March', image: 'sidequests/imperial-march-hdd.jpg' },
     ])}</section>`,
-    notes: 'And none of the side quests stopped.'
+    notes: 'Geekcon steam engine; Midburn pyro (was mislabeled Burning Man); fireworks; Imperial March HDD (YouTube: “yet another hard drive playing Imperial March”).'
   },
   {
     id: 'part1-10-twenty-years',
@@ -263,8 +281,30 @@ export const part1Slides = [
     duration: 18,
     title: 'AI Happened',
     className: 'slide-agent-windows',
-    html: `<section class="agent-window-wall" data-interaction="cursor-dominance"><h2 data-depth="1">AI Happened</h2><div class="agent-windows" data-depth="2"><button type="button" class="agent-window" data-agent="research">research</button><button type="button" class="agent-window" data-agent="code">code</button><button type="button" class="agent-window" data-agent="tests">tests</button><button type="button" class="agent-window" data-agent="art">art</button><button type="button" class="agent-window" data-agent="submissions">submissions</button></div></section>`,
-    notes: 'I stopped being the person doing every keystroke and became the person steering many loops. Cursor movement already changes which window dominates—no extra chrome bubble.'
+    html: `<section class="agent-era-wall" data-interaction="cursor-dominance" aria-label="AI era transition">
+      <h2 data-depth="1">AI Happened</h2>
+      <div class="era-split" data-depth="2">
+        <article class="era-pane era-pane--before" data-depth="2">
+          <span class="era-pane__tag">before</span>
+          <strong>one pair of hands</strong>
+          <div class="era-pane__lines" aria-hidden="true"><i></i><i></i><i></i></div>
+        </article>
+        <div class="era-jump" data-depth="4" aria-hidden="true"><span>↯</span></div>
+        <article class="era-pane era-pane--after" data-depth="3">
+          <span class="era-pane__tag">after</span>
+          <strong>many loops</strong>
+          <div class="agent-windows agent-windows--era">
+            <button type="button" class="agent-window" data-agent="research" data-depth="2">research</button>
+            <button type="button" class="agent-window" data-agent="code" data-depth="3">code</button>
+            <button type="button" class="agent-window" data-agent="tests" data-depth="2">tests</button>
+            <button type="button" class="agent-window" data-agent="art" data-depth="4">art</button>
+            <button type="button" class="agent-window" data-agent="ship" data-depth="3">ship</button>
+          </div>
+        </article>
+      </div>
+      <p class="era-caption" data-depth="2">move the cursor — windows wake up</p>
+    </section>`,
+    notes: 'I stopped being the person doing every keystroke and became the person steering many loops. Cursor movement changes which agent window dominates.'
   },
   {
     id: 'part1-15-currency',
@@ -367,7 +407,7 @@ export const part1Slides = [
     duration: 3,
     title: 'Save Point',
     className: 'slide-project save-point',
-    html: `<section class="project-feature project-feature--game" data-interaction="multiply-windows"><div class="project-image" data-depth="1"><video src="./assets/projects/save-point.webm" muted loop playsinline aria-label="Save Point gameplay"></video></div><h2 data-depth="2">Save Point</h2><div class="tiny-windows" data-depth="3"><span>narrative</span><span>web</span><span>build</span></div></section>`,
+    html: `<section class="project-feature project-feature--game" data-interaction="multiply-windows"><div class="project-image" data-depth="1"><video src="./assets/projects/save-point.webm" autoplay muted loop playsinline preload="auto" aria-label="Save Point gameplay"></video></div><h2 data-depth="2">Save Point</h2><div class="tiny-windows" data-depth="3"><span>narrative</span><span>web</span><span>build</span></div></section>`,
     notes: 'A narrative game—and the project behind the expensive lesson later. Placed last in the spotlight run so the $12k story has an image still fresh.'
   },
   {
