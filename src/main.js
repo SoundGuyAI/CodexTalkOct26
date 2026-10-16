@@ -488,6 +488,8 @@ function runAction(action, trigger) {
 
 function parallaxSkipped(node) {
   if (!node || node.classList.contains('is-gone')) return true;
+  // Final/QR slide: left copy must stay put so it never translates off-canvas.
+  if (node.matches('.final-copy') || node.closest('.final-copy')) return true;
   if (node.matches('[data-draggable], .kanban-card, .taskswipe-card, .swimlane, .year-bar, .chart-callout, .year-project-pin, .slot-reel__strip, .slot-tile, .slot-lever')) return true;
   if (node.closest('[data-draggable], .kanban-card, .taskswipe-card, .chart-callout, .slot-reel')) return true;
   return false;
@@ -509,9 +511,16 @@ function applyParallax() {
   const y = pointerY;
   document.documentElement.style.setProperty('--pointer-x', x.toFixed(4));
   document.documentElement.style.setProperty('--pointer-y', y.toFixed(4));
+  // Final/QR slide: further soften decorative layers; left copy is skipped above.
+  const finalSlide = root.classList.contains('slide--final') || root.classList.contains('slide--qr-close');
+  const depthScale = finalSlide ? 0.5 : 1;
   root.querySelectorAll('[data-depth]').forEach((node) => {
-    if (parallaxSkipped(node)) return;
-    const depth = Number(node.dataset.depth || 1);
+    if (parallaxSkipped(node)) {
+      node.style.setProperty('--parallax-x', '0px');
+      node.style.setProperty('--parallax-y', '0px');
+      return;
+    }
+    const depth = Number(node.dataset.depth || 1) * depthScale;
     const px = x * depth * 14;
     const py = y * depth * 10;
     node.style.setProperty('--parallax-x', `${px.toFixed(2)}px`);

@@ -405,13 +405,13 @@ export const part2Slides = [
     html: `
       <section class="slide-content slide-content--final" aria-labelledby="part2-qr-title">
         <div class="final-bagel" data-depth="1" aria-hidden="true"></div>
-        <div class="final-copy" data-depth="5">
+        <div class="final-copy">
           <h2 id="part2-qr-title">How do I manage 19 projects?</h2>
           <p class="final-answer"><span>I don’t.</span><strong>But here we are.</strong></p>
           <p class="final-url">Scan to open the deck</p>
           <p class="final-controls">← → · T timer · H hide timer</p>
         </div>
-        <a class="qr-placeholder" href="https://soundguyai.github.io/CodexTalkOct26/" target="_blank" rel="noreferrer" data-depth="4"><img data-qr alt="QR code to open the live deck"><small>open the live deck</small></a>
+        <a class="qr-placeholder" href="https://soundguyai.github.io/CodexTalkOct26/" target="_blank" rel="noreferrer" data-depth="2"><img data-qr alt="QR code to open the live deck"><small>open the live deck</small></a>
         <div class="final-project-drift" data-depth="2" aria-hidden="true">
           <span data-draggable="true">memory</span><span data-draggable="true">limits</span><span data-draggable="true">handoffs</span>
         </div>

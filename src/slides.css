@@ -153,9 +153,11 @@
 
 .stage{overflow:hidden}.slide-agent-windows .slide-inner,.slide-agent-windows .agent-era-wall{max-width:100%;overflow:hidden}
 
-.slide--final .slide-inner,.slide--qr-close .slide-inner,.slide-content--final{max-width:100%;overflow:hidden;box-sizing:border-box}
+/* Final/QR: keep left copy fully visible; clip parallax spill on right decor only. */
+.slide--final .slide-inner,.slide--qr-close .slide-inner,.slide-content--final{max-width:100%;overflow:visible;box-sizing:border-box}
 .slide-content--final{width:min(100%,1500px)!important;grid-template-columns:minmax(0,1.1fr) minmax(0,.7fr)!important;gap:clamp(1.5rem,3vw,3rem)!important}
-.slide--final .final-bagel,.slide--qr-close 
+.final-copy{position:relative;z-index:3;max-width:100%;min-width:0;translate:none}
+.slide--final .final-bagel,.slide--qr-close .final-bagel{overflow:hidden}
 .qr-placeholder{justify-self:end;max-width:100%;overflow:hidden}
 .qr-placeholder img{width:min(28vw,380px)!important;max-width:100%}
 .final-project-drift{overflow:hidden}
