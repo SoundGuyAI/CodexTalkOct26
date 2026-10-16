@@ -512,8 +512,8 @@ function applyParallax() {
   root.querySelectorAll('[data-depth]').forEach((node) => {
     if (parallaxSkipped(node)) return;
     const depth = Number(node.dataset.depth || 1);
-    const px = x * depth * 28;
-    const py = y * depth * 20;
+    const px = x * depth * 14;
+    const py = y * depth * 10;
     node.style.setProperty('--parallax-x', `${px.toFixed(2)}px`);
     node.style.setProperty('--parallax-y', `${py.toFixed(2)}px`);
   });
