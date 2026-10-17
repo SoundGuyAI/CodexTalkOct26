@@ -424,6 +424,60 @@ function wireTypeShift(root) {
   });
 }
 
+/** Slide: Software is changing. Three clicks scratch User → Prompt → API and reveal Everyone → Agent → AAI. */
+function wireSoftwareShift(root) {
+  const board = root.querySelector('[data-interaction="software-shift"]');
+  if (!board || board.dataset.shiftWired === 'true') return;
+  board.dataset.shiftWired = 'true';
+  const past = [...board.querySelectorAll('[data-past]')];
+  const nowItems = [...board.querySelectorAll('[data-now]')];
+  const nowArrows = [...board.querySelectorAll('[data-now-arrow]')];
+  const nowRow = board.querySelector('.software-chain--now');
+  const expansion = board.querySelector('.software-expansion');
+  const labels = [
+    'User, Prompt, API. Click to scratch the next word.',
+    'User struck. Everyone.',
+    'User and Prompt struck. Everyone, then Agent.',
+    'User, Prompt, and API struck. Everyone, then Agent, then AAI. Application Agent Interface.',
+  ];
+
+  const paint = (step) => {
+    const next = Math.max(0, Math.min(3, step));
+    board.dataset.step = String(next);
+    past.forEach((el, index) => el.classList.toggle('is-struck', index < next));
+    const showRow = next > 0;
+    if (nowRow) {
+      nowRow.hidden = !showRow;
+      nowRow.setAttribute('aria-hidden', showRow ? 'false' : 'true');
+    }
+    nowItems.forEach((el, index) => {
+      el.hidden = index >= next;
+      el.classList.toggle('is-in', index < next);
+    });
+    nowArrows.forEach((el) => {
+      el.hidden = next <= Number(el.dataset.nowArrow);
+    });
+    if (expansion) expansion.hidden = next < 3;
+    board.setAttribute('aria-label', labels[next]);
+  };
+
+  const advance = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const step = Number(board.dataset.step || 0);
+    if (step >= 3) return;
+    paint(step + 1);
+    beep(midiToHz(60 + step * 4), .05);
+  };
+
+  board.addEventListener('click', advance);
+  board.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    advance(event);
+  });
+  paint(0);
+}
+
 /** Slide 39: each limit card is an open tap. Click toggles it shut. All four shut stamps UNRESTRICTED. */
 function wireGuardrailTaps(root) {
   const section = root.querySelector('[data-interaction="guardrail-taps"]');
@@ -1025,6 +1079,7 @@ function wireSlideInteractions(slideEl) {
   wireKanban(root);
   wireTaskSwipe(root);
   wireTypeShift(root);
+  wireSoftwareShift(root);
   wireGuardrailTaps(root);
   wireRepoPreview(root);
   wireSlotMachine(root, { gsap, reducedMotion: prefersReducedMotion() });
@@ -1202,6 +1257,7 @@ function initInteractions() {
 }
 
 document.addEventListener('click', (event) => {
+  if (event.target.closest?.('[data-interaction="software-shift"]')) return;
   const actionButton = event.target.closest('[data-action]');
   const action = actionButton?.dataset.action;
   if (action === 'next') navigate(1);
@@ -1250,10 +1306,10 @@ let touchX = null;
 let suppressSwipe = false;
 document.addEventListener('touchstart', (e) => {
   touchX = e.changedTouches[0].clientX;
-  if (e.target.closest?.('.the-cut, [data-energy-card], .spend-evidence, .guardrail')) suppressSwipe = true;
+  if (e.target.closest?.('.the-cut, [data-energy-card], .spend-evidence, .guardrail, .software-chains')) suppressSwipe = true;
 }, { passive: true });
 document.addEventListener('touchend', (e) => {
-  const blocked = suppressSwipe || e.target.closest?.('.chart-callout, .show-card, .appraiser-pin, .fx-panel, .the-cut, [data-energy-card], .spend-evidence, .guardrail');
+  const blocked = suppressSwipe || e.target.closest?.('.chart-callout, .show-card, .appraiser-pin, .fx-panel, .the-cut, [data-energy-card], .spend-evidence, .guardrail, .software-chains');
   const dx = e.changedTouches[0].clientX - touchX;
   if (!blocked && Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
   suppressSwipe = false;

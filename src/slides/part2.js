@@ -303,24 +303,27 @@ export const part2Slides = [
     html: `
       <section class="slide-content slide-content--type-shift" aria-labelledby="part2-software-changing-title">
         <h2 id="part2-software-changing-title" data-depth="5">Software is changing.</h2>
-        <div class="software-chains" data-depth="2">
-          <div class="software-chain software-chain--past" aria-label="Past chain, struck through">
-            <span class="software-box"><s>User</s></span>
+        <div class="software-chains" data-interaction="software-shift" data-step="0" data-depth="2" role="button" tabindex="0" aria-label="User, Prompt, API. Click to scratch the next word.">
+          <div class="software-chain software-chain--past">
+            <span class="software-term" data-past="0"><span class="software-term__word">User</span></span>
             <span class="software-chain__arrow" aria-hidden="true">→</span>
-            <span class="software-box"><s>Builder</s></span>
+            <span class="software-term" data-past="1"><span class="software-term__word">Prompt</span></span>
             <span class="software-chain__arrow" aria-hidden="true">→</span>
-            <span class="software-box"><s>Modifier</s></span>
+            <span class="software-term" data-past="2"><span class="software-term__word">API</span></span>
           </div>
-          <div class="software-chain software-chain--now" aria-label="Everyone, then Agent, then AAI">
-            <strong>Everyone</strong>
-            <span class="software-chain__arrow" aria-hidden="true">→</span>
-            <strong>Agent</strong>
-            <span class="software-chain__arrow" aria-hidden="true">→</span>
-            <strong>AAI</strong>
+          <div class="software-chain software-chain--now" hidden>
+            <span class="software-now" data-now="0" hidden><strong>Everyone</strong></span>
+            <span class="software-chain__arrow" data-now-arrow="1" hidden aria-hidden="true">→</span>
+            <span class="software-now" data-now="1" hidden><strong>Agent</strong></span>
+            <span class="software-chain__arrow" data-now-arrow="2" hidden aria-hidden="true">→</span>
+            <span class="software-now software-now--aai" data-now="2" hidden>
+              <strong>AAI</strong>
+              <span class="software-expansion" hidden>Application Agent Interface</span>
+            </span>
           </div>
         </div>
       </section>`,
-    notes: 'Open source plus agents changes who gets to change software. The old chain — User, Builder, Modifier — stays struck through. The new chain is Everyone → Agent → AAI.'
+    notes: 'Open source plus agents changes who gets to change software. Start on User → Prompt → API. Each click scratches the next word and reveals Everyone, then Agent, then AAI. AAI expands to Application Agent Interface.'
   },
   {
     id: 'part2-everyone-developer',

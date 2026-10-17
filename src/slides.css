@@ -584,21 +584,39 @@
 .slide-content--guardrails .plan-reset{margin-top:.9rem;color:#aaa3ae;font-weight:700}
 .slide-content--guardrails .plan-reset strong{color:#c9ff4a}
 
-/* Software is changing: small struck past chain, large new chain. */
+/* Software is changing: big User → Prompt → API, then click to scratch and reveal. */
 .slide--software-changing .slide-content--type-shift{justify-content:center!important;gap:clamp(.6rem,2vh,1.4rem)}
-.slide--software-changing .software-chains{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(1.4rem,4.5vh,3rem);width:100%;max-width:min(100%,1600px);margin-top:clamp(.2rem,1.5vh,.8rem)}
-.slide--software-changing .software-chain{display:flex;align-items:center;justify-content:center;flex-wrap:nowrap;gap:clamp(.4rem,1.1vw,1rem);width:100%;margin:0}
-.slide--software-changing .software-box{display:flex;align-items:center;justify-content:center;min-width:0;padding:.45rem .85rem;min-height:clamp(2.8rem,7vh,4.2rem);border-radius:.7rem;background:#0c0b10;border:1px solid #3d3644}
-.slide--software-changing .software-box s{font-family:"Archivo Black",Arial Black,sans-serif;font-size:clamp(1rem,1.7vw,1.65rem);line-height:1;letter-spacing:-.04em;text-transform:uppercase;color:#6a6370;text-decoration:line-through;text-decoration-thickness:.14em;text-decoration-color:#ff3b81}
-.slide--software-changing .software-chain--past .software-chain__arrow{flex:0 0 auto;font-family:"Archivo Black",Arial Black,sans-serif;font-size:clamp(.85rem,1.5vw,1.35rem);line-height:1;color:#5c5662}
-.slide--software-changing .software-chain--now{gap:clamp(.5rem,1.5vw,1.4rem)}
-.slide--software-changing .software-chain--now strong{font-family:"Archivo Black",Arial Black,sans-serif;font-size:clamp(2.5rem,6.2vw,6.2rem);line-height:.88;letter-spacing:-.05em;text-transform:uppercase;color:#f6f0e4;text-shadow:0 0 1.15rem #42e8e066}
-.slide--software-changing .software-chain--now strong:last-of-type{color:#42e8e0;text-shadow:0 0 1.35rem #42e8e0bb}
-.slide--software-changing .software-chain--now .software-chain__arrow{flex:0 0 auto;font-family:"Archivo Black",Arial Black,sans-serif;font-size:clamp(2rem,4.8vw,4.8rem);line-height:1;color:#42e8e0;text-shadow:0 0 1rem #42e8e0}
+.slide--software-changing .software-chains{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(1.1rem,3.2vh,2.2rem);width:100%;max-width:min(100%,1600px);margin:0;padding:.4rem .5rem 1.6rem;border:0;background:transparent;color:inherit;cursor:pointer;font:inherit}
+.slide--software-changing .software-chains:focus-visible{outline:2px solid #c9ff4a;outline-offset:8px}
+.slide--software-changing .software-chain{display:flex;align-items:center;justify-content:center;flex-wrap:nowrap;gap:clamp(.45rem,1.3vw,1.15rem);width:100%;margin:0}
+.slide--software-changing .software-chain--now[hidden],
+.slide--software-changing .software-now[hidden],
+.slide--software-changing .software-chain__arrow[hidden],
+.slide--software-changing .software-expansion[hidden]{display:none!important}
+.slide--software-changing .software-term{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.slide--software-changing .software-term__word,
+.slide--software-changing .software-chain--past .software-chain__arrow{font-family:"Archivo Black",Arial Black,sans-serif;font-size:clamp(3.4rem,8.6vw,8.4rem);line-height:.9;letter-spacing:-.05em;text-transform:uppercase;color:#f6f0e4;text-shadow:0 0 1.2rem #42e8e077;transition:font-size .28s ease,color .2s ease,text-shadow .2s ease}
+.slide--software-changing .software-chain--past .software-chain__arrow{flex:0 0 auto;color:#42e8e0;text-shadow:0 0 1rem #42e8e0}
+.slide--software-changing .software-chains:not([data-step="0"]) .software-term__word,
+.slide--software-changing .software-chains:not([data-step="0"]) .software-chain--past .software-chain__arrow{font-size:clamp(1.8rem,4vw,4.1rem)}
+.slide--software-changing .software-term.is-struck .software-term__word{color:#6a6370;text-shadow:none}
+.slide--software-changing .software-term.is-struck::after{content:"";position:absolute;left:-3%;right:-3%;top:52%;height:.11em;border-radius:999px;background:#ff3b81;box-shadow:0 0 .55rem #ff3b81;transform:rotate(-2.5deg);pointer-events:none}
+.slide--software-changing .software-chain--now{gap:clamp(.45rem,1.4vw,1.2rem);align-items:center}
+.slide--software-changing .software-now{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.slide--software-changing .software-now--aai{flex-direction:column}
+.slide--software-changing .software-chain--now strong{font-family:"Archivo Black",Arial Black,sans-serif;font-size:clamp(2.4rem,5.6vw,5.6rem);line-height:.88;letter-spacing:-.05em;text-transform:uppercase;color:#f6f0e4;text-shadow:0 0 1.15rem #42e8e066}
+.slide--software-changing .software-now--aai strong{color:#42e8e0;text-shadow:0 0 1.35rem #42e8e0bb}
+.slide--software-changing .software-chain--now .software-chain__arrow{flex:0 0 auto;font-family:"Archivo Black",Arial Black,sans-serif;font-size:clamp(1.8rem,4.2vw,4.2rem);line-height:1;color:#42e8e0;text-shadow:0 0 1rem #42e8e0}
+.slide--software-changing .software-expansion{display:block;margin-top:.35rem;font-family:Inter,"Segoe UI",sans-serif;font-size:clamp(1.15rem,2.15vw,1.85rem);font-weight:700;line-height:1.15;letter-spacing:.01em;text-transform:none;color:#d9fff8;text-shadow:0 0 .75rem #42e8e0aa;white-space:nowrap}
 @media(max-width:980px){
   .slide--software-changing .software-chain{flex-wrap:wrap}
-  .slide--software-changing .software-chain--now strong{font-size:clamp(2rem,8.5vw,3.2rem)}
-  .slide--software-changing .software-chain--now .software-chain__arrow{font-size:clamp(1.5rem,5.5vw,2.3rem)}
+  .slide--software-changing .software-term__word,
+  .slide--software-changing .software-chain--past .software-chain__arrow{font-size:clamp(2.2rem,8vw,3.6rem)}
+  .slide--software-changing .software-chains:not([data-step="0"]) .software-term__word,
+  .slide--software-changing .software-chains:not([data-step="0"]) .software-chain--past .software-chain__arrow{font-size:clamp(1.35rem,5vw,2.2rem)}
+  .slide--software-changing .software-chain--now strong{font-size:clamp(1.7rem,7vw,2.8rem)}
+  .slide--software-changing .software-chain--now .software-chain__arrow{font-size:clamp(1.3rem,5vw,2rem)}
+  .slide--software-changing .software-expansion{font-size:clamp(.95rem,3.4vw,1.25rem);white-space:normal;text-align:center;max-width:16rem}
 }
 
 /* Slide 3 portrait and community photos: full image, no crop, no frame. */
