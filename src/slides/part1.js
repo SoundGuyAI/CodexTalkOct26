@@ -196,7 +196,7 @@ export const part1Slides = [
     className: 'slide-about orbit',
     html: `
       <section class="about-orbit" data-interaction="pause-orbit">
-        <div class="orbit-photo orbit-photo--main" data-depth="1">${asset('about/oded-maker.jpg', 'Oded making something')}</div>
+        <div class="orbit-photo orbit-photo--main" data-depth="1">${asset('about/oded-portrait.jpg', 'Oded')}</div>
         <div class="orbit-photo orbit-photo--burner" data-depth="3">${asset('about/oded-burner.jpg', 'Oded at Burning Man')}</div>
         <div class="orbit-mark orbit-mark--corbomite" data-depth="2">${asset('history/corbomite-logo.jpg', 'Corbomite logo')}</div>
         <div class="orbit-mark orbit-mark--adventure" data-depth="2">${asset('history/adventure-mob-logo.jpg', 'Adventure Mob logo')}</div>
@@ -226,10 +226,10 @@ export const part1Slides = [
     html: `<section class="platform-collage collage--logos tile-grid tile-grid--logos" data-interaction="snap-collage"><h2 class="sr-only">Different platforms</h2>${cards([
       { label: 'Star Shipping', image: 'history/star-shipping-logo.png' },
       { label: 'Spinning Cube', image: 'history/spinning-cube-logo.png' },
-      { label: "Larry demo", image: 'history/larry-demo-placeholder.png' },
-      { label: "Gun N' Blade", image: 'history/gun-n-blade-placeholder.png' },
+      { label: 'Larry demo', image: 'history/larry-kickstarter.png' },
+      { label: 'Interface Incineration', image: 'history/interface-incineration.png' },
     ])}</section>`,
-    notes: 'Star Shipping + Spinning Cube logos from Corbomite. Larry demo and Gun N’ Blade still need your captures.'
+    notes: 'Star Shipping + Spinning Cube logos from Corbomite. Larry is the Kickstarter page. Interface Incineration replaces Gun N’ Blade.'
   },
   {
     id: 'part1-06-adventure-publishing',
@@ -245,19 +245,6 @@ export const part1Slides = [
     notes: 'Bolt Riley, Avner, Herbert’s Quest, Uniform (replaced Nightmare Playground).'
   },
   {
-    id: 'part1-07-community',
-    duration: 2,
-    title: 'Organize, teach, speak, jam',
-    className: 'slide-collage community',
-    html: `<section class="community-collage tile-grid tile-grid--logos" data-interaction="snap-collage"><h2 class="sr-only">Community</h2>${cards([
-      { label: 'GDC stages', image: 'community/gdc-stages-placeholder.png' },
-      { label: 'Game Dev Day', image: 'community/game-dev-day-placeholder.png' },
-      { label: 'GGJ groups', image: 'community/ggj-groups-placeholder.png' },
-      { label: 'Teaching', image: 'community/teaching-placeholder.png' },
-    ])}</section>`,
-    notes: 'I also organized, taught, spoke, and jammed.'
-  },
-  {
     id: 'part1-08-xr',
     duration: 2,
     title: 'XR added more worlds',
@@ -269,6 +256,18 @@ export const part1Slides = [
       { label: 'Time to Escape', image: 'history/oh-ship-time-to-escape.jpg' },
     ])}</section>`,
     notes: 'XR worlds: Star Mates, BRCvr, Oh SHIP! logo, Oh SHIP! Time to Escape trailer still (replaces StreetWize; logo was not on Corbomite).'
+  },
+  {
+    id: 'part1-07-community',
+    duration: 2,
+    title: 'Organize, teach, speak, jam',
+    className: 'slide-collage community',
+    html: `<section class="community-collage community-photos" data-interaction="snap-collage"><h2 class="sr-only">Community</h2>${[
+      'community/award-stage.jpg',
+      'community/gdc-schedule.jpg',
+      'community/group-photo.jpg',
+    ].map((image, index) => `<button type="button" class="project-card project-card--${index + 1}" data-depth="${index % 3 + 1}">${asset(image, '')}</button>`).join('')}</section>`,
+    notes: 'I also organized, taught, spoke, and jammed.'
   },
   {
     id: 'part1-09-sidequests',

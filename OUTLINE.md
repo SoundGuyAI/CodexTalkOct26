@@ -13,12 +13,12 @@ The chart visuals use the inventory as a private design source, but the public s
 |---:|---|---|---|---|---:|
 | 1 | **Everything Everywhere All at Once**<br><small>how to work on 19 projects simultaneously</small> | Nineteen-panel multiverse grid. Pointer tilts the grid; panels reveal project names on hover. | Mixed project assets | Open with: “How do I manage 19 projects? I don't. But here we are.” | 8 |
 | 2 | **BACKGROUND** | One-frame white flash into an RGB/chromatic verse jump. | Code-native | “This did not begin with AI.” | 2 |
-| 3 | **Who am I?**<br><small>games · XR · improv · ADHD</small> | Real photo at center; Corbomite, maker, XR, and improv fragments orbit it. Hover pauses orbit. | `about/oded-maker.jpg`, `about/oded-burner.jpg`, `history/corbomite-logo.jpg` | “Thirty years making games. Indie developer, XR creator, improviser, ADHD.” | 15 |
+| 3 | **Who am I?**<br><small>games · XR · improv · ADHD</small> | Real photo at center; Corbomite, maker, XR, and improv fragments orbit it. Hover pauses orbit. | `about/oded-portrait.jpg`, `about/oded-burner.jpg`, `history/corbomite-logo.jpg` | “Thirty years making games. Indie developer, XR creator, improviser, ADHD.” | 15 |
 | 4 | — | Adventure-game collage: Zbang, Pizza Morgana, Knights, Rock Band. Cards snap into a scrapbook grid. | Placeholder set + later user photos | Fast chronology; no project descriptions. | 2 |
-| 5 | — | Mobile/console collage: Star Shipping, Spinning Cube, Larry demo, Gun N' Blade. | Placeholder set | “Different platforms, same small team.” | 2 |
+| 5 | — | Mobile/console collage: Star Shipping, Spinning Cube, Larry Kickstarter, Interface Incineration. | `history/larry-kickstarter.png`, `history/interface-incineration.png` | “Different platforms, same small team.” | 2 |
 | 6 | — | Bolt Riley, Avner, Herbert's Quest, Nightmare Playground. | `history/bolt-riley.jpg` + placeholders | “Years of adventure games and publishing.” | 2 |
-| 7 | — | GDC stages, Game Dev Day, GGJ groups. | Placeholders requested | “I also organized, taught, spoke, and jammed.” | 2 |
-| 8 | — | Star Mates, BRCvr, Oh SHIP!, StreetWize. | `history/brcvr-playa.jpg` + placeholders | “Then XR added more worlds.” | 2 |
+| 7 | — | Star Mates, BRCvr, Oh SHIP!, StreetWize. | `history/brcvr-playa.jpg` + placeholders | “Then XR added more worlds.” | 2 |
+| 8 | — | Community photos. | `community/award-stage.jpg`, `gdc-schedule.jpg`, `group-photo.jpg` | “I also organized, taught, spoke, and jammed.” | 2 |
 | 9 | — | Geekcon, pyro, burns, hard-drive Imperial March. | `about/fireworks.jpg`, `about/burning-man-sculpture.jpg` | “And none of the side quests stopped.” | 2 |
 | 10 | **20 years.** | Six collages shrink into one tiny mosaic; user can pull tiles back out briefly. | Slides 4–9 assets | “Busy was already normal.” | 5 |
 | 11 | **Projects / year** | Calm skyline of annual bars (2019 = 10). Hover reveals era bubbles; pins mark Corbomite→BRCvr. | Code-native chart + historical assets | “For years the shape was noisy, but roughly stable.” Do not recite every count. | 12 |

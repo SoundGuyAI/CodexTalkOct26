@@ -217,13 +217,81 @@ function activeRoot() {
   return slideEls[current]?.querySelector('.slide-inner');
 }
 
+const AGENT_WORK_MS = 5000;
+const agentJobs = new WeakMap();
+
+function dressKanbanCard(card) {
+  if (card.querySelector('.kanban-card__label')) return;
+  const label = document.createElement('span');
+  label.className = 'kanban-card__label';
+  while (card.firstChild) label.appendChild(card.firstChild);
+  const fill = document.createElement('span');
+  fill.className = 'kanban-card__fill';
+  fill.setAttribute('aria-hidden', 'true');
+  card.append(fill, label);
+}
+
+function paintAgentFill(card, ratio) {
+  const fill = card.querySelector('.kanban-card__fill');
+  if (!fill) return;
+  const clamped = Math.max(0, Math.min(1, ratio));
+  fill.style.height = `${(clamped * 100).toFixed(2)}%`;
+}
+
+function stopAgentWork(card) {
+  const job = agentJobs.get(card);
+  if (job?.raf) cancelAnimationFrame(job.raf);
+  agentJobs.delete(card);
+  card.classList.remove('is-agent-working');
+  card.removeAttribute('aria-busy');
+  paintAgentFill(card, 0);
+}
+
+function settleKanbanCard(card) {
+  gsap.set(card, { x: 0, y: 0, scale: 1, zIndex: 1 });
+}
+
+function moveCardToReview(card, reviewCol) {
+  stopAgentWork(card);
+  card.classList.remove('kanban-card--agent');
+  reviewCol.appendChild(card);
+  settleKanbanCard(card);
+  beep(midiToHz(79), 0.05);
+}
+
+function startAgentWork(card, reviewCol) {
+  if (!reviewCol || agentJobs.has(card)) return;
+  const started = performance.now();
+  card.classList.add('is-agent-working');
+  card.setAttribute('aria-busy', 'true');
+  paintAgentFill(card, 0);
+  const step = (now) => {
+    const job = agentJobs.get(card);
+    if (!job) return;
+    const ratio = Math.min(1, (now - started) / AGENT_WORK_MS);
+    paintAgentFill(card, ratio);
+    if (ratio < 1) {
+      job.raf = requestAnimationFrame(step);
+      return;
+    }
+    job.done = true;
+    job.raf = 0;
+    if (!Draggable.get(card)?.isDragging) moveCardToReview(card, reviewCol);
+  };
+  const job = { raf: 0, done: false };
+  agentJobs.set(card, job);
+  job.raf = requestAnimationFrame(step);
+}
+
 function wireKanban(root) {
   const board = root.querySelector('[data-interaction="symphony-kanban"]');
   if (!board || board.dataset.kanbanWired === 'true') return;
   board.dataset.kanbanWired = 'true';
   const columns = [...board.querySelectorAll('[data-kanban-col]')];
+  const reviewCol = columns.find((col) => col.dataset.kanbanCol === 'review');
   columns.forEach((col) => {
     [...col.querySelectorAll('.kanban-card')].forEach((card) => {
+      dressKanbanCard(card);
       Draggable.create(card, {
         type: 'x,y',
         bounds: board,
@@ -240,11 +308,23 @@ function wireKanban(root) {
             const dist = Math.hypot(cx - (r.left + r.width / 2), cy - (r.top + r.height / 2));
             if (dist < best) { best = dist; target = candidate; }
           });
+          const job = agentJobs.get(card);
+          const enteringAgent = target.dataset.kanbanCol === 'agent';
+          if (enteringAgent && job?.done && reviewCol) {
+            moveCardToReview(card, reviewCol);
+            return;
+          }
           target.appendChild(card);
-          gsap.set(card, { x: 0, y: 0, scale: 1, zIndex: 1 });
+          settleKanbanCard(card);
+          if (enteringAgent) {
+            if (!job) startAgentWork(card, reviewCol);
+          } else if (job) {
+            stopAgentWork(card);
+          }
           beep(midiToHz(72), .04);
         },
       });
+      if (col.dataset.kanbanCol === 'agent') startAgentWork(card, reviewCol);
     });
   });
 }
@@ -382,6 +462,28 @@ function wireSoftwareChanging(root) {
   stage.addEventListener('keydown', (event) => {
     if (event.key !== 'Enter') return;
     play();
+  });
+}
+
+/** Slide 39: each limit card is an open tap. Click toggles it shut. All four shut stamps UNRESTRICTED. */
+function wireGuardrailTaps(root) {
+  const section = root.querySelector('[data-interaction="guardrail-taps"]');
+  if (!section || section.dataset.tapsWired === 'true') return;
+  section.dataset.tapsWired = 'true';
+  const taps = [...section.querySelectorAll('[data-tap]')];
+  const syncBan = () => {
+    const allShut = taps.length > 0 && taps.every((tap) => tap.classList.contains('is-shut'));
+    section.classList.toggle('is-fully-restricted', allShut);
+  };
+  taps.forEach((tap) => {
+    tap.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const shut = tap.classList.toggle('is-shut');
+      tap.setAttribute('aria-pressed', shut ? 'true' : 'false');
+      beep(midiToHz(shut ? 55 : 72), .04);
+      syncBan();
+    });
   });
 }
 
@@ -965,6 +1067,7 @@ function wireSlideInteractions(slideEl) {
   wireTaskSwipe(root);
   wireTypeShift(root);
   wireSoftwareChanging(root);
+  wireGuardrailTaps(root);
   wireRepoPreview(root);
   wireSlotMachine(root, { gsap, reducedMotion: prefersReducedMotion() });
   wireHowVoid(root, { gsap, reducedMotion: prefersReducedMotion() });
@@ -1168,10 +1271,10 @@ let touchX = null;
 let suppressSwipe = false;
 document.addEventListener('touchstart', (e) => {
   touchX = e.changedTouches[0].clientX;
-  if (e.target.closest?.('.the-cut, [data-energy-card], .spend-evidence, [data-interaction="software-changing"]')) suppressSwipe = true;
+  if (e.target.closest?.('.the-cut, [data-energy-card], .spend-evidence, .guardrail, [data-interaction="software-changing"]')) suppressSwipe = true;
 }, { passive: true });
 document.addEventListener('touchend', (e) => {
-  const blocked = suppressSwipe || e.target.closest?.('.chart-callout, .show-card, .appraiser-pin, .fx-panel, .the-cut, [data-energy-card], .spend-evidence, [data-interaction="software-changing"]');
+  const blocked = suppressSwipe || e.target.closest?.('.chart-callout, .show-card, .appraiser-pin, .fx-panel, .the-cut, [data-energy-card], .spend-evidence, .guardrail, [data-interaction="software-changing"]');
   const dx = e.changedTouches[0].clientX - touchX;
   if (!blocked && Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
   suppressSwipe = false;

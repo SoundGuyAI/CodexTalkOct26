@@ -184,9 +184,9 @@ export const part2Slides = [
             <article class="kanban-card" tabindex="0">screenshot pass</article>
           </div>
         </div>
-        <p class="kanban-hint">drag cards → Idea · Todo · Agent · Review</p>
+        <p class="kanban-hint">drag into Agent — it fills green, then moves to Review</p>
       </section>`,
-    notes: 'Symphony + Linear: orchestration became another board to maintain. Demo: drag cards Idea → Todo → Agent → Review. Then the free-tier limit story.'
+    notes: 'Symphony + Linear: orchestration became another board to maintain. Demo: drag a card into Agent. It fills green for about five seconds, then jumps to Review. Then the free-tier limit story.'
   },
   {
     id: 'part2-project-20',
@@ -279,9 +279,9 @@ export const part2Slides = [
     title: 'NEVER LEAVE UNRESTRICTED',
     className: 'slide--unrestricted slide--danger',
     html: `
-      <section class="slide-content slide-content--guardrails" aria-labelledby="part2-unrestricted-title">
+      <section class="slide-content slide-content--guardrails" data-interaction="guardrail-taps" aria-labelledby="part2-unrestricted-title">
         <header class="slide-heading slide-heading--compact" data-depth="5">
-          <h2 id="part2-unrestricted-title">NEVER LEAVE UNRESTRICTED</h2>
+          <h2 id="part2-unrestricted-title">NEVER LEAVE <span class="ban-word">UNRESTRICTED<svg class="ban-stamp" viewBox="0 0 120 48" preserveAspectRatio="none" aria-hidden="true"><ellipse cx="60" cy="24" rx="54" ry="20" fill="none" stroke="#ff354d" stroke-width="5" vector-effect="non-scaling-stroke"/><line x1="22" y1="8" x2="98" y2="40" stroke="#ff354d" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg></span></h2>
         </header>
         <div class="guardrails" data-depth="2">
           ${[
@@ -289,11 +289,11 @@ export const part2Slides = [
             ['TOKENS', 'bounded budget'],
             ['COST', 'hard cap'],
             ['STOP', 'human exit']
-          ].map(([label, detail], index) => `<button class="guardrail" type="button" data-draggable="true" data-depth="${index + 1}"><strong>${label}</strong><span>${detail}</span></button>`).join('')}
+          ].map(([label, detail]) => `<button class="guardrail" type="button" data-tap aria-pressed="false"><span class="tap" aria-hidden="true"><span class="tap__handle"></span><span class="tap__neck"></span><span class="tap__spout"></span><span class="tap__stream"><i></i><i></i><i></i></span></span><strong>${label}</strong><span>${detail}</span></button>`).join('')}
         </div>
         <div class="plan-reset" data-depth="5">back to a <strong>$20 plan</strong></div>
       </section>`,
-    notes: 'Every loop gets a ceiling and an exit. Hard limits: time, tokens, cost, stop. Went back to the $20 plan.'
+    notes: 'Every loop gets a ceiling and an exit. The four taps start open — the loop is unrestricted. Click a card to shut that limit (time, tokens, cost, stop); click again to reopen. When all four are shut, the ban stamp lands on UNRESTRICTED. Went back to the $20 plan.'
   },
   {
     id: 'part2-software-changing',

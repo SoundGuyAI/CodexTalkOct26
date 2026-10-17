@@ -49,15 +49,12 @@ Planning references:
 | 4 | Heavenly Hell | **HAVE** | `history/heavenly-hell-logo.png` (Rock Band removed from this slide) |
 | 5 | Star Shipping | **HAVE** | `history/star-shipping-logo.png` framed Corbomite logo |
 | 5 | Spinning Cube | **HAVE** | `history/spinning-cube-logo.png` from CubeSpinLogo.png |
-| 5 | Leisure Suit Larry demo | **PLACEHOLDER · YOU** | Private / LinkedIn-era; need your capture |
-| 5 | Gun N' Blade | **PLACEHOLDER · YOU** | Lead: [SlideShare Gun N' Blade talk](http://www.slideshare.net/soundguy/gun-n-blade-oded-sharon-israeli-game-day-2013) — export a slide image, or send a still |
+| 5 | Leisure Suit Larry demo | **HAVE** | `history/larry-kickstarter.png` (Kickstarter page) |
+| 5 | Interface Incineration (was Gun N' Blade) | **HAVE** | `history/interface-incineration.png` |
 | 6 | Herbert's Quest | **HAVE** | `history/herberts-quest.jpg` from adventuremob screenshot |
 | 6 | Uniform (was Nightmare Playground) | **HAVE** | `history/uniform-logo.jpg` from adventuremob.com/uniform |
-| 7 | GDC stages | **PLACEHOLDER · YOU** | Photo of you on a GDC stage / Vault session still (your photo) |
-| 7 | Game Dev Day | **PLACEHOLDER · YOU** | Crowd / stage photo from Israeli Game Dev Day |
-| 7 | GGJ groups | **PLACEHOLDER · YOU** | Group photo; GGJ site archive limited |
-| 7 | Teaching | **PLACEHOLDER · YOU** | Classroom / workshop photo |
-| 8 | Oh SHIP! Time to Escape | **HAVE** | `history/oh-ship-time-to-escape.jpg` (user YT-style thumb; replaces StreetWize) |
+| 7 | Oh SHIP! Time to Escape | **HAVE** | `history/oh-ship-time-to-escape.jpg` (XR slide moved ahead of community) |
+| 8 | Community photos | **HAVE** | `community/award-stage.jpg`, `gdc-schedule.jpg`, `group-photo.jpg` (captions later) |
 | 9 | Midburn pyro | **HAVE (relabeled)** | Uses `about/burning-man-sculpture.jpg` (was mislabeled Burns) + fireworks |
 | 9 | Imperial March HDD | **HAVE** | `sidequests/imperial-march-hdd.jpg` from YT “yet another hard drive playing Imperial March” (Oded Sharon); letterboxed 16:10 |
 
@@ -106,7 +103,7 @@ Planning references:
 | Glasses cover PNG | PastProjectsForReference local |
 | Kaiju hero | OpenAIBuildWeek local evidence |
 
-Devpost gallery pages blocked automated download (HTTP 403). BRCvr team page also 403 from this environment (local `brcvr-playa.jpg` already covers slide 8).
+Devpost gallery pages blocked automated download (HTTP 403). BRCvr team page also 403 from this environment (local `brcvr-playa.jpg` already covers the XR slide, now deck slide 7).
 
 ---
 
@@ -115,8 +112,8 @@ Devpost gallery pages blocked automated download (HTTP 403). BRCvr team page als
 ### Must-have before talk day
 
 1. **Herbert's Quest** still or trailer URL
-2. **Gun N' Blade** still (or confirm SlideShare export is OK)
-3. **One community photo set** — any mix of GDC / Game Dev Day / GGJ / teaching (even 2–3 photos covers slide 7)
+2. **Gun N' Blade** — replaced on the platforms slide by Interface Incineration
+3. **Community photos** — three photos are on the community slide (now deck slide 8)
 
 ### Nice polish (no longer blocking)
 
