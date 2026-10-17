@@ -1017,6 +1017,163 @@ function wireSpendZoom(root) {
   });
 }
 
+/** Slide 44: chest opens, the touched box flies in, chest closes. It stays inside. */
+function wireStuffChest(root) {
+  const section = root.querySelector('[data-interaction="stuff-chest"]');
+  if (!section || section.dataset.chestWired === 'true') return;
+  section.dataset.chestWired = 'true';
+  const chest = section.querySelector('[data-stuff-chest]');
+  const pile = section.querySelector('[data-stuff-pile]');
+  const countEl = section.querySelector('[data-stuff-count]');
+  if (!chest || !pile) return;
+
+  const queue = [];
+  let busy = false;
+
+  const slotStyle = (index) => {
+    const col = index % 2;
+    const row = Math.floor(index / 2);
+    return {
+      left: col === 0 ? '4%' : '52%',
+      top: row === 0 ? '50%' : '2%',
+      width: '44%',
+      height: '48%',
+    };
+  };
+
+  const measureSlot = (index) => {
+    const probe = document.createElement('div');
+    const slot = slotStyle(index);
+    probe.setAttribute('aria-hidden', 'true');
+    Object.assign(probe.style, {
+      position: 'absolute',
+      left: slot.left,
+      top: slot.top,
+      width: slot.width,
+      height: slot.height,
+      pointerEvents: 'none',
+    });
+    pile.appendChild(probe);
+    const rect = probe.getBoundingClientRect();
+    probe.remove();
+    return { rect, slot };
+  };
+
+  const dock = (box, slot) => {
+    box.getAnimations?.().forEach((anim) => anim.cancel());
+    gsap.killTweensOf(box);
+    box.classList.remove('is-flying');
+    box.classList.add('is-stored');
+    box.dataset.stowed = 'true';
+    box.removeAttribute('data-depth');
+    box.removeAttribute('tabindex');
+    box.style.cssText = '';
+    Object.assign(box.style, {
+      position: 'absolute',
+      left: slot.left,
+      top: slot.top,
+      width: slot.width,
+      height: slot.height,
+      margin: '0',
+    });
+    pile.appendChild(box);
+    const stored = pile.querySelectorAll('[data-stuff-box]').length;
+    if (countEl) {
+      countEl.hidden = false;
+      countEl.textContent = String(stored);
+    }
+  };
+
+  const stow = (box) => new Promise((resolve) => {
+    const reduced = prefersReducedMotion();
+    const openMs = reduced ? 0 : 280;
+    const flyMs = reduced ? 0 : 520;
+    const closeMs = reduced ? 0 : 260;
+    const slideEl = box.closest('.slide') || section;
+    const from = box.getBoundingClientRect();
+    const ghost = document.createElement('div');
+    ghost.className = 'stuff-box-ghost';
+    ghost.setAttribute('aria-hidden', 'true');
+    ghost.style.height = `${from.height}px`;
+    box.before(ghost);
+
+    box.classList.add('is-flying');
+    box.removeAttribute('data-depth');
+    Draggable.get(box)?.kill();
+    slideEl.appendChild(box);
+    Object.assign(box.style, {
+      position: 'fixed',
+      left: `${from.left}px`,
+      top: `${from.top}px`,
+      width: `${from.width}px`,
+      height: `${from.height}px`,
+      margin: '0',
+      zIndex: '40',
+      pointerEvents: 'none',
+    });
+    const placed = box.getBoundingClientRect();
+    const fixX = from.left - placed.left;
+    const fixY = from.top - placed.top;
+    box.style.left = `${from.left + fixX}px`;
+    box.style.top = `${from.top + fixY}px`;
+
+    chest.classList.add('is-open');
+    window.setTimeout(() => {
+      const { rect, slot } = measureSlot(pile.querySelectorAll('[data-stuff-box]').length);
+      const current = box.getBoundingClientRect();
+      const dx = (rect.left + rect.width / 2) - (current.left + current.width / 2);
+      const dy = (rect.top + rect.height / 2) - (current.top + current.height / 2);
+      const scale = Math.max(0.2, Math.min(rect.width / Math.max(current.width, 1), rect.height / Math.max(current.height, 1)));
+      const finish = () => {
+        dock(box, slot);
+        beep(midiToHz(67), 0.05);
+        window.setTimeout(() => {
+          chest.classList.remove('is-open');
+          window.setTimeout(resolve, closeMs);
+        }, reduced ? 0 : 80);
+      };
+      if (!flyMs) {
+        finish();
+        return;
+      }
+      const anim = box.animate([
+        { transform: 'translate(0px, 0px) scale(1)' },
+        { transform: `translate(${dx}px, ${dy}px) scale(${scale})` },
+      ], { duration: flyMs, easing: 'cubic-bezier(.45, 0, 1, 1)', fill: 'forwards' });
+      anim.onfinish = finish;
+    }, openMs);
+  });
+
+  const pump = () => {
+    if (busy) return;
+    const box = queue.shift();
+    if (!box) return;
+    busy = true;
+    stow(box).then(() => {
+      busy = false;
+      pump();
+    });
+  };
+
+  const enqueue = (box) => {
+    if (!box || box.dataset.stowed === 'true' || box.dataset.queued === 'true') return;
+    box.dataset.queued = 'true';
+    queue.push(box);
+    pump();
+  };
+
+  section.addEventListener('click', (event) => {
+    const box = event.target.closest('[data-stuff-box]');
+    if (!box || !section.contains(box)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    enqueue(box);
+  });
+  section.addEventListener('pointerdown', (event) => {
+    if (event.target.closest('[data-stuff-box]')) event.stopPropagation();
+  });
+}
+
 function wireSlideInteractions(slideEl) {
   if (!slideEl) return;
   const root = slideEl.querySelector('.slide-inner');
@@ -1050,6 +1207,7 @@ function wireSlideInteractions(slideEl) {
     root.querySelectorAll('[data-draggable="true"]').forEach((node) => {
       if (node.closest('[data-interaction="symphony-kanban"], [data-interaction="taskswipe"], [data-interaction="how-void"]')) return;
       if (node.classList.contains('chart-callout')) return;
+      if (node.matches('[data-stuff-box]')) return;
       Draggable.create(node, {
         type: 'x,y',
         bounds: root,
@@ -1088,6 +1246,7 @@ function wireSlideInteractions(slideEl) {
   wireFocusEnergy(root);
   wireSpendZoom(root);
   wireNowProjects(root);
+  wireStuffChest(root);
 }
 
 function wireNowProjects(root) {
@@ -1181,6 +1340,7 @@ function parallaxSkipped(node) {
   if (!node || node.classList.contains('is-gone')) return true;
   // Final/QR slide: left copy must stay put so it never translates off-canvas.
   if (node.matches('.final-copy') || node.closest('.final-copy')) return true;
+  if (node.matches('[data-stuff-box]') || node.closest('.stuff-chest')) return true;
   if (node.matches('[data-draggable], .kanban-card, .taskswipe-card, .swimlane, .year-bar, .chart-callout, .year-project-pin, .slot-reel__strip, .slot-tile, .slot-lever')) return true;
   if (node.closest('[data-draggable], .kanban-card, .taskswipe-card, .chart-callout, .slot-reel')) return true;
   return false;
@@ -1258,6 +1418,7 @@ function initInteractions() {
 
 document.addEventListener('click', (event) => {
   if (event.target.closest?.('[data-interaction="software-shift"]')) return;
+  if (event.target.closest?.('[data-stuff-box], .stuff-chest')) return;
   const actionButton = event.target.closest('[data-action]');
   const action = actionButton?.dataset.action;
   if (action === 'next') navigate(1);
@@ -1306,10 +1467,10 @@ let touchX = null;
 let suppressSwipe = false;
 document.addEventListener('touchstart', (e) => {
   touchX = e.changedTouches[0].clientX;
-  if (e.target.closest?.('.the-cut, [data-energy-card], .spend-evidence, .guardrail, .software-chains')) suppressSwipe = true;
+  if (e.target.closest?.('.the-cut, [data-energy-card], .spend-evidence, .guardrail, .software-chains, [data-stuff-box], .stuff-chest')) suppressSwipe = true;
 }, { passive: true });
 document.addEventListener('touchend', (e) => {
-  const blocked = suppressSwipe || e.target.closest?.('.chart-callout, .show-card, .appraiser-pin, .fx-panel, .the-cut, [data-energy-card], .spend-evidence, .guardrail, .software-chains');
+  const blocked = suppressSwipe || e.target.closest?.('.chart-callout, .show-card, .appraiser-pin, .fx-panel, .the-cut, [data-energy-card], .spend-evidence, .guardrail, .software-chains, [data-stuff-box], .stuff-chest');
   const dx = e.changedTouches[0].clientX - touchX;
   if (!blocked && Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
   suppressSwipe = false;

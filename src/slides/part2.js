@@ -349,19 +349,31 @@ export const part2Slides = [
     title: 'Hyper-personalized apps.',
     className: 'slide--hyper-personalized slide--cards',
     html: `
-      <section class="slide-content slide-content--personalized" aria-labelledby="part2-hyper-title">
+      <section class="slide-content slide-content--personalized" data-interaction="stuff-chest" aria-labelledby="part2-hyper-title">
         <header class="slide-heading" data-depth="5">
           <h2 id="part2-hyper-title">Hyper-personalized apps.</h2>
         </header>
-        <div class="variant-board" data-depth="2" aria-label="Draggable personal app variants">
-          ${card({ label: 'for me', title: 'calendar', tone: 'cyan', depth: 2 })}
-          ${card({ label: 'for me', title: 'show tracker', tone: 'pink', depth: 3 })}
-          ${card({ label: 'for me', title: 'car finder', tone: 'orange', depth: 2 })}
-          ${card({ label: 'for me', title: 'improv dashboard', tone: 'lime', depth: 3 })}
+        <div class="variant-board" data-depth="2" aria-label="Personal app variants. Click a box to put it in my Stuff.">
+          ${card({ label: 'for me', title: 'calendar', tone: 'cyan', depth: 2, draggable: false, attrs: 'data-stuff-box="true" role="button" aria-label="Put calendar in my Stuff"' })}
+          ${card({ label: 'for me', title: 'show tracker', tone: 'pink', depth: 3, draggable: false, attrs: 'data-stuff-box="true" role="button" aria-label="Put show tracker in my Stuff"' })}
+          ${card({ label: 'for me', title: 'car finder', tone: 'orange', depth: 2, draggable: false, attrs: 'data-stuff-box="true" role="button" aria-label="Put car finder in my Stuff"' })}
+          ${card({ label: 'for me', title: 'improv dashboard', tone: 'lime', depth: 3, draggable: false, attrs: 'data-stuff-box="true" role="button" aria-label="Put improv dashboard in my Stuff"' })}
           <div class="variant-plus" data-depth="5" aria-hidden="true">+</div>
         </div>
+        <aside class="stuff-chest" data-stuff-chest>
+          <div class="stuff-chest__scene">
+            <div class="stuff-chest__lid" aria-hidden="true"></div>
+            <div class="stuff-chest__base" aria-hidden="true">
+              <span class="stuff-chest__band"></span>
+              <span class="stuff-chest__latch"></span>
+            </div>
+            <div class="stuff-chest__pile" data-stuff-pile></div>
+            <span class="stuff-chest__count" data-stuff-count hidden>0</span>
+          </div>
+          <p class="stuff-chest__label">my Stuff</p>
+        </aside>
       </section>`,
-    notes: 'Software stops being one product for a market and becomes a material people reshape. Drag two variants together to suggest a hybrid audience-of-one tool.'
+    notes: 'Software stops being one product for a market and becomes a material people reshape. Click any box: the chest opens, the box goes into my Stuff, and the chest closes. Each box stays inside.'
   },
   {
     id: 'part2-taskswipe',
