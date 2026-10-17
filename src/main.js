@@ -109,7 +109,7 @@ function playTransitionTone() {
   const midi = RICKROLL_MIDI[melodyIndex % RICKROLL_MIDI.length];
   melodyIndex = (melodyIndex + 1) % RICKROLL_MIDI.length;
   const hz = midiToHz(midi);
-  const isBill = current === 37;
+  const isBill = current === 38;
   beep(isBill ? hz * 0.5 : hz, isBill ? 0.16 : 0.07);
 }
 
@@ -1074,6 +1074,27 @@ function wireSlideInteractions(slideEl) {
   wireTheCut(root);
   wireFocusEnergy(root);
   wireSpendZoom(root);
+  wireNowProjects(root);
+}
+
+function wireNowProjects(root) {
+  const stage = root.querySelector('[data-interaction="now-projects"]');
+  if (!stage || stage.dataset.wired === 'true') return;
+  stage.dataset.wired = 'true';
+  const tiles = [...stage.querySelectorAll('.now-tile')];
+  const bringForward = (tile) => {
+    tiles.forEach((node) => {
+      const on = node === tile;
+      node.classList.toggle('is-forward', on);
+      node.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  };
+  tiles.forEach((tile) => {
+    tile.addEventListener('click', (event) => {
+      event.stopPropagation();
+      bringForward(tile);
+    });
+  });
 }
 
 function runAction(action, trigger) {

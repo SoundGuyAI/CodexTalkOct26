@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const TOTAL_SLIDES = 47;
+const TOTAL_SLIDES = 48;
 /** Top-level deck slides only — avoids nested false matches and opacity heuristics. */
 const SLIDES_SELECTOR = '#stage > .slide[data-slide]';
 
@@ -57,7 +57,7 @@ async function goToSlide(page, index) {
 }
 
 test.describe('deck verification', () => {
-  test('contains 47 slides and keeps the viewport free of horizontal overflow', async ({ page }) => {
+  test('contains 48 slides and keeps the viewport free of horizontal overflow', async ({ page }) => {
     // First suite hit pays Vite cold-compile cost; keep assertion strict, wait longer.
     test.setTimeout(90_000);
     await goToSlide(page, 1);
@@ -66,7 +66,7 @@ test.describe('deck verification', () => {
     await expect(page.locator('[data-testid="countdown-timer"], [aria-label*="countdown" i], .countdown-timer').first()).toBeVisible();
 
     // Spot-check interactive/later slides for horizontal document overflow.
-    for (const index of [1, 14, 35, 40, 43, TOTAL_SLIDES]) {
+    for (const index of [1, 14, 15, 35, 40, 43, TOTAL_SLIDES]) {
       await goToSlide(page, index);
       const dimensions = await page.evaluate(() => ({
         body: document.body.scrollWidth,
@@ -99,7 +99,7 @@ test.describe('deck verification', () => {
     await expectActiveSlide(page, 23);
 
     await goToSlide(page, TOTAL_SLIDES);
-    await expect(page).toHaveURL(/#slide-47$/);
+    await expect(page).toHaveURL(/#slide-48$/);
     await expectActiveSlide(page, TOTAL_SLIDES);
   });
 

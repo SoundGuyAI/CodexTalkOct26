@@ -350,6 +350,41 @@ export const part1Slides = [
     notes: 'I stopped being the person doing every keystroke and became the person steering many loops. Cursor movement changes which agent window dominates.'
   },
   {
+    id: 'part1-14b-current-projects',
+    duration: 10,
+    title: 'Current projects: 2026',
+    className: 'slide-now-projects',
+    html: (() => {
+      const projects = [
+        { label: 'LoveLink', image: 'projects/lovelink.jpg' },
+        { label: 'Save Point', image: 'projects/savepoint-hero.png' },
+        { label: 'Glasses', image: 'projects/where-are-my-glasses-cover.png', full: 'Where Are My Glasses?' },
+        { label: 'Meditation Extreme', image: 'projects/meditation-extreme.jpg' },
+        { label: 'Feed The Feed', image: 'projects/feed-the-feed.png' },
+        { label: 'JigTrade', image: 'projects/jigtrade.png' },
+        { label: 'Improv', image: 'projects/improv-dashboard.png' },
+        { label: 'CamSport', image: 'projects/camsport.png' },
+        { label: 'Kaiju QA', image: 'projects/kaiju-qa.png' },
+        { label: 'TaskSwipe', image: 'projects/taskswipe-placeholder.png' },
+      ];
+      const tile = (item, index) => `
+        <button type="button" class="now-tile${index === 0 ? ' is-forward' : ''}" data-project="${item.label}" aria-pressed="${index === 0 ? 'true' : 'false'}" aria-label="${item.full || item.label}">
+          <span class="now-tile__art"><img src="./assets/${item.image}" alt="" draggable="false"></span>
+          <span class="now-tile__name">${item.label}</span>
+        </button>`;
+      return `
+        <section class="now-projects" data-interaction="now-projects" aria-labelledby="now-projects-title">
+          <header class="now-projects__head">
+            <h2 id="now-projects-title">Current projects</h2>
+            <p class="now-year">2026</p>
+          </header>
+          <div class="now-stage">${projects.map(tile).join('')}</div>
+          <p class="now-hint">click a project — it comes forward</p>
+        </section>`;
+    })(),
+    notes: 'The projects in motion in 2026 — a spotlight, not the year chart and not the weekly cut. Click a tile to pull that project forward; the others keep a slow drift. LoveLink, Save Point, Glasses, Meditation Extreme, Feed The Feed, JigTrade, Improv, CamSport, Kaiju QA, TaskSwipe.'
+  },
+  {
     id: 'part1-15-currency',
     duration: 2,
     title: 'Currency converter',
