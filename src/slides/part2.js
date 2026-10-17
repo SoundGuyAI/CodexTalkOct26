@@ -303,16 +303,33 @@ export const part2Slides = [
     html: `
       <section class="slide-content slide-content--type-shift" aria-labelledby="part2-software-changing-title">
         <h2 id="part2-software-changing-title" data-depth="5">Software is changing.</h2>
-        <div class="type-shift" aria-label="Click a role to strike it" data-depth="2">
-          <button type="button" class="type-shift__word" data-strike-word>User</button>
-          <span class="type-shift__arrow" aria-hidden="true">→</span>
-          <button type="button" class="type-shift__word" data-strike-word>Builder</button>
-          <span class="type-shift__arrow" aria-hidden="true">→</span>
-          <button type="button" class="type-shift__word" data-strike-word>Modifier</button>
+        <div class="type-shift" data-interaction="software-changing" data-depth="2" role="button" tabindex="0" aria-pressed="false" aria-label="Rewrite Developer, Prompt, and API">
+          <article class="shift-card" data-shift="developer">
+            <strong class="shift-card__word">Developer</strong>
+          </article>
+          <article class="shift-card" data-shift="prompt">
+            <span class="shift-card__stack">
+              <strong class="shift-card__word shift-card__word--from">Prompt</strong>
+              <strong class="shift-card__word shift-card__word--to" aria-hidden="true">Agent</strong>
+            </span>
+          </article>
+          <div class="shift-api">
+            <article class="shift-card" data-shift="api">
+              <strong class="shift-card__word">API</strong>
+            </article>
+            <div class="shift-aai" aria-hidden="true">
+              <span class="shift-aai__arrow" aria-hidden="true">→</span>
+              <article class="shift-card shift-card--aai">
+                <strong>AAI</strong>
+                <span>Application Agent Interface</span>
+              </article>
+            </div>
+          </div>
         </div>
-        <p class="type-shift__hint">click to strike</p>
+        <p class="type-shift__hint">click to rewrite</p>
+        <p class="sr-only" data-shift-live aria-live="polite"></p>
       </section>`,
-    notes: 'Open source plus agents changes who gets to change software. Click User / Builder / Modifier to strike them live. The tool is material, not a finished product.'
+    notes: 'Open source plus agents changes who gets to change software. One click rewrites the row: Developer strikes out, Prompt becomes Agent, and API strikes out into AAI — Application Agent Interface.'
   },
   {
     id: 'part2-everyone-developer',

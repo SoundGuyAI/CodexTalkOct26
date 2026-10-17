@@ -344,6 +344,47 @@ function wireTypeShift(root) {
   });
 }
 
+/** Slide 40: one click rewrites Developer, Prompt, and API. Arrow keys stay with the deck. */
+function wireSoftwareChanging(root) {
+  const stage = root.querySelector('[data-interaction="software-changing"]');
+  if (!stage || stage.dataset.shiftWired === 'true') return;
+  stage.dataset.shiftWired = 'true';
+  const live = root.querySelector('[data-shift-live]');
+  const hint = root.querySelector('.slide-content--type-shift .type-shift__hint');
+  const play = () => {
+    if (stage.classList.contains('is-rewritten') || stage.dataset.playing === 'true') return;
+    stage.dataset.playing = 'true';
+    const reduced = prefersReducedMotion();
+    const at = (ms, fn) => {
+      if (reduced || ms <= 0) fn();
+      else window.setTimeout(fn, ms);
+    };
+    beep(midiToHz(55), .04);
+    at(0, () => stage.classList.add('is-step-developer'));
+    at(reduced ? 0 : 320, () => {
+      stage.classList.add('is-step-prompt');
+      const from = stage.querySelector('.shift-card__word--from');
+      const to = stage.querySelector('.shift-card__word--to');
+      from?.setAttribute('aria-hidden', 'true');
+      to?.removeAttribute('aria-hidden');
+      beep(midiToHz(67), .04);
+    });
+    at(reduced ? 0 : 680, () => {
+      stage.classList.add('is-step-api', 'is-rewritten');
+      stage.setAttribute('aria-pressed', 'true');
+      stage.querySelector('.shift-aai')?.removeAttribute('aria-hidden');
+      if (live) live.textContent = 'Developer struck. Prompt is now Agent. API struck, replaced by AAI, Application Agent Interface.';
+      if (hint) hint.textContent = 'rewritten';
+      beep(midiToHz(72), .06);
+    });
+  };
+  stage.addEventListener('click', play);
+  stage.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter') return;
+    play();
+  });
+}
+
 function wireRepoPreview(root) {
   const tree = root.querySelector('.repo-tree');
   const preview = root.querySelector('[data-repo-preview]');
@@ -923,6 +964,7 @@ function wireSlideInteractions(slideEl) {
   wireKanban(root);
   wireTaskSwipe(root);
   wireTypeShift(root);
+  wireSoftwareChanging(root);
   wireRepoPreview(root);
   wireSlotMachine(root, { gsap, reducedMotion: prefersReducedMotion() });
   wireHowVoid(root, { gsap, reducedMotion: prefersReducedMotion() });
@@ -1126,10 +1168,10 @@ let touchX = null;
 let suppressSwipe = false;
 document.addEventListener('touchstart', (e) => {
   touchX = e.changedTouches[0].clientX;
-  if (e.target.closest?.('.the-cut, [data-energy-card], .spend-evidence')) suppressSwipe = true;
+  if (e.target.closest?.('.the-cut, [data-energy-card], .spend-evidence, [data-interaction="software-changing"]')) suppressSwipe = true;
 }, { passive: true });
 document.addEventListener('touchend', (e) => {
-  const blocked = suppressSwipe || e.target.closest?.('.chart-callout, .show-card, .appraiser-pin, .fx-panel, .the-cut, [data-energy-card], .spend-evidence');
+  const blocked = suppressSwipe || e.target.closest?.('.chart-callout, .show-card, .appraiser-pin, .fx-panel, .the-cut, [data-energy-card], .spend-evidence, [data-interaction="software-changing"]');
   const dx = e.changedTouches[0].clientX - touchX;
   if (!blocked && Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
   suppressSwipe = false;

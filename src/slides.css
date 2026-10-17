@@ -551,3 +551,98 @@
 /* Slides 11-12: the SVG leader stays on the bar while the bubble moves. */
 .yearly-chart:has(.chart-leaders--pins) .year-project-pin__stem{display:none}
 
+
+/* Slide 40: Developer / Prompt / API rewrite into Agent and AAI. */
+.slide--software-changing .slide-content--type-shift{justify-content:center!important;gap:0}
+.slide--software-changing .type-shift{display:flex!important;align-items:stretch;justify-content:center;flex-wrap:nowrap!important;gap:clamp(.7rem,1.4vw,1.25rem)!important;width:100%!important;max-width:min(100%,1600px)!important;margin-top:clamp(1.4rem,4vh,2.8rem);padding:0!important;cursor:pointer}
+.slide--software-changing .type-shift:focus-visible{outline:2px solid #c9ff4a;outline-offset:6px;border-radius:1.2rem}
+.slide--software-changing .shift-card{flex:1 1 0;min-width:0;min-height:clamp(9.5rem,30vh,16.5rem);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.45rem;padding:1.2rem 1rem;border-radius:1.15rem;background:#120f16;border:1px solid #42e8e055;box-shadow:0 0 1.15rem #42e8e033;text-align:center;transition:border-color .35s ease,box-shadow .35s ease,background .35s ease}
+.slide--software-changing .shift-card[data-shift="developer"]{border-color:#ff3b8188;box-shadow:0 0 1.2rem #ff3b8144}
+.slide--software-changing .shift-card[data-shift="prompt"]{border-color:#c9ff4a88;box-shadow:0 0 1.2rem #c9ff4a33}
+.slide--software-changing .shift-card[data-shift="api"]{border-color:#42e8e088;box-shadow:0 0 1.2rem #42e8e044}
+.slide--software-changing .shift-card__word{font-family:"Archivo Black",Arial Black,sans-serif;font-size:clamp(1.7rem,3.3vw,3.35rem);line-height:.92;letter-spacing:-.045em;text-transform:uppercase;color:#f6f0e4;transition:color .28s ease,opacity .28s ease,transform .28s ease}
+.slide--software-changing .shift-card__stack{display:grid;place-items:center;width:100%}
+.slide--software-changing .shift-card__word--from,.slide--software-changing .shift-card__word--to{grid-area:1/1}
+.slide--software-changing .shift-card__word--to{opacity:0;transform:translateY(.45em);color:#c9ff4a;text-shadow:0 0 1.15rem #c9ff4aaa}
+.slide--software-changing .type-shift.is-step-developer [data-shift="developer"]{border-color:#3d3644;box-shadow:none;background:#0c0b10}
+.slide--software-changing .type-shift.is-step-developer [data-shift="developer"] .shift-card__word{color:#6a6370;text-decoration:line-through;text-decoration-thickness:.12em;text-decoration-color:#ff3b81}
+.slide--software-changing .type-shift.is-step-prompt .shift-card__word--from{opacity:0;transform:translateY(-.4em)}
+.slide--software-changing .type-shift.is-step-prompt .shift-card__word--to{opacity:1;transform:none}
+.slide--software-changing .type-shift.is-step-prompt [data-shift="prompt"]{border-color:#c9ff4a;box-shadow:0 0 1.5rem #c9ff4a66}
+.slide--software-changing .shift-api{display:flex;align-items:stretch;flex:1 1 0;min-width:0}
+.slide--software-changing .shift-api>.shift-card{flex:1 1 auto;width:auto;min-width:0}
+.slide--software-changing .shift-aai{display:flex;align-items:center;gap:.7rem;flex:0 0 0px;min-width:0;max-width:0;opacity:0;overflow:hidden;margin-left:0;transform:translateX(-.75rem);pointer-events:none;transition:flex-basis .45s ease,max-width .45s ease,opacity .35s ease .12s,transform .45s ease .08s,margin-left .45s ease}
+.slide--software-changing .type-shift.is-step-api .shift-api{flex:2.15 1 0}
+.slide--software-changing .type-shift.is-step-api [data-shift="api"]{border-color:#3d3644;box-shadow:none;background:#0c0b10;flex:0 1 9.5rem;width:auto}
+.slide--software-changing .type-shift.is-step-api [data-shift="api"] .shift-card__word{color:#6a6370;text-decoration:line-through;text-decoration-thickness:.12em;text-decoration-color:#ff3b81}
+.slide--software-changing .type-shift.is-step-api .shift-aai{flex:1 1 18rem;max-width:34rem;opacity:1;overflow:visible;margin-left:.85rem;transform:none}
+.slide--software-changing .shift-aai__arrow{flex:0 0 auto;font-family:"Archivo Black",Arial Black,sans-serif;font-size:clamp(2.4rem,5vw,4.4rem);line-height:1;color:#42e8e0;text-shadow:0 0 1rem #42e8e0}
+.slide--software-changing .shift-card--aai{flex:1 1 auto;min-width:13.5rem;border-color:#42e8e0;background:#10141c;box-shadow:0 0 1.6rem #42e8e077,inset 0 0 0 1px #42e8e033}
+.slide--software-changing .shift-card--aai strong{font-family:"Archivo Black",Arial Black,sans-serif;font-size:clamp(3rem,6.2vw,5.6rem);line-height:.82;letter-spacing:-.05em;color:#42e8e0;text-shadow:0 0 1.4rem #42e8e0bb;text-transform:uppercase}
+.slide--software-changing .shift-card--aai span{font-weight:700;font-size:clamp(1.05rem,1.7vw,1.5rem);line-height:1.15;letter-spacing:.01em;color:#f6f0e4;max-width:16ch;text-transform:none}
+.slide--software-changing .type-shift.is-rewritten~.type-shift__hint{color:#6a6370}
+@media(max-width:980px){
+  .slide--software-changing .type-shift{flex-wrap:wrap!important}
+  .slide--software-changing .shift-card,.slide--software-changing .shift-api{flex:1 1 42%}
+  .slide--software-changing .type-shift.is-step-api .shift-api{flex:1 1 100%;flex-wrap:wrap}
+  .slide--software-changing .type-shift.is-step-api .shift-aai{flex:1 1 100%;max-width:none;margin-left:0;margin-top:.7rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .slide--software-changing .shift-card,
+  .slide--software-changing .shift-card__word,
+  .slide--software-changing .shift-aai{transition:none}
+}
+
+/* Slide 3 portrait and community photos: full image, no crop, no frame. */
+.slide-about .orbit-photo--main{
+  width:min(38vw,520px);
+  height:min(76vh,860px);
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  overflow:visible;
+  background:transparent;
+}
+.slide-about .orbit-photo--main img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+  border-radius:0;
+}
+.community-collage.community-photos{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  gap:clamp(.8rem,1.6vw,1.4rem);
+  width:min(96vw,1720px)!important;
+  height:min(82vh,980px)!important;
+  align-items:stretch;
+}
+.community-collage.community-photos .project-card{
+  position:relative!important;
+  inset:auto!important;
+  width:auto!important;
+  height:100%!important;
+  min-height:0;
+  margin:0;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.community-collage.community-photos img{
+  width:100%!important;
+  height:100%!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  object-position:center;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  padding:0!important;
+}
+
