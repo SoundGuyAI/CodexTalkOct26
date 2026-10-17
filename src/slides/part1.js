@@ -258,18 +258,6 @@ export const part1Slides = [
     notes: 'XR worlds: Star Mates, BRCvr, Oh SHIP! logo, Oh SHIP! Time to Escape trailer still (replaces StreetWize; logo was not on Corbomite).'
   },
   {
-    id: 'part1-07-community',
-    duration: 2,
-    title: 'Organize, teach, speak, jam',
-    className: 'slide-collage community',
-    html: `<section class="community-collage community-photos" data-interaction="snap-collage"><h2 class="sr-only">Community</h2>${[
-      'community/award-stage.jpg',
-      'community/gdc-schedule.jpg',
-      'community/group-photo.jpg',
-    ].map((image, index) => `<button type="button" class="project-card project-card--${index + 1}" data-depth="${index % 3 + 1}">${asset(image, '')}</button>`).join('')}</section>`,
-    notes: 'I also organized, taught, spoke, and jammed.'
-  },
-  {
     id: 'part1-09-sidequests',
     duration: 2,
     title: 'The side quests did not stop',
@@ -281,6 +269,18 @@ export const part1Slides = [
       { label: 'Imperial March', image: 'sidequests/imperial-march-hdd.jpg' },
     ])}</section>`,
     notes: 'Geekcon steam engine; Midburn pyro (was mislabeled Burning Man); fireworks; Imperial March HDD (YouTube: “yet another hard drive playing Imperial March”).'
+  },
+  {
+    id: 'part1-07-community',
+    duration: 2,
+    title: 'Organize, teach, speak, jam',
+    className: 'slide-collage community',
+    html: `<section class="community-collage community-photos" data-interaction="snap-collage"><h2 class="sr-only">Community</h2>${[
+      'community/award-stage.jpg',
+      'community/gdc-schedule.jpg',
+      'community/group-photo.jpg',
+    ].map((image, index) => `<button type="button" class="project-card project-card--${index + 1}" data-depth="${index % 3 + 1}">${asset(image, '')}</button>`).join('')}</section>`,
+    notes: 'I also organized, taught, spoke, and jammed.'
   },
   {
     id: 'part1-10-twenty-years',
@@ -365,7 +365,7 @@ export const part1Slides = [
         { label: 'Improv', image: 'projects/improv-dashboard.png' },
         { label: 'CamSport', image: 'projects/camsport.png' },
         { label: 'Kaiju QA', image: 'projects/kaiju-qa.png' },
-        { label: 'TaskSwipe', image: 'projects/taskswipe-placeholder.png' },
+        { label: 'TaskSwipe', image: 'projects/taskswipe-mockup.png' },
       ];
       const tile = (item, index) => `
         <button type="button" class="now-tile${index === 0 ? ' is-forward' : ''}" data-project="${item.label}" aria-pressed="${index === 0 ? 'true' : 'false'}" aria-label="${item.full || item.label}">
@@ -382,6 +382,17 @@ export const part1Slides = [
         </section>`;
     })(),
     notes: 'The projects in motion in 2026 — a spotlight, not the year chart and not the weekly cut. Click a tile to pull that project forward; the others keep a slow drift. LoveLink, Save Point, Glasses, Meditation Extreme, Feed The Feed, JigTrade, Improv, CamSport, Kaiju QA, TaskSwipe.'
+  },
+  {
+    id: 'part1-14c-count-together',
+    duration: 4,
+    title: 'Count with me together.',
+    className: 'slide--count-together',
+    html: `
+      <section class="count-together" aria-labelledby="count-together-title">
+        <h2 id="count-together-title" data-depth="1">Count with me together.</h2>
+      </section>`,
+    notes: 'Title beat. Read it and leave the room a moment with the sentence.'
   },
   {
     id: 'part1-15-currency',
@@ -607,6 +618,53 @@ export const part1Slides = [
       return `<section class="misc-projects" aria-labelledby="misc-projects-title"><h2 id="misc-projects-title" data-depth="1">Misc. projects</h2><div class="film-strip">${frames.map(frame).join('')}</div></section>`;
     })(),
     notes: 'Side work that is not a shipped product: the improv troupe, server maintenance, AI research, and organizing events.'
+  },
+  {
+    id: 'part1-27c-task-swipe',
+    duration: 3,
+    title: 'Task Swipe',
+    className: 'slide--task-swipe-later',
+    html: `
+      <section class="task-swipe-placeholder" aria-labelledby="task-swipe-title">
+        <h2 id="task-swipe-title" data-depth="1">Task Swipe</h2>
+        <figure class="task-swipe-shot" data-depth="2">
+          <img src="./assets/projects/taskswipe-mockup.png" alt="TaskSwipe" loading="eager">
+        </figure>
+        <p class="task-swipe-later" data-depth="3">Demo later</p>
+      </section>`,
+    notes: 'Placeholder. The swipe demo is later in the deck.'
+  },
+  {
+    id: 'part1-27d-this-talk',
+    duration: 4,
+    title: '#19 — This talk.',
+    className: 'slide--this-talk',
+    html: `
+      <section class="this-talk" aria-labelledby="this-talk-title">
+        <h2 id="this-talk-title" data-depth="1">#19 — This talk.</h2>
+        <div class="talk-mini-frame" data-depth="2">
+          <div class="talk-mini-scale">
+            <section class="hero-grid" aria-label="Opening slide">
+              <h1 data-depth="1">Everything Everywhere<br><em>All at Once</em></h1>
+              <p data-depth="2">how to work on 19 projects simultaneously</p>
+              <div class="project-grid" data-depth="3">
+                ${cards([
+                  { label: 'LoveLink', image: 'projects/lovelink.jpg' },
+                  { label: 'Save Point', image: 'projects/save-point.webm' },
+                  { label: 'Where Are My Glasses?', image: 'projects/where-are-my-glasses.jpg' },
+                  { label: 'Meditation: EXTREME!!!1', image: 'projects/meditation-extreme.jpg' },
+                  { label: 'Feed The Feed', image: 'projects/feed-the-feed.png' },
+                  { label: 'JigTrade', image: 'projects/jigtrade.png' },
+                  { label: 'Improv Dashboard', image: 'projects/improv-dashboard.png' },
+                  { label: 'CamSport', image: 'projects/camsport.png' },
+                ])}
+              </div>
+              <span class="hotspot">Tilt the grid</span>
+            </section>
+          </div>
+        </div>
+      </section>`,
+    notes: 'Project nineteen is this talk. The frame is the opening slide, scaled down.'
   },
   {
     id: 'part1-28-hackathons-funds-talks',

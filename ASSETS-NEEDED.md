@@ -34,8 +34,8 @@ Planning references:
 | 8 | BRCvr | `history/brcvr-playa.jpg` |
 | 8 | Oh SHIP! | `history/oh-ship-logo.jpg` (+ trailer thumb) |
 | 8 | Star Mates | `history/star-mates-gdc.jpg` (YT: `eVL2MUwJ9Og`) |
-| 9 | Geekcon | `sidequests/geekcon-steam-engine.jpg` (YT: `b5j8TWnWSU0`) |
-| 9 | Burns | `about/burning-man-sculpture.jpg` |
+| 8 | Geekcon | `sidequests/geekcon-steam-engine.jpg` (YT: `b5j8TWnWSU0`) |
+| 8 | Burns | `about/burning-man-sculpture.jpg` |
 | 15–27 | Modern spotlights (reordered) | Currency/Car/Show placeholders → Feed The Feed → CamSport → Kaiju → **Improv Dashboard/Calendar real UI screenshots** → LoveLink → JigTrade → Glasses → Meditation → Save Point |
 | 47 | QR | Generated from live Pages URL |
 
@@ -54,9 +54,9 @@ Planning references:
 | 6 | Herbert's Quest | **HAVE** | `history/herberts-quest.jpg` from adventuremob screenshot |
 | 6 | Uniform (was Nightmare Playground) | **HAVE** | `history/uniform-logo.jpg` from adventuremob.com/uniform |
 | 7 | Oh SHIP! Time to Escape | **HAVE** | `history/oh-ship-time-to-escape.jpg` (XR slide moved ahead of community) |
-| 8 | Community photos | **HAVE** | `community/award-stage.jpg`, `gdc-schedule.jpg`, `group-photo.jpg` (captions later) |
-| 9 | Midburn pyro | **HAVE (relabeled)** | Uses `about/burning-man-sculpture.jpg` (was mislabeled Burns) + fireworks |
-| 9 | Imperial March HDD | **HAVE** | `sidequests/imperial-march-hdd.jpg` from YT “yet another hard drive playing Imperial March” (Oded Sharon); letterboxed 16:10 |
+| 8 | Midburn pyro | **HAVE (relabeled)** | Uses `about/burning-man-sculpture.jpg` (was mislabeled Burns) + fireworks |
+| 8 | Imperial March HDD | **HAVE** | `sidequests/imperial-march-hdd.jpg` from YT “yet another hard drive playing Imperial March” (Oded Sharon); letterboxed 16:10 |
+| 9 | Community photos | **HAVE** | `community/award-stage.jpg`, `gdc-schedule.jpg`, `group-photo.jpg` (captions later) |
 
 ### Modern / Part 1 utilities & slots
 
@@ -113,7 +113,7 @@ Devpost gallery pages blocked automated download (HTTP 403). BRCvr team page als
 
 1. **Herbert's Quest** still or trailer URL
 2. **Gun N' Blade** — replaced on the platforms slide by Interface Incineration
-3. **Community photos** — three photos are on the community slide (now deck slide 8)
+3. **Community photos** — three photos are on the community slide (now deck slide 9)
 
 ### Nice polish (no longer blocking)
 

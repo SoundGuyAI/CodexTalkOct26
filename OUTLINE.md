@@ -9,6 +9,10 @@ The chart visuals use the inventory as a private design source, but the public s
 
 ## Part 1 — Background → graph → post-AI (2:10)
 
+Live deck insertion: after **Current projects in 2026** (live #15) is **Count with me together.** (live #16). Title only. Later live indices shift by +1. The numbered rows below are the earlier outline and are not renumbered.
+
+Live deck insertion: immediately before **Hackathons. Funds. Talks.** are **Task Swipe** (“Demo later”) and **#19 — This talk.** Those numbered rows are not renumbered.
+
 | # | On-screen text | Visual and interaction | Asset | Speaker note | Sec |
 |---:|---|---|---|---|---:|
 | 1 | **Everything Everywhere All at Once**<br><small>how to work on 19 projects simultaneously</small> | Nineteen-panel multiverse grid. Pointer tilts the grid; panels reveal project names on hover. | Mixed project assets | Open with: “How do I manage 19 projects? I don't. But here we are.” | 8 |
@@ -18,8 +22,8 @@ The chart visuals use the inventory as a private design source, but the public s
 | 5 | — | Mobile/console collage: Star Shipping, Spinning Cube, Larry Kickstarter, Interface Incineration. | `history/larry-kickstarter.png`, `history/interface-incineration.png` | “Different platforms, same small team.” | 2 |
 | 6 | — | Bolt Riley, Avner, Herbert's Quest, Nightmare Playground. | `history/bolt-riley.jpg` + placeholders | “Years of adventure games and publishing.” | 2 |
 | 7 | — | Star Mates, BRCvr, Oh SHIP!, StreetWize. | `history/brcvr-playa.jpg` + placeholders | “Then XR added more worlds.” | 2 |
-| 8 | — | Community photos. | `community/award-stage.jpg`, `gdc-schedule.jpg`, `group-photo.jpg` | “I also organized, taught, spoke, and jammed.” | 2 |
-| 9 | — | Geekcon, pyro, burns, hard-drive Imperial March. | `about/fireworks.jpg`, `about/burning-man-sculpture.jpg` | “And none of the side quests stopped.” | 2 |
+| 8 | — | Geekcon, pyro, burns, hard-drive Imperial March. | `about/fireworks.jpg`, `about/burning-man-sculpture.jpg` | “And none of the side quests stopped.” | 2 |
+| 9 | — | Community photos. | `community/award-stage.jpg`, `gdc-schedule.jpg`, `group-photo.jpg` | “I also organized, taught, spoke, and jammed.” | 2 |
 | 10 | **20 years.** | Six collages shrink into one tiny mosaic; user can pull tiles back out briefly. | Slides 4–9 assets | “Busy was already normal.” | 5 |
 | 11 | **Projects / year** | Calm skyline of annual bars (2019 = 10). Hover reveals era bubbles; pins mark Corbomite→BRCvr. | Code-native chart + historical assets | “For years the shape was noisy, but roughly stable.” Do not recite every count. | 12 |
 | 12 | **2025** | Chart adds the 2025 bar (18). Era pins + hover bubbles stay on correct years. | Chart + project assets | “In 2025 the baseline moved.” | 5 |

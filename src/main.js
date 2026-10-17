@@ -108,6 +108,7 @@ function playTransitionTone() {
   // Always forward through the chorus — direction of navigation does not matter.
   const midi = RICKROLL_MIDI[melodyIndex % RICKROLL_MIDI.length];
   melodyIndex = (melodyIndex + 1) % RICKROLL_MIDI.length;
+  document.documentElement.dataset.melodyIndex = String(melodyIndex);
   const hz = midiToHz(midi);
   const isBill = current === 38;
   beep(isBill ? hz * 0.5 : hz, isBill ? 0.16 : 0.07);
@@ -172,7 +173,14 @@ function showSlide(index, direction = 1) {
   if (!parallaxRaf) parallaxRaf = requestAnimationFrame(applyParallax);
 }
 
-function navigate(delta) { showSlide(current + delta, delta); }
+function navigate(delta) {
+  // Last slide has no next slide, but Next still advances the chorus.
+  if (delta > 0 && current >= slides.length - 1 && slideEls[current]?.classList.contains('is-active')) {
+    playTransitionTone();
+    return;
+  }
+  showSlide(current + delta, delta);
+}
 
 function toggleTimer() {
   if (timerStartedAt === null) { timerStartedAt = performance.now(); return; }
@@ -1018,6 +1026,11 @@ function wireSpendZoom(root) {
 }
 
 /** Slide 44: chest opens, the touched box flies in, chest closes. It stays inside. */
+const CHEST_OPEN_MS = 560;
+const CHEST_FLY_MS = 2000;
+const CHEST_SETTLE_MS = 200;
+const CHEST_CLOSE_MS = 560;
+
 function wireStuffChest(root) {
   const section = root.querySelector('[data-interaction="stuff-chest"]');
   if (!section || section.dataset.chestWired === 'true') return;
@@ -1026,6 +1039,9 @@ function wireStuffChest(root) {
   const pile = section.querySelector('[data-stuff-pile]');
   const countEl = section.querySelector('[data-stuff-count]');
   if (!chest || !pile) return;
+  section.dataset.chestOpenMs = String(CHEST_OPEN_MS);
+  section.dataset.chestFlyMs = String(CHEST_FLY_MS);
+  section.dataset.chestCloseMs = String(CHEST_CLOSE_MS);
 
   const queue = [];
   let busy = false;
@@ -1085,10 +1101,10 @@ function wireStuffChest(root) {
   };
 
   const stow = (box) => new Promise((resolve) => {
-    const reduced = prefersReducedMotion();
-    const openMs = reduced ? 0 : 280;
-    const flyMs = reduced ? 0 : 520;
-    const closeMs = reduced ? 0 : 260;
+    // Always visible. prefers-reduced-motion used to zero these and the box snapped in.
+    const openMs = CHEST_OPEN_MS;
+    const flyMs = CHEST_FLY_MS;
+    const closeMs = CHEST_CLOSE_MS;
     const slideEl = box.closest('.slide') || section;
     const from = box.getBoundingClientRect();
     const ghost = document.createElement('div');
@@ -1130,16 +1146,12 @@ function wireStuffChest(root) {
         window.setTimeout(() => {
           chest.classList.remove('is-open');
           window.setTimeout(resolve, closeMs);
-        }, reduced ? 0 : 80);
+        }, CHEST_SETTLE_MS);
       };
-      if (!flyMs) {
-        finish();
-        return;
-      }
       const anim = box.animate([
         { transform: 'translate(0px, 0px) scale(1)' },
         { transform: `translate(${dx}px, ${dy}px) scale(${scale})` },
-      ], { duration: flyMs, easing: 'cubic-bezier(.45, 0, 1, 1)', fill: 'forwards' });
+      ], { duration: flyMs, easing: 'cubic-bezier(.37, .04, .2, 1)', fill: 'forwards' });
       anim.onfinish = finish;
     }, openMs);
   });
@@ -1172,6 +1184,142 @@ function wireStuffChest(root) {
   section.addEventListener('pointerdown', (event) => {
     if (event.target.closest('[data-stuff-box]')) event.stopPropagation();
   });
+}
+
+/** Slide 49: project bubbles drift and ease toward the bagel. Always in motion. */
+function wireFinalBubbles(root) {
+  const field = root.querySelector('.final-project-drift');
+  if (!field || field.dataset.bubbleWired === 'true') return;
+  const nodes = [...field.querySelectorAll('.final-bubble')];
+  if (!nodes.length) return;
+  field.dataset.bubbleWired = 'true';
+  const slide = field.closest('.slide');
+  const bubbles = nodes.map((el, index) => {
+    const size = 72 + (index % 5) * 8;
+    el.style.setProperty('--bubble', `${size}px`);
+    return {
+      el,
+      baseX: 0,
+      baseY: 0,
+      phase: index * 0.73,
+      freq: 0.55 + (index % 7) * 0.08,
+      size,
+    };
+  });
+  const seeds = [
+    [0.05, 0.72], [0.16, 0.84], [0.30, 0.9], [0.46, 0.86], [0.62, 0.9],
+    [0.74, 0.78], [0.86, 0.66], [0.92, 0.42], [0.78, 0.1], [0.62, 0.06],
+    [0.48, 0.08], [0.9, 0.16], [0.06, 0.5], [0.04, 0.28], [0.84, 0.5],
+    [0.7, 0.56], [0.54, 0.72], [0.38, 0.7], [0.22, 0.62],
+  ];
+
+  const placeSeed = () => {
+    const width = field.clientWidth || 1;
+    const height = field.clientHeight || 1;
+    bubbles.forEach((bubble, index) => {
+      const [sx, sy] = seeds[index % seeds.length];
+      const w = bubble.el.offsetWidth || bubble.size;
+      const h = bubble.el.offsetHeight || bubble.size + 24;
+      bubble.baseX = sx * Math.max(width, 1) - w / 2;
+      bubble.baseY = sy * Math.max(height, 1) - h / 2;
+      bubble.el.style.transform = `translate3d(${bubble.baseX.toFixed(1)}px, ${bubble.baseY.toFixed(1)}px, 0)`;
+    });
+  };
+  let seeded = field.clientWidth > 40;
+  if (seeded) placeSeed();
+
+  let last = performance.now();
+  const tick = (now) => {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    if (slide?.classList.contains('is-active') && field.clientWidth > 40) {
+      if (!seeded) {
+        placeSeed();
+        seeded = true;
+      }
+      const fieldRect = field.getBoundingClientRect();
+      const bagel = root.querySelector('.final-bagel');
+      let tx = fieldRect.width * 0.78;
+      let ty = fieldRect.height * 0.24;
+      if (bagel) {
+        const br = bagel.getBoundingClientRect();
+        tx = br.left + br.width * 0.5 - fieldRect.left;
+        ty = br.top + br.height * 0.5 - fieldRect.top;
+      }
+      const blocks = [...root.querySelectorAll('#part2-qr-title, .final-answer, .final-url, .final-controls, .qr-placeholder img, .qr-placeholder small')].map((el) => el.getBoundingClientRect());
+      bubbles.forEach((bubble) => {
+        const w = bubble.el.offsetWidth || bubble.size;
+        const h = bubble.el.offsetHeight || bubble.size + 28;
+        bubble.w = w;
+        bubble.h = h;
+        bubble.baseX += (tx - w / 2 - bubble.baseX) * 0.045 * dt;
+        bubble.baseY += (ty - h / 2 - bubble.baseY) * 0.045 * dt;
+      });
+      for (let pass = 0; pass < 2; pass += 1) {
+        for (let i = 0; i < bubbles.length; i += 1) {
+          for (let j = i + 1; j < bubbles.length; j += 1) {
+            const a = bubbles[i];
+            const b = bubbles[j];
+            const ax = a.baseX + a.w / 2;
+            const ay = a.baseY + a.h / 2;
+            const bx = b.baseX + b.w / 2;
+            const by = b.baseY + b.h / 2;
+            const dx = ax - bx;
+            const dy = ay - by;
+            const dist = Math.hypot(dx, dy) || 1;
+            const min = (a.w + b.w) * 0.42;
+            if (dist >= min) continue;
+            const push = (min - dist) * 0.35;
+            const ux = dx / dist;
+            const uy = dy / dist;
+            a.baseX += ux * push;
+            a.baseY += uy * push;
+            b.baseX -= ux * push;
+            b.baseY -= uy * push;
+          }
+        }
+      }
+      bubbles.forEach((bubble) => {
+        const { w, h } = bubble;
+        const wobbleX = Math.sin(now * 0.001 * bubble.freq + bubble.phase) * 16;
+        const wobbleY = Math.cos(now * 0.00085 * bubble.freq + bubble.phase) * 12;
+        let x = bubble.baseX + wobbleX;
+        let y = bubble.baseY + wobbleY;
+        blocks.forEach((block) => {
+          const left = block.left - fieldRect.left - 18;
+          const top = block.top - fieldRect.top - 14;
+          const right = block.right - fieldRect.left + 18;
+          const bottom = block.bottom - fieldRect.top + 14;
+          const options = [
+            { x: left - w - 10, y },
+            { x: right + 10, y },
+            { x, y: top - h - 10 },
+            { x, y: bottom + 10 },
+          ];
+          const hits = (px, py) => px < right && px + w > left && py < bottom && py + h > top;
+          if (!hits(x, y)) return;
+          const placed = options
+            .map((option) => ({
+              x: Math.max(6, Math.min(fieldRect.width - w - 6, option.x)),
+              y: Math.max(6, Math.min(fieldRect.height - h - 6, option.y)),
+            }))
+            .filter((option) => !hits(option.x, option.y))
+            .sort((a, b) => Math.hypot(a.x - x, a.y - y) - Math.hypot(b.x - x, b.y - y));
+          if (placed[0]) {
+            x = placed[0].x;
+            y = placed[0].y;
+          }
+        });
+        x = Math.max(6, Math.min(fieldRect.width - w - 6, x));
+        y = Math.max(6, Math.min(fieldRect.height - h - 6, y));
+        bubble.baseX = x - wobbleX;
+        bubble.baseY = y - wobbleY;
+        bubble.el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
+      });
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
 }
 
 function wireSlideInteractions(slideEl) {
@@ -1247,6 +1395,7 @@ function wireSlideInteractions(slideEl) {
   wireSpendZoom(root);
   wireNowProjects(root);
   wireStuffChest(root);
+  wireFinalBubbles(root);
 }
 
 function wireNowProjects(root) {
@@ -1340,6 +1489,7 @@ function parallaxSkipped(node) {
   if (!node || node.classList.contains('is-gone')) return true;
   // Final/QR slide: left copy must stay put so it never translates off-canvas.
   if (node.matches('.final-copy') || node.closest('.final-copy')) return true;
+  if (node.matches('.final-project-drift, .final-bubble') || node.closest('.final-project-drift')) return true;
   if (node.matches('[data-stuff-box]') || node.closest('.stuff-chest')) return true;
   if (node.matches('[data-draggable], .kanban-card, .taskswipe-card, .swimlane, .year-bar, .chart-callout, .year-project-pin, .slot-reel__strip, .slot-tile, .slot-lever')) return true;
   if (node.closest('[data-draggable], .kanban-card, .taskswipe-card, .chart-callout, .slot-reel')) return true;

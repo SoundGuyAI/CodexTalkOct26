@@ -1,9 +1,9 @@
 /**
  * Slide "Everyone is a developer." (part2-everyone-developer).
- * Middle card strikes "code" and brightens the other two.
- * "Make it yours" shrinks the first two, fills the slide with the third,
- * and recolors the app screen behind it. Both states can be on together.
- * Clicks stay on the cards: they do not move the deck. Arrow keys still do.
+ * "Change" grows to fill a white card. "Ask" grows, "don’t code" is struck,
+ * and that card turns white too. "Make it yours" stays a black card and can
+ * still take over the stage. Clicks stay on the cards. Arrow keys still move the deck.
+ * Word growth is not shortened for prefers-reduced-motion.
  */
 import './everyone-developer.css';
 
@@ -12,6 +12,8 @@ const STAGE = '[data-interaction="everyone-developer"]';
 function sync(stage) {
   const yoursOn = stage.classList.contains('is-yours');
   const struck = stage.classList.contains('is-struck');
+  const changed = stage.classList.contains('is-changed');
+  stage.querySelector('[data-maker="change"]')?.setAttribute('aria-pressed', changed ? 'true' : 'false');
   stage.querySelector('[data-maker="ask"]')?.setAttribute('aria-pressed', struck ? 'true' : 'false');
   stage.querySelector('[data-maker="yours"]')?.setAttribute('aria-pressed', yoursOn ? 'true' : 'false');
   const title = stage.querySelector('.yours-screen__title');
@@ -28,6 +30,7 @@ document.addEventListener('click', (event) => {
   event.stopPropagation();
 
   const which = control.dataset.maker;
+  if (which === 'change') stage.classList.add('is-changed');
   if (which === 'ask') stage.classList.add('is-struck');
   if (which === 'yours') stage.classList.add('is-yours');
   sync(stage);

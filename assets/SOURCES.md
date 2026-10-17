@@ -28,8 +28,8 @@ All files live under `public/assets/` so the deck works offline.
 | `history/oh-ship-trailer.jpg` | YouTube `aGywOpo2T90` sddefault | Slot / spare |
 | `history/oh-ship-horizon.jpg` | YouTube `pdmROI1yShc` maxres | Spare |
 | `history/star-mates-gdc.jpg` | YouTube `eVL2MUwJ9Og` maxres | Slide 8 |
-| `sidequests/geekcon-steam-engine.jpg` | YouTube `b5j8TWnWSU0` hqdefault | Slide 9 |
-| `sidequests/imperial-march-hdd.jpg` | YouTube “yet another hard drive playing Imperial March” (Oded Sharon); user-supplied still, letterboxed 16:10 | Slide 9 |
+| `sidequests/geekcon-steam-engine.jpg` | YouTube `b5j8TWnWSU0` hqdefault | Slide 8 |
+| `sidequests/imperial-march-hdd.jpg` | YouTube “yet another hard drive playing Imperial March” (Oded Sharon); user-supplied still, letterboxed 16:10 | Slide 8 |
 | `sidequests/imperial-march-hdd-raw.png` | Raw user attachment of same YT still | Source backup |
 | `projects/lovelink.jpg` | User UnitedXR / project | Spotlight |
 | `projects/save-point.webm` | User local export | Spotlight |

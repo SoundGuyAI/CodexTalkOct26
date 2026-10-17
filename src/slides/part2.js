@@ -17,6 +17,34 @@ const card = ({ label, title, detail = '', tone = 'pink', depth = 2, asset = '',
     </div>
   </article>`;
 
+const finalProjectBubbles = [
+  { label: 'LoveLink', image: 'projects/lovelink.jpg' },
+  { label: 'Save Point', image: 'projects/savepoint-hero.png' },
+  { label: 'Where Are My Glasses?', image: 'projects/where-are-my-glasses-cover.png' },
+  { label: 'Meditation Extreme', image: 'projects/meditation-extreme.jpg' },
+  { label: 'Feed The Feed', image: 'projects/feed-the-feed.png' },
+  { label: 'JigTrade', image: 'projects/jigtrade.png' },
+  { label: 'Improv Dashboard', image: 'projects/improv-dashboard.png' },
+  { label: 'CamSport', image: 'projects/camsport.png' },
+  { label: 'Kaiju QA', image: 'projects/kaiju-qa.png' },
+  { label: 'TaskSwipe', image: 'projects/taskswipe-placeholder.png' },
+  { label: 'Improv Calendar', image: 'projects/improv-calendar.png' },
+  { label: 'Pizza Morgana', image: 'history/pizza-morgana-logo.png' },
+  { label: 'Bolt Riley', image: 'history/bolt-riley.jpg' },
+  { label: 'Star Shipping', image: 'history/star-shipping-logo.png' },
+  { label: 'Oh SHIP!', image: 'history/oh-ship-logo.jpg' },
+  { label: "Herbert's Quest", image: 'history/herberts-quest.jpg' },
+  { label: 'Zbang', image: 'history/zbang-logo.png' },
+  { label: 'Corbomite', image: 'history/corbomite-logo.jpg' },
+  { label: 'BRCvr', image: 'history/brcvr-playa.jpg' },
+];
+
+const finalBubbleHtml = finalProjectBubbles.map((item) => `
+          <figure class="final-bubble" data-project="${esc(item.label)}">
+            <img src="./assets/${esc(item.image)}" alt="" draggable="false">
+            <figcaption>${esc(item.label)}</figcaption>
+          </figure>`).join('');
+
 export const part2Slides = [
   {
     id: 'part2-how',
@@ -348,13 +376,13 @@ export const part2Slides = [
             <strong class="yours-screen__title">App</strong>
           </div>
           <div class="maker-panels">
-            <button type="button" class="maker-panel" data-maker="change" tabindex="-1"><span class="maker-glyph" aria-hidden="true">✦</span><strong>Change any software</strong></button>
-            <button type="button" class="maker-panel" data-maker="ask" tabindex="-1" aria-pressed="false"><span class="maker-glyph" aria-hidden="true">↻</span><strong>Ask, don’t <span class="maker-code">code<span class="maker-strike" aria-hidden="true"></span></span></strong></button>
+            <button type="button" class="maker-panel" data-maker="change" tabindex="-1" aria-pressed="false"><span class="maker-glyph" aria-hidden="true">✦</span><strong><span class="maker-word">Change</span> <span class="maker-rest">any software</span></strong></button>
+            <button type="button" class="maker-panel" data-maker="ask" tabindex="-1" aria-pressed="false"><span class="maker-glyph" aria-hidden="true">↻</span><strong><span class="maker-word">Ask</span><span class="maker-rest">, <span class="maker-code">don’t code<span class="maker-strike" aria-hidden="true"></span></span></span></strong></button>
             <button type="button" class="maker-panel" data-maker="yours" tabindex="-1" aria-pressed="false"><span class="maker-glyph" aria-hidden="true">∞</span><strong>Make it yours</strong></button>
           </div>
         </div>
       </section>`,
-    notes: 'You will not need permission from the software maker—or a computer-science degree—to adapt the tool. Click “Ask, don’t code” to strike through code and brighten the other cards. Click “Make it yours” to shrink the first two, fill the slide with the third, and turn the app behind it into Yours.'
+    notes: 'You will not need permission from the software maker—or a computer-science degree—to adapt the tool. Click “Change any software” and the word change grows to fill a white card. Click “Ask, don’t code” and ask grows, don’t code is crossed out, and that card turns white. “Make it yours” stays black.'
   },
   {
     id: 'part2-hyper-personalized',
@@ -491,10 +519,10 @@ export const part2Slides = [
           <p class="final-controls">← → · T timer · H hide timer</p>
         </div>
         <a class="qr-placeholder" href="https://soundguyai.github.io/CodexTalkOct26/" target="_blank" rel="noreferrer" data-depth="2"><img data-qr alt="QR code to open the live deck"><small>open the live deck</small></a>
-        <div class="final-project-drift" data-depth="2" aria-hidden="true">
-          <span data-draggable="true">memory</span><span data-draggable="true">limits</span><span data-draggable="true">handoffs</span>
+        <div class="final-project-drift" aria-hidden="true">
+          ${finalBubbleHtml}
         </div>
       </section>`,
-    notes: 'Close with: “How do I manage 19 projects? I don’t. But here we are.” QR → live GitHub Pages deck.'
+    notes: 'Close with: “How do I manage 19 projects? I don’t. But here we are.” Nineteen real projects drift toward the bagel. QR → live GitHub Pages deck. Next still plays the next chorus note.'
   }
 ];
