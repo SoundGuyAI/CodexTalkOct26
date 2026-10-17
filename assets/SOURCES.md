@@ -104,3 +104,12 @@ Imperial March HDD: **HAVE** — YouTube “yet another hard drive playing Imper
 
 | `history/oh-ship-time-to-escape.jpg` | User-provided YouTube-style thumb (Oh Ship / TIME TO ESCAPE corridor); letterboxed 16:10 | Slide 8 (replaces StreetWize) |
 | `history/oh-ship-time-to-escape.png` | Raw user attachment | Source backup |
+
+## Misc. projects film frames
+
+| Asset | Source | Use |
+|---|---|---|
+| `misc/improv-troupe.jpg` | User photo `photo_20261017_165921.jpg` (TelegramFiles) | Improv troupe frame |
+| `misc/server-maintenance.jpg` | Unsplash `photo-1558494949-ef010cbdcc31` — https://images.unsplash.com/photo-1558494949-ef010cbdcc31 (server racks, Taylor Vick) | Server maintenance frame |
+| `misc/ai-research.jpg` | Unsplash `photo-1677442136019-21780ecad995` — https://images.unsplash.com/photo-1677442136019-21780ecad995 | AI research frame |
+| `misc/organize-events.jpg` | User photo `photo_20261017_170145.jpg` (TelegramFiles) | Organize events frame |

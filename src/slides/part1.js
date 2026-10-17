@@ -582,6 +582,34 @@ export const part1Slides = [
     notes: 'A narrative game—and the project behind the expensive lesson later. Placed last in the spotlight run so the $12k story has an image still fresh.'
   },
   {
+    id: 'part1-27b-misc-projects',
+    duration: 4,
+    title: 'Misc. projects',
+    className: 'slide-misc-projects',
+    html: (() => {
+      const frames = [
+        { label: 'Improv troupe', image: 'misc/improv-troupe.jpg', position: 'center 42%' },
+        { label: 'Server maintenance', image: 'misc/server-maintenance.jpg', position: 'center center' },
+        { label: 'AI research', image: 'misc/ai-research.jpg', position: '58% center' },
+        { label: 'Organize events', image: 'misc/organize-events.jpg', position: 'center 46%' },
+      ];
+      const frame = (item, index) => `
+        <figure class="film-frame" data-depth="${(index % 3) + 1}">
+          <div class="film-cell">
+            <div class="film-sprockets" aria-hidden="true"></div>
+            <div class="film-gate">
+              <img src="./assets/${item.image}" alt="${item.label}" style="object-position:${item.position}" loading="eager">
+            </div>
+            <div class="film-sprockets" aria-hidden="true"></div>
+            <span class="film-index" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span>
+          </div>
+          <figcaption>${item.label}</figcaption>
+        </figure>`;
+      return `<section class="misc-projects" aria-labelledby="misc-projects-title"><h2 id="misc-projects-title" data-depth="1">Misc. projects</h2><div class="film-strip">${frames.map(frame).join('')}</div></section>`;
+    })(),
+    notes: 'Side work that is not a shipped product: the improv troupe, server maintenance, AI research, and organizing events.'
+  },
+  {
     id: 'part1-28-hackathons-funds-talks',
     duration: 5,
     title: 'Hackathons. Funds. Talks.',

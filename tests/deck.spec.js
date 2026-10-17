@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const TOTAL_SLIDES = 48;
+const TOTAL_SLIDES = 49;
 /** Top-level deck slides only — avoids nested false matches and opacity heuristics. */
 const SLIDES_SELECTOR = '#stage > .slide[data-slide]';
 
@@ -57,7 +57,7 @@ async function goToSlide(page, index) {
 }
 
 test.describe('deck verification', () => {
-  test('contains 48 slides and keeps the viewport free of horizontal overflow', async ({ page }) => {
+  test('contains 49 slides and keeps the viewport free of horizontal overflow', async ({ page }) => {
     // First suite hit pays Vite cold-compile cost; keep assertion strict, wait longer.
     test.setTimeout(90_000);
     await goToSlide(page, 1);
@@ -99,7 +99,7 @@ test.describe('deck verification', () => {
     await expectActiveSlide(page, 23);
 
     await goToSlide(page, TOTAL_SLIDES);
-    await expect(page).toHaveURL(/#slide-48$/);
+    await expect(page).toHaveURL(/#slide-49$/);
     await expectActiveSlide(page, TOTAL_SLIDES);
   });
 
