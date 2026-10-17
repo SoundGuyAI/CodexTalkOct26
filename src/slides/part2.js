@@ -201,34 +201,46 @@ export const part2Slides = [
   {
     id: 'part2-azure',
     duration: 10,
-    title: 'Azure OpenAI',
-    className: 'slide--azure slide--dashboard',
+    title: 'The Save Point site',
+    className: 'slide--azure slide--savepoint-site',
     html: `
-      <section class="slide-content slide-content--dashboard" aria-labelledby="part2-azure-title">
+      <section class="slide-content slide-content--savepoint-site" aria-labelledby="part2-azure-title">
         <header class="slide-heading" data-depth="5">
-          <h2 id="part2-azure-title">Azure OpenAI</h2>
+          <h2 id="part2-azure-title">The Save Point site they were building.</h2>
+          <p class="savepoint-site__line">adventuremob.com/savepoint</p>
         </header>
-        <div class="cost-dashboard" data-depth="2" aria-label="Generic fictional cost dashboard">
-          <div class="cost-dashboard__bar"><span></span><span></span><span></span><small>usage / fictional sample</small></div>
-          <div class="cost-dashboard__grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          <div class="cost-dashboard__line" data-depth="4"></div>
-          <div class="cost-dashboard__redact">ACCOUNT: REDACTED</div>
+        <div class="savepoint-shots" data-depth="2">
+          <figure>
+            <img src="./assets/projects/savepoint-hero.png" alt="Save Point website hero: Ever get the feeling you've done this before?" />
+            <figcaption>Hero</figcaption>
+          </figure>
+          <figure>
+            <img src="./assets/projects/savepoint-world.png" alt="Save Point website world section: Bright screenshots. Moving crowds. One game to show." />
+            <figcaption>World</figcaption>
+          </figure>
+          <figure>
+            <img src="./assets/projects/savepoint-how-it-plays.png" alt="Save Point website how it plays: A game within a game." />
+            <figcaption>How it plays</figcaption>
+          </figure>
         </div>
       </section>`,
-    notes: 'Then I tried giving one loop more runway. Keep all identifiers fictional and redacted on the visual.'
+    notes: 'The overnight loop was building the live Save Point site at adventuremob.com/savepoint. Hero, the world chapter, and how it plays.'
   },
   {
     id: 'part2-twelve-thousand',
     duration: 10,
-    title: '$12,000',
+    title: '$20k',
     className: 'slide--twelve-thousand slide--cracked',
     html: `
-      <section class="slide-content slide-content--center" aria-labelledby="part2-twelve-thousand-title">
+      <section class="slide-content slide-content--spend" aria-labelledby="part2-twelve-thousand-title">
         <div class="crack-overlay" data-depth="1" aria-hidden="true"></div>
-        <h2 id="part2-twelve-thousand-title" class="cost-number" data-count-to="12000" data-depth="5">$12,000</h2>
-        <video class="evidence-loop" src="./assets/projects/save-point.webm" muted loop autoplay playsinline preload="metadata" aria-label="Save Point gameplay loop"></video>
+        <h2 id="part2-twelve-thousand-title" class="cost-number" data-count-to="20000" data-depth="5">$20k</h2>
+        <figure class="spend-evidence" data-depth="2">
+          <img src="./assets/projects/foundry-models-spend.png" alt="Foundry Models token spend: two rows, $11,420.21 and $7,877.25" />
+          <figcaption>Foundry Models · token spend</figcaption>
+        </figure>
       </section>`,
-    notes: 'For an infinite loop building Save Point overnight. Codex / GPT-5.6 Sol / ultra-high effort / unattended. Roughly twelve thousand dollars in Azure credits.'
+    notes: 'Foundry Models token spend on the Save Point site loop. The two rows are about $11,420 and $7,877 — roughly $20k. Codex / GPT-5.6 Sol / ultra-high effort / unattended.'
   },
   {
     id: 'part2-unrestricted',

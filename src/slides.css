@@ -345,3 +345,18 @@
 .show-card__check{font-style:normal;font-weight:800;color:#1c7a3a;opacity:0}
 .show-card.is-seen .show-card__check{opacity:1}
 @media(max-width:900px){.slide-inner>.life-tool,.slide-inner>.life-tool--shows{grid-template-columns:1fr;height:auto}.show-board{grid-template-columns:1fr}.tlv-stage{height:auto;width:100%}}
+
+/* Slides 37–38: live Save Point site, then ~$20k Foundry spend. */
+.slide--azure .slide-content--savepoint-site{width:min(96vw,1680px)!important;height:auto!important;max-height:100%;align-items:stretch!important;justify-content:center!important;gap:.55rem}
+.slide--azure .slide-content--savepoint-site h2{font-size:clamp(1.7rem,3.2vw,3rem);text-align:left}
+.slide--azure .savepoint-site__line{margin:.35rem 0 0;color:#42e8e0;font-weight:700;font-size:clamp(.95rem,1.5vw,1.25rem)!important;letter-spacing:.01em}
+.savepoint-shots{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:.7rem;width:100%;min-height:0}
+.savepoint-shots figure{margin:0;display:flex;flex-direction:column;gap:.35rem;min-width:0}
+.savepoint-shots img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:center top;border-radius:.7rem;border:1px solid #ffffff33;box-shadow:0 1rem 2.4rem #000a}
+.savepoint-shots figcaption{color:#aaa3ae;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.slide--twelve-thousand .slide-content--spend{width:min(94vw,1500px)!important;height:auto!important;max-height:100%;align-items:center!important;justify-content:center!important;gap:1rem;text-align:center}
+.slide--twelve-thousand .cost-number{font-size:clamp(5.5rem,13vw,11rem);margin:0;text-transform:none}
+.spend-evidence{margin:0;width:min(100%,1180px);background:#fff;border-radius:.65rem;padding:.4rem .45rem .2rem;box-shadow:0 1.1rem 2.6rem #000a}
+.spend-evidence img{display:block;width:100%;height:auto}
+.spend-evidence figcaption{color:#5c564f;font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:.2rem 0 .25rem}
+@media(max-width:900px){.savepoint-shots{grid-template-columns:1fr}}
