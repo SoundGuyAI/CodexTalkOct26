@@ -66,9 +66,9 @@ Planning references:
 | Slide | Subject | Status | Notes |
 |---:|---|---|---|
 | 17 | Where Are My Glasses? | **HAVE** (+ better cover unused) | Spotlight uses `where-are-my-glasses.jpg`; higher-res `where-are-my-glasses-cover.png` also in repo if you want a swap |
-| 23 | Currency converter | **PLACEHOLDER · YOU** | Phone screenshot of the live app |
-| 24 | Car Appraiser Finder | **PLACEHOLDER · YOU** | Phone screenshot |
-| 26 | Show tracker | **PLACEHOLDER · YOU** | WatchingApp / show-tracker UI screenshot |
+| 15 | Currency converter | **HAVE (interactive mock)** | In-deck yen → USD / NIS mock with static mid-Oct 2026 rates. Optional later: real app screenshot → `projects/currency-converter.*` |
+| 16 | Car Appraiser Finder | **HAVE (interactive mock)** | Offline Tel Aviv SVG + pins. Optional later: real app screenshot → `projects/car-appraiser.*` |
+| 17 | Show tracker | **HAVE (interactive mock)** | Two lists + TVMaze posters. Optional later: real WatchingApp screenshot → `projects/show-tracker.*` |
 | 28 | Slot machine | **HAVE** | Now uses Kaiju hero, Save Point itch, Good Measure, Oh SHIP trailer, Tricky Potions, Freedom Beats |
 | 28 | Extra Devpost thumbs | **OPTIONAL** | Devpost returned 403 to scrapers — if you want more, drop gallery PNGs or public image URLs |
 
@@ -114,12 +114,9 @@ Devpost gallery pages blocked automated download (HTTP 403). BRCvr team page als
 
 ### Must-have before talk day
 
-1. **Currency converter** — phone screenshot → `projects/currency-converter.*`
-2. **Car Appraiser Finder** — phone screenshot → `projects/car-appraiser.*`
-3. **Show tracker** — phone screenshot → `projects/show-tracker.*`
-4. **Herbert's Quest** still or trailer URL
-5. **Gun N' Blade** still (or confirm SlideShare export is OK)
-6. **One community photo set** — any mix of GDC / Game Dev Day / GGJ / teaching (even 2–3 photos covers slide 7)
+1. **Herbert's Quest** still or trailer URL
+2. **Gun N' Blade** still (or confirm SlideShare export is OK)
+3. **One community photo set** — any mix of GDC / Game Dev Day / GGJ / teaching (even 2–3 photos covers slide 7)
 
 ### Nice polish (no longer blocking)
 
@@ -180,4 +177,4 @@ None remaining on slides 4–9 after the historical placeholder pass. Do **not**
 
 ### Still unique placeholders (no shared art)
 
-Knights, Rock Band, Spinning Cube, Larry, Gun N' Blade, Herbert's Quest, Nightmare Playground, community set, Midburn pyro (better still), currency / car / show tracker, TaskSwipe. (StreetWize replaced by Oh SHIP Time to Escape; Imperial March HDD HAVE.)
+Knights, Rock Band, Spinning Cube, Larry, Gun N' Blade, Herbert's Quest, Nightmare Playground, community set, Midburn pyro (better still). Currency / car / show tracker and TaskSwipe now have in-deck mocks (real screenshots optional). (StreetWize replaced by Oh SHIP Time to Escape; Imperial March HDD HAVE.)

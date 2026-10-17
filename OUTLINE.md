@@ -23,11 +23,11 @@ The chart visuals use the inventory as a private design source, but the public s
 | 10 | **20 years.** | Six collages shrink into one tiny mosaic; user can pull tiles back out briefly. | Slides 4–9 assets | “Busy was already normal.” | 5 |
 | 11 | **Projects / year** | Calm skyline of annual bars (2019 = 10). Hover reveals era bubbles; pins mark Corbomite→BRCvr. | Code-native chart + historical assets | “For years the shape was noisy, but roughly stable.” Do not recite every count. | 12 |
 | 12 | **2025** | Chart adds the 2025 bar (18). Era pins + hover bubbles stay on correct years. | Chart + project assets | “In 2025 the baseline moved.” | 5 |
-| 13 | **2026** | 2026 bar smashes past the chart frame (36). | Chart + all project assets | “In 2026, the chart stopped fitting.” | 7 |
+| 13 | **2026** | 2026 bar smashes past the chart frame (36). Project bubbles scatter across the empty sky; leader lines stay pinned to that bar and stretch when dragged. | Chart + LoveLink, Save Point, Improv Dashboard, TaskSwipe, Kaiju QA | “In 2026, the chart stopped fitting.” | 7 |
 | 14 | **AI Happened** | Agent windows: research, code, tests, art, submissions. Cursor movement changes which window is dominant. | Code-native mock terminals | “I stopped being the person doing every keystroke and became the person steering many loops.” | 18 |
-| 15 | **Currency converter** | Phone placeholder. | `projects/currency-converter-placeholder.png` | “An audience-of-one utility.” | 2 |
-| 16 | **Car Appraiser Finder** | Phone map/search placeholder. | `projects/car-appraiser-placeholder.png` | “Another tiny tool for a specific personal need.” | 2 |
-| 17 | **Show tracker** | Phone stack placeholder. | `projects/show-tracker-placeholder.png` | “A tracker because the existing trackers were not mine.” | 2 |
+| 15 | **Currency converter** | Type JPY, see USD and NIS. Static approximate mid-Oct 2026 rates, labeled mock / not live. | Code-native mock (no FX API) | “An audience-of-one utility.” | 2 |
+| 16 | **Car Appraiser Finder** | Stylized offline Tel Aviv map. Click a pin for approximate drive time from Ramat Hasharon. | Code-native SVG map | “Another tiny tool for a specific personal need.” | 2 |
+| 17 | **Show tracker** | Watching vs Need to check. Click marks seen; drag moves lists. | `projects/show-stuart-fails.jpg`, `show-ted-lasso.jpg`, `show-strange-new-worlds.jpg`, `show-visionquest.jpg`, `show-adults-s2.jpg` | “A tracker because the existing trackers were not mine.” | 2 |
 | 18 | **Feed The Feed** | Studio UI; port note button. | `projects/feed-the-feed.png` | “A Horizon project, then another project to port it.” | 3 |
 | 19 | **CamSport** | Pitch-to-hit; ball arc. | `projects/camsport.png` | One short sentence from the local project during build. | 2 |
 | 20 | **Kaiju QA** | PASS stamp. | `projects/kaiju-qa.png` | “Built in three days for OpenAI Build Week.” | 2 |

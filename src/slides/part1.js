@@ -50,13 +50,17 @@ const chartPinCatalog = [
 
 const chartPinByYear = Object.fromEntries(chartPinCatalog.map((pin) => [pin.year, pin]));
 
-/** Image bubbles left of the 2026 smash bar (lines point at that column). */
+/**
+ * Image bubbles scattered in the empty sky above the shorter bars.
+ * `anchor` is a fixed fraction down the 2026 smash bar (arrowhead stays there).
+ * x/y are percentages of the chart, spread across the top — not one column.
+ */
 const chart2026Callouts = [
-  { label: 'LoveLink', image: 'projects/lovelink.jpg', y: 16 },
-  { label: 'Save Point', image: 'projects/save-point-itch.jpg', y: 32 },
-  { label: 'Improv Dashboard', image: 'projects/improv-dashboard.png', y: 48 },
-  { label: 'TaskSwipe', image: 'projects/taskswipe-placeholder.png', y: 64 },
-  { label: 'Kaiju QA', image: 'projects/kaiju-qa.png', y: 80 },
+  { label: 'LoveLink', image: 'projects/lovelink.jpg', x: 22, y: 16, anchor: 0.22 },
+  { label: 'Save Point', image: 'projects/save-point-itch.jpg', x: 36, y: 16, anchor: 0.38 },
+  { label: 'Improv Dashboard', image: 'projects/improv-dashboard.png', x: 54, y: 3, anchor: 0.52 },
+  { label: 'TaskSwipe', image: 'projects/taskswipe-placeholder.png', x: 68, y: 18, anchor: 0.66 },
+  { label: 'Kaiju QA', image: 'projects/kaiju-qa.png', x: 28, y: 32, anchor: 0.8 },
 ];
 
 const barHeightPct = (count) => Math.max(11, (count / 36) * 100);
@@ -114,15 +118,20 @@ const yearlyChart = ({ throughYear, highlightYear = null, phase }) => `
     </div>
     ${yearlyProjectPins(throughYear, highlightYear)}
     ${highlightYear === 2026 ? `
+      <svg class="chart-leaders" aria-hidden="true">
+        <defs>
+          <marker id="chart-leader-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0 0 L10 5 L0 10 Z" fill="#ff3b81"></path>
+          </marker>
+        </defs>
+        ${chart2026Callouts.map((item, index) => `<line data-leader="${index}" marker-end="url(#chart-leader-arrow)"></line>`).join('')}
+      </svg>
       <div class="chart-callouts" aria-label="Projects in the AI Agents year">
-        ${chart2026Callouts.map((item) => `
-          <div class="chart-callout" style="--callout-y:${item.y}%" data-draggable="true">
-            <figure class="chart-callout__bubble">
-              <img src="./assets/${item.image}" alt="" draggable="false">
-              <figcaption>${item.label}</figcaption>
-            </figure>
-            <i class="chart-callout__line" aria-hidden="true"></i>
-          </div>`).join('')}
+        ${chart2026Callouts.map((item, index) => `
+          <figure class="chart-callout" data-draggable="true" data-leader="${index}" data-anchor="${item.anchor}" style="left:${item.x}%;top:${item.y}%">
+            <img src="./assets/${item.image}" alt="" draggable="false">
+            <figcaption>${item.label}</figcaption>
+          </figure>`).join('')}
       </div>` : ''}
     <p class="yearly-chart__hint">hover a bar · drag bubbles</p>
   </section>`;
@@ -290,7 +299,7 @@ export const part1Slides = [
     title: '2026',
     className: 'slide-chart yearly-projects yearly-projects--2026',
     html: yearlyChart({ throughYear: 2026, highlightYear: 2026, phase: '36 projects' }),
-    notes: 'Keep the same chart and smash the 2026 bar past the frame: thirty-six active projects. Exact count can stay in the phase pill; the smash is the beat.'
+    notes: 'Keep the same chart and smash the 2026 bar past the frame: thirty-six active projects. Project bubbles are scattered in the empty sky above the shorter bars. Each leader line stays pinned to a fixed point on the 36-projects bar and stretches when a bubble is dragged.'
   },
   {
     id: 'part1-14-ai-happened',
@@ -327,24 +336,117 @@ export const part1Slides = [
     duration: 2,
     title: 'Currency converter',
     className: 'slide-project utility currency',
-    html: `<section class="utility-phone" data-interaction="split-recombine"><div class="phone-shell" data-depth="2">${asset('projects/currency-converter-placeholder.png', 'NEED IMAGE Of CURRENCY CONVERTER HERE')}</div><h2 data-depth="1">Currency converter</h2></section>`,
-    notes: 'An audience-of-one utility. Start the spotlight run with the smallest life tools.'
+    html: `<section class="life-tool life-tool--fx" data-interaction="currency-mock">
+      <h2 data-depth="1">Currency converter</h2>
+      <form class="fx-panel" action="#" autocomplete="off">
+        <label class="fx-amount">
+          <span>JPY</span>
+          <input type="text" inputmode="decimal" name="jpy" value="10000" aria-label="Amount in Japanese yen">
+        </label>
+        <div class="fx-results">
+          <p><span>USD</span><strong data-out="usd">$63.30</strong></p>
+          <p><span>NIS</span><strong data-out="ils">195.57</strong></p>
+        </div>
+        <small>Approximate mock · 16 Oct 2026 · not a live rate</small>
+      </form>
+    </section>`,
+    notes: 'An audience-of-one utility. Type a yen amount; USD and NIS update from static mid-October 2026 rates (about 158 JPY per USD, 100 JPY = ₪1.9557). No live FX call.'
   },
   {
     id: 'part1-16-car-appraiser',
     duration: 2,
     title: 'Car Appraiser Finder',
     className: 'slide-project utility car-appraiser',
-    html: `<section class="utility-phone" data-interaction="fan-cards"><div class="phone-shell phone-shell--map" data-depth="2">${asset('projects/car-appraiser-placeholder.png', 'NEED IMAGE Of CAR APPRAISER FINDER HERE')}</div><h2 data-depth="1">Car Appraiser Finder</h2></section>`,
-    notes: 'Another tiny tool for a specific personal need.'
+    html: `<section class="life-tool life-tool--map" data-interaction="car-map">
+      <div class="life-tool__copy">
+        <h2 data-depth="1">Car Appraiser Finder</h2>
+        <aside class="drive-card">
+          <p data-drive-copy>Tap a pin</p>
+          <strong data-drive-time></strong>
+          <small>approx. drive from Ramat Hasharon</small>
+        </aside>
+      </div>
+      <div class="tlv-stage">
+        <svg class="tlv-map" viewBox="0 0 860 520" role="img" aria-label="Stylized map of Tel Aviv and Ramat Hasharon">
+          <rect width="860" height="520" fill="#12181f"/>
+          <path d="M0 0 H230 C200 70 260 130 210 190 C165 250 235 300 195 360 C160 415 220 460 180 520 H0 Z" fill="#16384a"/>
+          <path d="M250 20 C230 110 285 175 235 245 C195 315 255 380 215 510" fill="none" stroke="#f6f0e422" stroke-width="5"/>
+          <path d="M505 24 V508" fill="none" stroke="#f6f0e433" stroke-width="7"/>
+          <path d="M850 168 C680 148 540 196 390 176 C300 164 245 150 205 172" fill="none" stroke="#42e8e0" stroke-width="7" stroke-linecap="round"/>
+          <g fill="#ffffff12">
+            <rect x="280" y="210" width="36" height="22" rx="2"/><rect x="324" y="210" width="36" height="22" rx="2"/><rect x="368" y="210" width="36" height="22" rx="2"/>
+            <rect x="280" y="240" width="36" height="22" rx="2"/><rect x="324" y="240" width="36" height="22" rx="2"/><rect x="368" y="240" width="36" height="22" rx="2"/>
+            <rect x="300" y="300" width="40" height="24" rx="2"/><rect x="348" y="300" width="40" height="24" rx="2"/><rect x="396" y="300" width="40" height="24" rx="2"/>
+            <rect x="300" y="332" width="40" height="24" rx="2"/><rect x="348" y="332" width="40" height="24" rx="2"/><rect x="396" y="332" width="40" height="24" rx="2"/>
+            <rect x="320" y="390" width="34" height="20" rx="2"/><rect x="360" y="390" width="34" height="20" rx="2"/><rect x="330" y="416" width="34" height="20" rx="2"/>
+          </g>
+          <text x="28" y="250" fill="#7eb8cc" font-size="15" font-family="Inter,sans-serif" transform="rotate(-90 28 250)">Mediterranean</text>
+          <text x="430" y="58" fill="#c9ff4a" font-size="16" font-family="Inter,sans-serif" font-weight="700">Ramat Hasharon</text>
+          <circle cx="400" cy="78" r="7" fill="#c9ff4a" stroke="#09090b" stroke-width="2"/>
+          <text x="620" y="150" fill="#42e8e0" font-size="13" font-family="Inter,sans-serif">Yarkon</text>
+          <text x="560" y="250" fill="#d8d0dc" font-size="13" font-family="Inter,sans-serif">Ramat Gan</text>
+          <text x="520" y="500" fill="#aaa3ae" font-size="12" font-family="Inter,sans-serif">Ayalon</text>
+        </svg>
+        <button type="button" class="appraiser-pin" style="left:34.88%;top:27.88%" data-place="Glilot" data-minutes="8" aria-label="Glilot, about 8 minutes from Ramat Hasharon"><span class="appraiser-pin__dot"></span><span class="appraiser-pin__name">Glilot</span></button>
+        <button type="button" class="appraiser-pin" style="left:41.86%;top:44.23%" data-place="Ramat Aviv" data-minutes="12" aria-label="Ramat Aviv, about 12 minutes from Ramat Hasharon"><span class="appraiser-pin__dot"></span><span class="appraiser-pin__name">Ramat Aviv</span></button>
+        <button type="button" class="appraiser-pin" style="left:29.07%;top:48.08%" data-place="Namal Tel Aviv" data-minutes="15" aria-label="Namal Tel Aviv, about 15 minutes from Ramat Hasharon"><span class="appraiser-pin__dot"></span><span class="appraiser-pin__name">Namal</span></button>
+        <button type="button" class="appraiser-pin" style="left:46.51%;top:59.62%" data-place="Dizengoff Center" data-minutes="20" aria-label="Dizengoff Center, about 20 minutes from Ramat Hasharon"><span class="appraiser-pin__dot"></span><span class="appraiser-pin__name">Dizengoff</span></button>
+        <button type="button" class="appraiser-pin" style="left:72.09%;top:51.92%" data-place="Ramat Gan Bursa" data-minutes="18" aria-label="Ramat Gan Bursa, about 18 minutes from Ramat Hasharon"><span class="appraiser-pin__dot"></span><span class="appraiser-pin__name">Bursa</span></button>
+        <button type="button" class="appraiser-pin" style="left:43.02%;top:76.92%" data-place="Florentin" data-minutes="28" aria-label="Florentin, about 28 minutes from Ramat Hasharon"><span class="appraiser-pin__dot"></span><span class="appraiser-pin__name">Florentin</span></button>
+        <button type="button" class="appraiser-pin" style="left:26.74%;top:78.85%" data-place="Jaffa Port" data-minutes="34" aria-label="Jaffa Port, about 34 minutes from Ramat Hasharon"><span class="appraiser-pin__dot"></span><span class="appraiser-pin__name">Jaffa</span></button>
+      </div>
+    </section>`,
+    notes: 'Another tiny tool for a specific personal need. Stylized offline map of Tel Aviv. Click a pin for a mock drive time from Ramat Hasharon — plausible minutes, not a routing API.'
   },
   {
     id: 'part1-17-show-tracker',
     duration: 2,
     title: 'Show tracker',
     className: 'slide-project utility show-tracker',
-    html: `<section class="stacked-phone-cards" data-interaction="stack-cards"><div class="phone-shell" data-depth="2">${asset('projects/show-tracker-placeholder.png', 'NEED IMAGE Of SHOW TRACKER HERE')}</div><h2>Show tracker</h2></section>`,
-    notes: 'A tracker because the existing trackers were not mine.'
+    html: `<section class="life-tool life-tool--shows" data-interaction="show-tracker">
+      <header class="show-tracker__head">
+        <h2>Show tracker</h2>
+        <p>click = seen · drag between lists</p>
+      </header>
+      <div class="show-board">
+        <div class="show-list" data-list="watching">
+          <h3>Watching</h3>
+          <div class="show-list__stack">
+            <article class="show-card" draggable="true" tabindex="0" data-show="stuart" aria-pressed="false">
+              <img src="./assets/projects/show-stuart-fails.jpg" alt="" draggable="false">
+              <span class="show-card__title">Stuart Fails to Save the Universe</span>
+              <i class="show-card__check" aria-hidden="true">✓</i>
+            </article>
+            <article class="show-card" draggable="true" tabindex="0" data-show="lasso" aria-pressed="false">
+              <img src="./assets/projects/show-ted-lasso.jpg" alt="" draggable="false">
+              <span class="show-card__title">Ted Lasso</span>
+              <i class="show-card__check" aria-hidden="true">✓</i>
+            </article>
+            <article class="show-card" draggable="true" tabindex="0" data-show="snw" aria-pressed="false">
+              <img src="./assets/projects/show-strange-new-worlds.jpg" alt="" draggable="false">
+              <span class="show-card__title">Star Trek: Strange New Worlds</span>
+              <i class="show-card__check" aria-hidden="true">✓</i>
+            </article>
+          </div>
+        </div>
+        <div class="show-list" data-list="check">
+          <h3>Need to check</h3>
+          <div class="show-list__stack">
+            <article class="show-card" draggable="true" tabindex="0" data-show="vision" aria-pressed="false">
+              <img src="./assets/projects/show-visionquest.jpg" alt="" draggable="false">
+              <span class="show-card__title">VisionQuest</span>
+              <i class="show-card__check" aria-hidden="true">✓</i>
+            </article>
+            <article class="show-card" draggable="true" tabindex="0" data-show="adults" aria-pressed="false">
+              <img src="./assets/projects/show-adults-s2.jpg" alt="" draggable="false">
+              <span class="show-card__title">Adults · season 2</span>
+              <i class="show-card__check" aria-hidden="true">✓</i>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>`,
+    notes: 'A tracker because the existing trackers were not mine. Click a card to mark it seen (strike + check). Drag a card into the other list. Posters are local copies. The real title for the Stuart show is Stuart Fails to Save the Universe (Big Bang Theory spinoff), not “Stuart Saves the Universe.”'
   },
   {
     id: 'part1-18-feed-the-feed',
@@ -501,15 +603,30 @@ export const part1Slides = [
     notes: 'The software projects generate applications, talks, demos, and deadlines. No private names.'
   },
   {
-    id: 'part1-29-all-at-once',
-    duration: 8,
-    title: 'All at once.',
-    className: 'slide-swimlane',
-    html: `<section class="swimlane-wall" data-interaction="reorder-lanes"><h2 data-depth="1">All at once.</h2><div class="swimlanes swimlanes--chaos" data-depth="2">${[
-      'LoveLink', 'Save Point', 'Glasses', 'Meditation', 'Feed The Feed', 'JigTrade', 'Improv', 'CamSport', 'Kaiju QA',
-      'TaskSwipe', 'Currency', 'Servers', 'Music', 'Submissions', 'Symphony', 'Planning', 'Calendar', 'Talks', 'This deck'
-    ].map((label, index) => `<button type="button" class="swimlane swimlane--${index + 1}" data-lane="${label}" data-depth="${index % 3 + 1}" style="--width:${55 + ((index * 17) % 40)}%"><span>${label}</span></button>`).join('')}</div>${hotspot('Reorder lanes', 'data-action="reorder-lanes"')}</section>`,
-    notes: 'Nineteen concurrent lanes — games, life tools, servers, music uploads, submissions, talks, planning. Drag to prove it is not a static animation. Transition: “So—how?”'
+    id: 'part1-29-the-cut',
+    duration: 20,
+    title: 'The Cut.',
+    className: 'slide-the-cut',
+    html: (() => {
+      const names = [
+        'LoveLink', 'Save Point', 'Glasses', 'Meditation', 'Feed The Feed', 'JigTrade', 'Improv',
+        'CamSport', 'Kaiju QA', 'TaskSwipe', 'Currency', 'Servers', 'Music', 'Submissions', 'Symphony', 'Planning', 'Calendar', 'Talks', 'This deck',
+      ];
+      const chip = (label) => `<button type="button" class="cut-name" data-project="${label}">${label}</button>`;
+      return `
+      <section class="the-cut" data-interaction="the-cut" aria-labelledby="the-cut-title">
+        <header class="the-cut__head">
+          <h2 id="the-cut-title">The Cut.</h2>
+          <p class="the-cut__count" data-cut-count>7 this week</p>
+        </header>
+        <div class="the-cut__above" data-cut-zone="above" aria-label="This week">${names.slice(0, 7).map(chip).join('')}</div>
+        <div class="the-cut__line" role="separator" aria-hidden="true"><span>the cut</span></div>
+        <p class="the-cut__later">not this week — drag a name through the line</p>
+        <div class="the-cut__below" data-cut-zone="below" aria-label="Not this week">${names.slice(7).map(chip).join('')}</div>
+        <p class="sr-only">Seven projects fit above the cut. Drag another one up and one drops below.</p>
+      </section>`;
+    })(),
+    notes: 'The cut: seven projects fit above the line in the same week. Drag a name up through the line — an eighth pushes one back down. Everything else stays crushed below. Transition: “So—how?”'
   }
 ];
 

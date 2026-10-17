@@ -2,6 +2,15 @@
 
 You are continuing work on an existing interactive slide deck. **Do not rebuild from scratch.** Read this whole prompt, then the linked source files, then execute the unfinished TODO list and plan gaps below.
 
+## Latest speaker request (2026-10-17) — done this pass
+
+Do not revert these. They are implemented; see `TODO.md` section 8.
+
+1. **Slide 13 (`part1-13-now`)** — scatter the 36-project image callouts across the empty sky above the chart, not in one column beside the bar. Keep the existing project images. The arrowhead stays fixed on the 2026 / 36-projects bar. Dragging a bubble stretches the leader line; the bar end does not move.
+2. **Slide 15 (`part1-15-currency`)** — functioning yen → USD / NIS mock. Static approximate mid-Oct 2026 rates only (no live FX API). Label them approximate / mock. Type a JPY amount; USD and NIS update.
+3. **Slide 16 (`part1-16-car-appraiser`)** — offline stylized Tel Aviv map (no API key). Pins at plausible appraiser stops. Click a pin to show an approximate drive time from Ramat Hasharon (mock minutes).
+4. **Slide 17 (`part1-17-show-tracker`)** — two lists. Watching: Stuart Fails to Save the Universe (real title of the show the speaker called “Stuart saves the universe”), Ted Lasso, Star Trek: Strange New Worlds. Need to check: VisionQuest, Adults season 2. Local posters under `public/assets/projects/show-*.jpg`. Click marks seen (strike + check). Drag moves a card between lists. No backend.
+
 ## Repos / paths
 
 | What | Path |

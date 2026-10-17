@@ -54,7 +54,7 @@ Show only era-correct project images, chronologically, **no image reuse** across
 - [x] List every missing image in [`ASSETS-NEEDED.md`](./ASSETS-NEEDED.md)
 - [x] First scrape pass from Corbomite / Star Shipping / Oh SHIP / itch / YouTube (see `assets/SOURCES.md`)
 
-**Still PLACEHOLDER (need you):** Knights, Rock Band, Spinning Cube, Larry demo, Gun N' Blade, Herbert's Quest, Nightmare Playground, GDC/Game Dev Day/GGJ/Teaching, Midburn pyro — plus currency / car / show tracker / TaskSwipe (see `ASSETS-NEEDED.md`). Imperial March HDD: HAVE.
+**Still PLACEHOLDER (need you):** Knights, Rock Band, Spinning Cube, Larry demo, Gun N' Blade, Herbert's Quest, Nightmare Playground, GDC/Game Dev Day/GGJ/Teaching, Midburn pyro (see `ASSETS-NEEDED.md`). Currency, car appraiser, and show tracker are interactive mocks (section 8). Imperial March HDD: HAVE.
 
 ---
 
@@ -124,6 +124,19 @@ Pins: Corbomite 2006, Zbang 2007, Pizza Morgana 2009, Star Shipping 2010, Bolt R
 - [x] Slides 30/31/34/35/40 polish (How, planning+games, ADHD contrast, Symphony+Linear kanban, User/Builder/Modifier strike)
 - [x] Transition SFX: rapid advances play Never Gonna Give You Up chorus melody
 - [ ] Commit + push coherent chunk — **ask before commit/push**
+
+---
+
+## 8. Slide 13 scatter + life-tool mockups (2026-10-17)
+
+- [x] **Slide 13** — scatter the five 2026 project bubbles across the empty sky above the bars (not one column). Leader arrowheads stay fixed on the 36-projects bar and stretch while bubbles are dragged. Same images as before (LoveLink, Save Point, Improv Dashboard, TaskSwipe, Kaiju QA).
+- [x] **Slide 15** — yen → USD / NIS converter mock. Static rates, labeled approximate / not live. No FX API.
+- [x] **Slide 16** — offline Tel Aviv map mock. Pins + approximate drive minutes from Ramat Hasharon. No map API key.
+- [x] **Slide 17** — show tracker with Watching and Need to check. Click = seen, drag = move lists. Posters saved under `public/assets/projects/`.
+
+Rates used (mock, 16 Oct 2026): 1 JPY = $0.00633 (≈ 158 JPY per USD) and 1 JPY = ₪0.019557 (Bank of Israel representative rate: 100 JPY = ₪1.9557, 1 USD = ₪3.089).
+
+Show label note: on-screen title is **Stuart Fails to Save the Universe** (the 2026 series). Speaker wrote “Stuart saves the universe”; that shorthand is not the released title.
 
 ---
 

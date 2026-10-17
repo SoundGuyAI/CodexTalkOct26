@@ -48,6 +48,11 @@ All files live under `public/assets/` so the deck works offline.
 | `slot/freedom-beats-itch.jpg` | soundguy.itch.io/freedom-of-beats-and-music | Slot |
 | `slot/turn-me-on-itch.jpg` | soundguy.itch.io/turn-me-on | Spare |
 | `slot/good-measure-itch.jpg` | soundguy.itch.io/good-measure | Slot (large; compress later if needed) |
+| `projects/show-stuart-fails.jpg` | TVMaze show 83360 poster (static.tvmaze.com) | Slide 17 Watching |
+| `projects/show-ted-lasso.jpg` | TVMaze show 44458 poster | Slide 17 Watching |
+| `projects/show-strange-new-worlds.jpg` | TVMaze show 48090 poster | Slide 17 Watching |
+| `projects/show-visionquest.jpg` | TVMaze show 64950 poster | Slide 17 Need to check |
+| `projects/show-adults-s2.jpg` | TVMaze show 83946 season 2 image | Slide 17 Need to check |
 
 ## Placeholders (generated labeled PNGs — replace)
 

@@ -365,6 +365,171 @@ function wireRepoPreview(root) {
   });
 }
 
+/**
+ * Leader lines for the 2026 chart. Arrowheads stay on fixed fractions of the
+ * smash bar; bubble drag only moves the other end.
+ */
+function layoutChartCallouts(root) {
+  const chart = root?.querySelector?.('.yearly-chart--agents');
+  if (!chart) return;
+  const bar = chart.querySelector('.year-bar.is-smash');
+  const svg = chart.querySelector('.chart-leaders');
+  if (!bar || !svg) return;
+  const chartRect = chart.getBoundingClientRect();
+  if (chartRect.width < 2 || chartRect.height < 2) return;
+  const barRect = bar.getBoundingClientRect();
+  const scaleX = chartRect.width / (chart.offsetWidth || chartRect.width) || 1;
+  const scaleY = chartRect.height / (chart.offsetHeight || chartRect.height) || 1;
+  svg.setAttribute('viewBox', `0 0 ${chart.offsetWidth} ${chart.offsetHeight}`);
+  const toLocal = (vx, vy) => ({
+    x: (vx - chartRect.left) / scaleX,
+    y: (vy - chartRect.top) / scaleY,
+  });
+  chart.querySelectorAll('.chart-callout').forEach((node) => {
+    const line = svg.querySelector(`line[data-leader="${node.dataset.leader}"]`);
+    if (!line) return;
+    const anchorT = Number(node.dataset.anchor || 0.5);
+    const anchor = toLocal(barRect.left + 6 * scaleX, barRect.top + barRect.height * anchorT);
+    const bubble = node.getBoundingClientRect();
+    const center = toLocal(bubble.left + bubble.width / 2, bubble.top + bubble.height / 2);
+    const dx = anchor.x - center.x;
+    const dy = anchor.y - center.y;
+    const halfW = (bubble.width / scaleX) / 2;
+    const halfH = (bubble.height / scaleY) / 2;
+    const denom = Math.max(Math.abs(dx) / Math.max(halfW, 1), Math.abs(dy) / Math.max(halfH, 1), 0.001);
+    line.setAttribute('x1', (center.x + dx / denom).toFixed(1));
+    line.setAttribute('y1', (center.y + dy / denom).toFixed(1));
+    line.setAttribute('x2', anchor.x.toFixed(1));
+    line.setAttribute('y2', anchor.y.toFixed(1));
+  });
+  svg.classList.add('is-ready');
+}
+
+function wireChartCallouts(root) {
+  if (!root || root.dataset.calloutsWired === 'true') return;
+  const chart = root.querySelector('.yearly-chart--agents');
+  if (!chart) return;
+  root.dataset.calloutsWired = 'true';
+  chart.querySelectorAll('.chart-callout').forEach((node) => {
+    Draggable.create(node, {
+      type: 'x,y',
+      bounds: chart,
+      inertia: false,
+      onPress() { node.classList.add('is-lifted'); },
+      onDrag() { layoutChartCallouts(root); },
+      onRelease() {
+        node.classList.remove('is-lifted');
+        layoutChartCallouts(root);
+      },
+    });
+  });
+  chart.querySelectorAll('.chart-callout img').forEach((img) => {
+    img.addEventListener('load', () => layoutChartCallouts(root));
+  });
+}
+
+/** Static mid-Oct 2026 mock. BOI 16 Oct 2026: 100 JPY = ₪1.9557, 1 USD = ₪3.089. */
+const JPY_TO_USD = 0.00633;
+const JPY_TO_ILS = 0.019557;
+
+function formatMockMoney(amount, symbol) {
+  if (!Number.isFinite(amount)) return '—';
+  const body = Math.abs(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return `${amount < 0 ? '−' : ''}${symbol}${body}`;
+}
+
+function wireCurrencyMock(root) {
+  const mock = root?.querySelector?.('[data-interaction="currency-mock"]');
+  if (!mock || mock.dataset.wired === 'true') return;
+  mock.dataset.wired = 'true';
+  const input = mock.querySelector('input[name="jpy"]');
+  const usd = mock.querySelector('[data-out="usd"]');
+  const ils = mock.querySelector('[data-out="ils"]');
+  const render = () => {
+    const raw = String(input.value || '').replace(/,/g, '').trim();
+    const jpy = raw === '' ? NaN : Number(raw);
+    usd.textContent = formatMockMoney(jpy * JPY_TO_USD, '$');
+    ils.textContent = formatMockMoney(jpy * JPY_TO_ILS, '');
+  };
+  mock.querySelector('form')?.addEventListener('submit', (event) => event.preventDefault());
+  input.addEventListener('input', render);
+  render();
+}
+
+function wireCarMap(root) {
+  const map = root?.querySelector?.('[data-interaction="car-map"]');
+  if (!map || map.dataset.wired === 'true') return;
+  map.dataset.wired = 'true';
+  const copy = map.querySelector('[data-drive-copy]');
+  const time = map.querySelector('[data-drive-time]');
+  map.querySelectorAll('.appraiser-pin').forEach((pin) => {
+    pin.addEventListener('click', () => {
+      map.querySelectorAll('.appraiser-pin').forEach((other) => other.classList.remove('is-active'));
+      pin.classList.add('is-active');
+      copy.textContent = pin.dataset.place;
+      time.textContent = `${pin.dataset.minutes} min`;
+    });
+  });
+}
+
+function wireShowTracker(root) {
+  const board = root?.querySelector?.('[data-interaction="show-tracker"]');
+  if (!board || board.dataset.wired === 'true') return;
+  board.dataset.wired = 'true';
+  let dragEl = null;
+  let suppressClick = false;
+  const toggleSeen = (card) => {
+    card.classList.toggle('is-seen');
+    card.setAttribute('aria-pressed', card.classList.contains('is-seen') ? 'true' : 'false');
+  };
+  board.addEventListener('click', (event) => {
+    const card = event.target.closest('.show-card');
+    if (!card || suppressClick) return;
+    toggleSeen(card);
+  });
+  board.addEventListener('keydown', (event) => {
+    const card = event.target.closest?.('.show-card');
+    if (!card || (event.key !== 'Enter' && event.key !== ' ')) return;
+    event.preventDefault();
+    event.stopPropagation();
+    toggleSeen(card);
+  });
+  board.addEventListener('dragstart', (event) => {
+    const card = event.target.closest('.show-card');
+    if (!card) return;
+    dragEl = card;
+    suppressClick = true;
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', card.dataset.show || 'show');
+    card.classList.add('is-dragging');
+  });
+  board.addEventListener('dragend', () => {
+    dragEl?.classList.remove('is-dragging');
+    board.querySelectorAll('.show-list').forEach((list) => list.classList.remove('is-drop'));
+    const dragged = dragEl;
+    dragEl = null;
+    setTimeout(() => {
+      suppressClick = false;
+      dragged?.classList.remove('is-dragging');
+    }, 80);
+  });
+  board.querySelectorAll('.show-list').forEach((list) => {
+    list.addEventListener('dragover', (event) => {
+      event.preventDefault();
+      list.classList.add('is-drop');
+    });
+    list.addEventListener('dragleave', (event) => {
+      if (!list.contains(event.relatedTarget)) list.classList.remove('is-drop');
+    });
+    list.addEventListener('drop', (event) => {
+      event.preventDefault();
+      list.classList.remove('is-drop');
+      const stack = list.querySelector('.show-list__stack');
+      if (dragEl && stack && dragEl.parentElement !== stack) stack.appendChild(dragEl);
+    });
+  });
+}
+
 function wireSlideInteractions(slideEl) {
   if (!slideEl) return;
   const root = slideEl.querySelector('.slide-inner');
@@ -397,6 +562,7 @@ function wireSlideInteractions(slideEl) {
 
     root.querySelectorAll('[data-draggable="true"]').forEach((node) => {
       if (node.closest('[data-interaction="symphony-kanban"], [data-interaction="taskswipe"]')) return;
+      if (node.classList.contains('chart-callout')) return;
       Draggable.create(node, {
         type: 'x,y',
         bounds: root,
@@ -412,6 +578,13 @@ function wireSlideInteractions(slideEl) {
     });
   }
 
+  wireChartCallouts(root);
+  layoutChartCallouts(root);
+  requestAnimationFrame(() => layoutChartCallouts(root));
+  window.setTimeout(() => layoutChartCallouts(root), 520);
+  wireCurrencyMock(root);
+  wireCarMap(root);
+  wireShowTracker(root);
   wireKanban(root);
   wireTaskSwipe(root);
   wireTypeShift(root);
@@ -560,6 +733,9 @@ function initInteractions() {
   }, { passive: true });
 
   document.documentElement.classList.toggle('reduced-motion', prefersReducedMotion());
+  window.addEventListener('resize', () => {
+    layoutChartCallouts(slideEls[current]?.querySelector('.slide-inner'));
+  });
 }
 
 document.addEventListener('click', (event) => {
@@ -609,7 +785,11 @@ document.addEventListener('keydown', (event) => {
 
 let touchX = null;
 document.addEventListener('touchstart', (e) => { touchX = e.changedTouches[0].clientX; }, { passive: true });
-document.addEventListener('touchend', (e) => { const dx = e.changedTouches[0].clientX - touchX; if (Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1); }, { passive: true });
+document.addEventListener('touchend', (e) => {
+  if (e.target.closest('.chart-callout, .show-card, .appraiser-pin, .fx-panel')) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
+}, { passive: true });
 window.addEventListener('hashchange', () => showSlide(indexFromHash()));
 
 showSlide(current);
