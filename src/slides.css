@@ -354,11 +354,25 @@
 .savepoint-shots figure{margin:0;display:flex;flex-direction:column;gap:.35rem;min-width:0}
 .savepoint-shots img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:center top;border-radius:.7rem;border:1px solid #ffffff33;box-shadow:0 1rem 2.4rem #000a}
 .savepoint-shots figcaption{color:#aaa3ae;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
-.slide--twelve-thousand .slide-content--spend{width:min(94vw,1500px)!important;height:auto!important;max-height:100%;align-items:center!important;justify-content:center!important;gap:1rem;text-align:center}
-.slide--twelve-thousand .cost-number{font-size:clamp(5.5rem,13vw,11rem);margin:0;text-transform:none}
-.spend-evidence{margin:0;width:min(100%,1180px);background:#fff;border-radius:.65rem;padding:.4rem .45rem .2rem;box-shadow:0 1.1rem 2.6rem #000a}
-.spend-evidence img{display:block;width:100%;height:auto}
-.spend-evidence figcaption{color:#5c564f;font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:.2rem 0 .25rem}
+.slide--twelve-thousand .slide-inner{padding-top:clamp(3.2rem,6vh,4.8rem);padding-bottom:clamp(3.2rem,6vh,4.8rem)}
+.slide--twelve-thousand .slide-content--spend{position:static;width:min(96vw,1760px)!important;height:auto!important;max-height:100%;align-items:center!important;justify-content:center!important;gap:0;text-align:center;overflow:visible}
+.slide--twelve-thousand .slide-content--spend .cost-number{position:absolute;z-index:6;top:clamp(2.6rem,5vh,4.2rem);left:0;right:0;margin:0;font-family:"Archivo Black",Arial Black,sans-serif;font-size:clamp(5.5rem,13vw,11rem);line-height:.82;letter-spacing:-.045em;text-transform:none;text-align:center;color:#f6f0e4;text-shadow:0 .08em .4em #000,0 0 1.6rem #ff3b8177;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(.45em) scale(.94)}
+.slide--twelve-thousand .slide-content--spend .cost-number.is-revealed{visibility:visible;opacity:1;left:clamp(1rem,4vw,4rem);right:auto;width:min(44vw,760px);top:50%;text-align:center;transform:translateY(-50%);transition:opacity .4s ease,transform .5s cubic-bezier(.22,1,.36,1)}
+.spend-evidence{margin:0;width:min(100%,1680px);border:0;padding:0;background:#fff;border-radius:.75rem;box-shadow:0 1.2rem 2.8rem #000a;color:#242424;text-align:left;cursor:zoom-in;overflow:hidden}
+.spend-evidence:focus-visible{outline:3px solid #42e8e0;outline-offset:4px}
+.spend-evidence.is-zoomed{cursor:default;align-self:flex-end;margin-right:clamp(.4rem,2vw,1.5rem)}
+.spend-viewport{overflow:hidden;background:#fff}
+.spend-zoom{position:relative;display:block;transform-origin:0 0;will-change:transform}
+.spend-shot{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;opacity:0;pointer-events:none}
+.spend-table{position:relative;z-index:1;width:100%;border-collapse:collapse;background:#fff;color:#242424;font-family:"Segoe UI",Inter,sans-serif;font-size:clamp(1.28rem,2.15vw,2.05rem);line-height:1.25;text-rendering:geometricPrecision}
+.spend-table th,.spend-table td{white-space:nowrap}
+.spend-table th{font-size:.58em;font-weight:650;letter-spacing:.07em;text-transform:uppercase;color:#616161;text-align:left;padding:1.05rem 1.25rem .85rem;border-bottom:1px solid #e4e4e4;background:#fafafa}
+.spend-table td{padding:1.12rem 1.25rem;border-bottom:1px solid #eee;font-weight:600}
+.spend-table th:nth-child(1),.spend-table td:nth-child(1){width:24%}
+.spend-table th:nth-child(2),.spend-table td:nth-child(2){width:50%}
+.spend-table th:nth-child(3),.spend-table td:nth-child(3){width:26%;text-align:right;font-variant-numeric:tabular-nums;font-weight:750;color:#1a1614}
+.spend-caption{margin:0;color:#5c564f;font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;text-align:center;padding:.55rem .6rem .5rem;background:#fff}
+.spend-evidence.is-zoomed .spend-caption{display:none}
 @media(max-width:900px){.savepoint-shots{grid-template-columns:1fr}}
 
 /* Slide 29 — The Cut. Seven names above one line; the rest crushed below. */

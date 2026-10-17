@@ -238,13 +238,38 @@ export const part2Slides = [
     title: '$20k',
     className: 'slide--twelve-thousand slide--cracked',
     html: `
-      <section class="slide-content slide-content--spend" aria-labelledby="part2-twelve-thousand-title">
+      <section class="slide-content slide-content--spend" aria-label="Foundry Models token spend">
         <div class="crack-overlay" data-depth="1" aria-hidden="true"></div>
-        <h2 id="part2-twelve-thousand-title" class="cost-number" data-count-to="20000" data-depth="5">$20k</h2>
-        <figure class="spend-evidence" data-depth="2">
-          <img src="./assets/projects/foundry-models-spend.png" alt="Foundry Models token spend: two rows, $11,420.21 and $7,877.25" />
-          <figcaption>Foundry Models · token spend</figcaption>
-        </figure>
+        <h2 id="part2-twelve-thousand-title" class="cost-number" data-count-to="20000" data-depth="5" aria-hidden="true">$20k</h2>
+        <div class="spend-evidence" data-spend-zoom tabindex="0" role="button" aria-expanded="false" aria-label="Zoom in on the Foundry spend amounts">
+          <div class="spend-viewport">
+            <div class="spend-zoom">
+              <img class="spend-shot" src="./assets/projects/foundry-models-spend.png" alt="" />
+              <table class="spend-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Service name</th>
+                    <th scope="col">Service resources</th>
+                    <th scope="col">Spend</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Foundry Models</td>
+                    <td>5.6 sol ShortCo inp PP Gl TM Tokens</td>
+                    <td class="spend-amount">$11420.21</td>
+                  </tr>
+                  <tr>
+                    <td>Foundry Models</td>
+                    <td>5.6 sol ShortCo Cd inp PP Gl TM Tokens</td>
+                    <td class="spend-amount">$7877.25</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p class="spend-caption">Foundry Models · token spend · click to zoom</p>
+        </div>
       </section>`,
     notes: 'Foundry Models token spend on the Save Point site loop. The two rows are about $11,420 and $7,877 — roughly $20k. Codex / GPT-5.6 Sol / ultra-high effort / unattended.'
   },

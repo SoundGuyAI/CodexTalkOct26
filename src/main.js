@@ -765,6 +765,101 @@ function wireTheCut(root) {
   window.addEventListener('pointercancel', finish);
 }
 
+function revealSpendTotal(title) {
+  if (!title || title.classList.contains('is-revealed')) return;
+  title.classList.add('is-revealed');
+  title.removeAttribute('aria-hidden');
+}
+
+/** Slide 38: click the spend table to crop into the amounts, then show $20k. */
+function wireSpendZoom(root) {
+  const trigger = root.querySelector('[data-spend-zoom]');
+  if (!trigger || trigger.dataset.spendWired === 'true') return;
+  trigger.dataset.spendWired = 'true';
+  const viewport = trigger.querySelector('.spend-viewport');
+  const stage = trigger.querySelector('.spend-zoom');
+  const title = root.querySelector('.cost-number');
+  if (!viewport || !stage) return;
+
+  const zoom = () => {
+    if (trigger.classList.contains('is-zoomed')) return;
+    const amounts = [...trigger.querySelectorAll('.spend-amount')];
+    if (!amounts.length) return;
+
+    const frame = viewport.getBoundingClientRect();
+    const textBox = (node) => {
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      const rect = range.getBoundingClientRect();
+      range.detach?.();
+      return rect;
+    };
+    const first = textBox(amounts[0]);
+    const last = textBox(amounts[amounts.length - 1]);
+    const colRight = Math.max(first.right, last.right) + 10;
+    const colTop = Math.min(first.top, last.top) - 14;
+    const colBottom = Math.max(last.bottom, first.bottom) + 14;
+    const colH = Math.max(1, colBottom - colTop);
+    const localY = (colTop + colBottom) / 2 - frame.top;
+    const lockedWidth = stage.getBoundingClientRect().width;
+    const reduced = prefersReducedMotion();
+
+    const resourceRight = Math.min(
+      ...amounts.map((node) => node.previousElementSibling?.getBoundingClientRect().right ?? first.left)
+    );
+    const localResource = resourceRight - frame.left;
+    const span = Math.max(1, colRight - resourceRight);
+    const viewW = Math.max(280, Math.min(window.innerWidth * 0.44, 820));
+    const maxH = Math.min(window.innerHeight * 0.7, 680);
+    let scale = Math.min(5, (viewW * 0.98) / span);
+    let viewH = Math.min(maxH, colH * scale + 36);
+    scale = Math.min(scale, Math.max(1.15, (viewH - 20) / colH));
+    viewH = Math.min(maxH, colH * scale + 28);
+    const tx = -localResource * scale - 8;
+    const ty = viewH / 2 - localY * scale;
+
+    stage.style.width = `${lockedWidth}px`;
+    trigger.style.width = `${frame.width}px`;
+    viewport.style.height = `${frame.height}px`;
+    trigger.classList.add('is-zoomed');
+    trigger.setAttribute('aria-expanded', 'true');
+    if (!reduced) {
+      trigger.style.transition = 'width .72s cubic-bezier(.22,1,.36,1)';
+      viewport.style.transition = 'height .72s cubic-bezier(.22,1,.36,1)';
+      stage.style.transition = 'transform .72s cubic-bezier(.22,1,.36,1)';
+    }
+
+    const apply = () => {
+      trigger.style.width = `${viewW}px`;
+      viewport.style.height = `${viewH}px`;
+      stage.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+      if (reduced) revealSpendTotal(title);
+    };
+    if (reduced) apply();
+    else requestAnimationFrame(apply);
+
+    const reveal = () => revealSpendTotal(title);
+    const done = (event) => {
+      if (event.target !== stage || event.propertyName !== 'transform') return;
+      stage.removeEventListener('transitionend', done);
+      reveal();
+    };
+    stage.addEventListener('transitionend', done);
+    window.setTimeout(reveal, 980);
+  };
+
+  trigger.addEventListener('click', (event) => {
+    event.stopPropagation();
+    zoom();
+  });
+  trigger.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter') return;
+    event.preventDefault();
+    event.stopPropagation();
+    zoom();
+  });
+}
+
 function wireSlideInteractions(slideEl) {
   if (!slideEl) return;
   const root = slideEl.querySelector('.slide-inner');
@@ -831,6 +926,7 @@ function wireSlideInteractions(slideEl) {
   wireSlotMachine(root, { gsap, reducedMotion: prefersReducedMotion() });
   wireTheCut(root);
   wireFocusEnergy(root);
+  wireSpendZoom(root);
 }
 
 function runAction(action, trigger) {
@@ -1028,10 +1124,10 @@ let touchX = null;
 let suppressSwipe = false;
 document.addEventListener('touchstart', (e) => {
   touchX = e.changedTouches[0].clientX;
-  if (e.target.closest?.('.the-cut, [data-energy-card]')) suppressSwipe = true;
+  if (e.target.closest?.('.the-cut, [data-energy-card], .spend-evidence')) suppressSwipe = true;
 }, { passive: true });
 document.addEventListener('touchend', (e) => {
-  const blocked = suppressSwipe || e.target.closest?.('.chart-callout, .show-card, .appraiser-pin, .fx-panel, .the-cut, [data-energy-card]');
+  const blocked = suppressSwipe || e.target.closest?.('.chart-callout, .show-card, .appraiser-pin, .fx-panel, .the-cut, [data-energy-card], .spend-evidence');
   const dx = e.changedTouches[0].clientX - touchX;
   if (!blocked && Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
   suppressSwipe = false;
