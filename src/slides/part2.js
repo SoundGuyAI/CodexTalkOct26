@@ -130,24 +130,30 @@ export const part2Slides = [
         <header class="slide-heading" data-depth="5">
           <h2 id="part2-adhd-title">ADHD is a feature.</h2>
         </header>
-        <div class="attention-field" data-depth="2" aria-label="Project windows">
+        <div class="attention-field" data-interaction="focus-energy" aria-label="Finite focus">
+          <div class="focus-pool" data-focus-pool role="meter" aria-label="Total focus" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+            <span class="focus-pool__label">focus</span>
+            <span class="focus-pool__track"><span class="focus-pool__fill"></span></span>
+            <span class="focus-pool__readout" data-focus-readout>100%</span>
+          </div>
           ${[
-            ['talk', 'cyan'],
-            ['game', 'pink'],
+            ['talks', 'cyan'],
+            ['games', 'pink'],
             ['XR', 'lime'],
-            ['calendar', 'orange'],
-            ['submission', 'cyan'],
-            ['tool', 'pink'],
-            ['experiment', 'lime'],
+            ['calendars', 'orange'],
+            ['submissions', 'cyan'],
+            ['tools', 'pink'],
+            ['experiments', 'lime'],
           ].map(([name, tone], index) => `
-            <button class="attention-window attention-window--${tone} attention-window--${index + 1}" type="button" data-draggable="true" data-depth="${index % 3 + 1}">
-              <small>window ${index + 1}</small>
+            <button class="attention-window attention-window--${tone} attention-window--${index + 1}" type="button" data-energy-card aria-pressed="false" data-charge="0">
+              <span class="attention-charge" aria-hidden="true"></span>
+              <small class="attention-status">idle</small>
               <strong>${esc(name)}</strong>
             </button>`).join('')}
           <div class="attention-eye" data-depth="5" aria-hidden="true">◉</div>
         </div>
       </section>`,
-    notes: 'Context switching becomes useful when state lives outside my head. The urge to switch becomes routing energy. Drag a window; the rest stay readable.'
+    notes: 'Focus is a finite pool. Click a card and it fills with energy — about ten seconds if it is the only one. Click a second and every active card still fills, but slower, because they split the same pool. When the bar hits empty, the fill crawls.'
   },
   {
     id: 'part2-symphony',

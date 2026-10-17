@@ -360,3 +360,51 @@
 .spend-evidence img{display:block;width:100%;height:auto}
 .spend-evidence figcaption{color:#5c564f;font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:.2rem 0 .25rem}
 @media(max-width:900px){.savepoint-shots{grid-template-columns:1fr}}
+
+/* Slide 29 — The Cut. Seven names above one line; the rest crushed below. */
+.slide-the-cut .slide-inner{justify-content:center}
+.slide-inner>.the-cut{display:flex;flex-direction:column;align-items:stretch;justify-content:center;width:min(94vw,1500px);height:auto;max-height:100%;gap:clamp(.25rem,1vh,.7rem);user-select:none;touch-action:none;overflow:visible}
+.the-cut__head,.the-cut__above,.the-cut__below,.the-cut__line,.the-cut__later{align-self:stretch;width:100%;flex:0 0 auto}
+.the-cut__head{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;position:relative;z-index:2}
+.slide-the-cut .the-cut h2{font-size:clamp(1.6rem,3.2vw,3.4rem);line-height:1;text-align:left}
+.the-cut__count{margin:0;color:#42e8e0;font:800 clamp(.85rem,1.4vw,1.15rem)/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase}
+.the-cut__above,.the-cut__below{display:flex;flex-wrap:wrap;align-content:flex-start;align-items:flex-end;gap:.2rem 1rem;min-height:0}
+.the-cut__below{gap:.15rem .7rem}
+.cut-name{position:relative;appearance:none;border:0;background:transparent;padding:0;margin:0;cursor:grab;text-align:left;line-height:.92;touch-action:none}
+.the-cut__above .cut-name{font:clamp(2.05rem,4.5vw,4.7rem)/.92 "Archivo Black",sans-serif;letter-spacing:-.045em;text-transform:uppercase;color:#f6f0e4;text-shadow:0 0 18px #42e8e044}
+.the-cut__above .cut-name:nth-child(3n+1){color:#42e8e0;text-shadow:0 0 16px #42e8e066}
+.the-cut__above .cut-name:nth-child(3n+2){color:#ff3b81;text-shadow:0 0 16px #ff3b8166}
+.the-cut__above .cut-name:nth-child(3n){color:#c9ff4a;text-shadow:0 0 16px #c9ff4a55}
+.slide-inner>.the-cut .the-cut__line{position:relative;height:5px;min-height:5px;max-height:5px;margin:.55rem 0 .15rem;background:#f6f0e4;box-shadow:0 0 10px #42e8e0,0 0 22px #ff3b8199,0 0 2px #fff;border-radius:2px;overflow:visible}
+.slide-inner>.the-cut .the-cut__line>span{position:absolute;right:0;top:-1.15rem;color:#42e8e0;font:800 .68rem/1 Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase}
+.the-cut__line.is-hot{box-shadow:0 0 14px #c9ff4a,0 0 28px #42e8e0,0 0 3px #fff}
+.the-cut__later{margin:0;color:#6a6270;font:700 .72rem/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase}
+.the-cut__below .cut-name{font:600 clamp(.58rem,.78vw,.78rem)/1.15 Inter,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:#5e5666;text-shadow:none}
+.cut-name.is-dragging{z-index:40;cursor:grabbing;transform-origin:0% 50%;color:#42e8e0!important;text-shadow:0 0 22px #42e8e0!important}
+.cut-name.is-eject{opacity:.38;filter:grayscale(.35)}
+.cut-name.is-eject:after{content:" ↓";color:#ff3b81}
+
+/* Slide 34 — finite focus. Cards fill from a shared energy pool. */
+.slide--adhd .slide-inner{padding-top:clamp(4.2rem,7vh,5.5rem);padding-bottom:4.2rem}
+.slide--adhd .slide-content--attention{height:auto!important;max-height:100%;justify-content:center!important}
+.slide--adhd .slide-heading h2{font-size:clamp(2.3rem,5vw,4.6rem)}
+.slide--adhd .attention-field{margin-top:.7rem;min-height:0;gap:.7rem;align-content:start}
+.slide--adhd .focus-pool{grid-column:1 / -1;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:.75rem;--pool:100%}
+.slide--adhd .focus-pool__label,.slide--adhd .focus-pool__readout{font:800 .78rem/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#42e8e0}
+.slide--adhd .focus-pool__readout{min-width:4.2rem;text-align:right;font-variant-numeric:tabular-nums}
+.slide--adhd .focus-pool__track{display:block;height:.9rem;border-radius:999px;background:#120f16;border:1px solid #42e8e077;box-shadow:inset 0 0 10px #000,0 0 16px #42e8e022;overflow:hidden}
+.slide--adhd .focus-pool__fill{display:block;height:100%;width:var(--pool);border-radius:inherit;background:linear-gradient(90deg,#ff3b81,#42e8e0 58%,#c9ff4a);box-shadow:0 0 16px #42e8e0cc}
+.slide--adhd .focus-pool.is-empty .focus-pool__fill{width:2%;background:#ff354d;box-shadow:0 0 12px #ff354d;animation:focus-spent 1.05s ease-in-out infinite}
+.slide--adhd .focus-pool.is-empty .focus-pool__label,.slide--adhd .focus-pool.is-empty .focus-pool__readout{color:#ff354d}
+@keyframes focus-spent{50%{opacity:.35}}
+.slide--adhd .attention-window{position:relative;overflow:hidden;cursor:pointer;min-height:clamp(5.4rem,12vh,8.2rem);justify-content:flex-start;touch-action:manipulation}
+.slide--adhd .attention-window--cyan{--charge-color:#42e8e0}
+.slide--adhd .attention-window--pink{--charge-color:#ff3b81}
+.slide--adhd .attention-window--lime{--charge-color:#c9ff4a}
+.slide--adhd .attention-window--orange{--charge-color:#ff7a2f}
+.slide--adhd .attention-charge{position:absolute;left:0;right:0;bottom:0;height:var(--charge,0%);z-index:0;pointer-events:none;background:linear-gradient(to top,var(--charge-color,#42e8e0),transparent 72%);box-shadow:inset 0 0 22px var(--charge-color,#42e8e0)}
+.slide--adhd .attention-charge:after{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:#fff;box-shadow:0 0 12px var(--charge-color,#fff);opacity:.9}
+.slide--adhd .attention-window>small,.slide--adhd .attention-window>strong{position:relative;z-index:1}
+.slide--adhd .attention-window strong{text-shadow:0 .08em .35em #000}
+.slide--adhd .attention-window.is-charging{box-shadow:0 0 0 1px var(--charge-color,#42e8e0),0 0 22px #42e8e088}
+.slide--adhd .attention-window.is-full{box-shadow:0 0 0 1px #c9ff4a,0 0 24px #c9ff4a88}

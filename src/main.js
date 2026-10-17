@@ -530,6 +530,217 @@ function wireShowTracker(root) {
   });
 }
 
+const focusLoops = new WeakMap();
+const FOCUS_POOL_MAX = 2;
+const FOCUS_SOLO_PER_SEC = 0.1;
+const FOCUS_CRAWL = 0.08;
+
+function focusCharge(card) {
+  const value = Number(card.dataset.charge || 0);
+  return Number.isFinite(value) ? value : 0;
+}
+
+function paintFocus(field) {
+  const pool = Number(field.dataset.focusPool ?? FOCUS_POOL_MAX);
+  const pct = Math.max(0, Math.min(100, (pool / FOCUS_POOL_MAX) * 100));
+  const meter = field.querySelector('[data-focus-pool]');
+  if (!meter) return;
+  meter.style.setProperty('--pool', `${pct.toFixed(2)}%`);
+  meter.setAttribute('aria-valuenow', String(Math.round(pct)));
+  meter.classList.toggle('is-empty', pool <= 0.0008);
+  const readout = meter.querySelector('[data-focus-readout]');
+  if (readout) readout.textContent = pool <= 0.0008 ? 'spent' : `${Math.round(pct)}%`;
+}
+
+function tickFocus(field, dt) {
+  let pool = Number(field.dataset.focusPool ?? FOCUS_POOL_MAX);
+  if (!Number.isFinite(pool)) pool = FOCUS_POOL_MAX;
+  const cards = [...field.querySelectorAll('[data-energy-card]')];
+  const active = cards.filter((card) => card.classList.contains('is-charging') && focusCharge(card) < 0.999);
+  if (active.length) {
+    const crawling = pool <= 0.0008;
+    const budget = crawling
+      ? FOCUS_SOLO_PER_SEC * FOCUS_CRAWL * dt
+      : Math.min(pool, FOCUS_SOLO_PER_SEC * dt);
+    const share = budget / active.length;
+    let spent = 0;
+    active.forEach((card) => {
+      const before = focusCharge(card);
+      const next = Math.min(1, before + share);
+      spent += next - before;
+      card.dataset.charge = next.toFixed(4);
+      card.style.setProperty('--charge', `${(next * 100).toFixed(2)}%`);
+      const full = next >= 0.999;
+      card.classList.toggle('is-full', full);
+      const label = card.querySelector('.attention-status');
+      if (label) label.textContent = full ? 'full' : (crawling ? `${Math.round(next * 100)}% · crawl` : `${Math.round(next * 100)}%`);
+    });
+    if (!crawling) pool = Math.max(0, pool - spent);
+    field.dataset.focusPool = String(pool);
+  }
+  paintFocus(field);
+}
+
+function startFocusLoop(field) {
+  if (focusLoops.get(field)) return;
+  let last = performance.now();
+  const step = (now) => {
+    if (!field.closest('.slide')?.classList.contains('is-active')) {
+      focusLoops.delete(field);
+      return;
+    }
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    tickFocus(field, dt);
+    focusLoops.set(field, requestAnimationFrame(step));
+  };
+  focusLoops.set(field, requestAnimationFrame(step));
+}
+
+function wireFocusEnergy(root) {
+  const field = root.querySelector('[data-interaction="focus-energy"]');
+  if (!field) return;
+  if (field.dataset.energyWired !== 'true') {
+    field.dataset.energyWired = 'true';
+    field.dataset.focusPool = String(FOCUS_POOL_MAX);
+    field.querySelectorAll('[data-energy-card]').forEach((card) => {
+      card.dataset.charge = '0';
+      card.style.setProperty('--charge', '0%');
+    });
+    paintFocus(field);
+    field.addEventListener('click', (event) => {
+      const card = event.target.closest('[data-energy-card]');
+      if (!card) return;
+      const on = card.classList.toggle('is-charging');
+      card.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (!on) {
+        const pct = Math.round(focusCharge(card) * 100);
+        const label = card.querySelector('.attention-status');
+        if (label) label.textContent = card.classList.contains('is-full') ? 'full' : (pct ? `${pct}%` : 'idle');
+      }
+      beep(midiToHz(on ? 74 : 62), 0.03);
+    });
+  }
+  startFocusLoop(field);
+}
+
+function wireTheCut(root) {
+  const board = root.querySelector('[data-interaction="the-cut"]');
+  if (!board || board.dataset.cutWired === 'true') return;
+  board.dataset.cutWired = 'true';
+  const above = board.querySelector('[data-cut-zone="above"]');
+  const below = board.querySelector('[data-cut-zone="below"]');
+  const line = board.querySelector('.the-cut__line');
+  const countEl = board.querySelector('[data-cut-count]');
+  const cap = 7;
+  if (!above || !below || !line) return;
+
+  const namesIn = (zone) => [...zone.querySelectorAll('.cut-name')];
+  const updateCount = () => {
+    const count = namesIn(above).length;
+    board.dataset.aboveCount = String(count);
+    if (countEl) countEl.textContent = `${count} this week`;
+  };
+  const clearEject = () => board.querySelectorAll('.is-eject').forEach((node) => node.classList.remove('is-eject'));
+  const zoneAt = (clientY) => {
+    const rect = line.getBoundingClientRect();
+    return clientY < rect.top + rect.height / 2 ? 'above' : 'below';
+  };
+  const settle = (node, fromRect) => {
+    node.classList.remove('is-dragging', 'is-promoted');
+    node.style.zIndex = '';
+    node.style.transform = '';
+    node.style.transition = '';
+    if (prefersReducedMotion()) return;
+    const to = node.getBoundingClientRect();
+    const dx = fromRect.left - to.left;
+    const dy = fromRect.top - to.top;
+    if (Math.hypot(dx, dy) < 2) return;
+    node.style.transform = `translate(${dx}px, ${dy}px)`;
+    requestAnimationFrame(() => {
+      node.style.transition = 'transform .32s cubic-bezier(.2,.75,.2,1)';
+      node.style.transform = 'translate(0px, 0px)';
+      const clear = (event) => {
+        if (event.propertyName !== 'transform') return;
+        node.style.transition = '';
+        node.style.transform = '';
+        node.removeEventListener('transitionend', clear);
+      };
+      node.addEventListener('transitionend', clear);
+    });
+  };
+
+  let drag = null;
+  updateCount();
+
+  board.addEventListener('pointerdown', (event) => {
+    const name = event.target.closest('.cut-name');
+    if (!name || event.button > 0) return;
+    event.preventDefault();
+    drag = {
+      name,
+      id: event.pointerId,
+      origin: above.contains(name) ? 'above' : 'below',
+      startX: event.clientX,
+      startY: event.clientY,
+    };
+    name.classList.add('is-dragging');
+    name.setPointerCapture?.(event.pointerId);
+    suppressSwipe = true;
+  });
+
+  window.addEventListener('pointermove', (event) => {
+    if (!drag || event.pointerId !== drag.id) return;
+    const x = event.clientX - drag.startX;
+    const y = event.clientY - drag.startY;
+    const zone = zoneAt(event.clientY);
+    const scale = zone === 'above' && drag.origin === 'below' ? 2.8 : 1;
+    drag.name.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+    drag.name.classList.toggle('is-promoted', scale > 1);
+    clearEject();
+    line.classList.toggle('is-hot', zone !== drag.origin);
+    if (zone === 'above' && drag.origin === 'below' && namesIn(above).length >= cap) {
+      namesIn(above).at(-1)?.classList.add('is-eject');
+    }
+  });
+
+  const finish = (event) => {
+    if (!drag || (event && event.pointerId !== drag.id)) return;
+    const { name, origin, startX, startY } = drag;
+    const moved = Math.hypot(event.clientX - startX, event.clientY - startY) > 8;
+    const zone = zoneAt(event.clientY);
+    const from = name.getBoundingClientRect();
+    drag = null;
+    clearEject();
+    line.classList.remove('is-hot');
+    window.setTimeout(() => { suppressSwipe = false; }, 120);
+    if (!moved || zone === origin) {
+      settle(name, from);
+      return;
+    }
+    let victim = null;
+    let victimFrom = null;
+    if (zone === 'above') {
+      const current = namesIn(above);
+      if (current.length >= cap) {
+        victim = current[current.length - 1];
+        victimFrom = victim.getBoundingClientRect();
+      }
+      above.appendChild(name);
+      if (victim) below.insertBefore(victim, below.firstChild);
+    } else {
+      below.insertBefore(name, below.firstChild);
+    }
+    settle(name, from);
+    if (victim && victimFrom) settle(victim, victimFrom);
+    updateCount();
+    beep(midiToHz(zone === 'above' ? 76 : 64), 0.04);
+  };
+
+  window.addEventListener('pointerup', finish);
+  window.addEventListener('pointercancel', finish);
+}
+
 function wireSlideInteractions(slideEl) {
   if (!slideEl) return;
   const root = slideEl.querySelector('.slide-inner');
@@ -590,6 +801,8 @@ function wireSlideInteractions(slideEl) {
   wireTypeShift(root);
   wireRepoPreview(root);
   wireSlotMachine(root, { gsap, reducedMotion: prefersReducedMotion() });
+  wireTheCut(root);
+  wireFocusEnergy(root);
 }
 
 function runAction(action, trigger) {
@@ -784,11 +997,16 @@ document.addEventListener('keydown', (event) => {
 });
 
 let touchX = null;
-document.addEventListener('touchstart', (e) => { touchX = e.changedTouches[0].clientX; }, { passive: true });
+let suppressSwipe = false;
+document.addEventListener('touchstart', (e) => {
+  touchX = e.changedTouches[0].clientX;
+  if (e.target.closest?.('.the-cut, [data-energy-card]')) suppressSwipe = true;
+}, { passive: true });
 document.addEventListener('touchend', (e) => {
-  if (e.target.closest('.chart-callout, .show-card, .appraiser-pin, .fx-panel')) return;
+  const blocked = suppressSwipe || e.target.closest?.('.chart-callout, .show-card, .appraiser-pin, .fx-panel, .the-cut, [data-energy-card]');
   const dx = e.changedTouches[0].clientX - touchX;
-  if (Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
+  if (!blocked && Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
+  suppressSwipe = false;
 }, { passive: true });
 window.addEventListener('hashchange', () => showSlide(indexFromHash()));
 
