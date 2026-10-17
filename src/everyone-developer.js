@@ -1,11 +1,12 @@
 /**
  * Slide "Everyone is a developer." (part2-everyone-developer).
- * "Change" grows to fill a white card. "Ask" grows, "don’t code" is struck,
- * and that card turns white too. "Make it yours" stays a black card and can
- * still take over the stage. Clicks stay on the cards. Arrow keys still move the deck.
+ * "Create" grows to fill a white card. "Tweak" grows, "don’t code" is struck,
+ * and that card turns white too. "Yours" grows on a card that stays black.
+ * Clicks stay on the cards. Arrow keys still move the deck.
  * Word growth is not shortened for prefers-reduced-motion.
  */
 import './everyone-developer.css';
+import { playSfx } from './sfx.js';
 
 const STAGE = '[data-interaction="everyone-developer"]';
 
@@ -33,6 +34,7 @@ document.addEventListener('click', (event) => {
   if (which === 'change') stage.classList.add('is-changed');
   if (which === 'ask') stage.classList.add('is-struck');
   if (which === 'yours') stage.classList.add('is-yours');
+  if (which === 'change' || which === 'ask' || which === 'yours') playSfx('whoosh');
   sync(stage);
 
   if (event.detail !== 0) control.blur();

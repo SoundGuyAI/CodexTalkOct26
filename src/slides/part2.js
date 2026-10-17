@@ -333,9 +333,9 @@ export const part2Slides = [
     html: `
       <section class="slide-content slide-content--type-shift" aria-labelledby="part2-software-changing-title">
         <h2 id="part2-software-changing-title" data-depth="5">Software is changing.</h2>
-        <div class="software-chains" data-interaction="software-shift" data-step="0" data-depth="2" role="button" tabindex="0" aria-label="User, Prompt, API. Click to scratch the next word.">
+        <div class="software-chains" data-interaction="software-shift" data-step="0" data-depth="2" role="button" tabindex="0" aria-label="Developer, Prompt, API. Click to scratch the next word.">
           <div class="software-chain software-chain--past">
-            <span class="software-term" data-past="0"><span class="software-term__word">User</span></span>
+            <span class="software-term" data-past="0"><span class="software-term__word">Developer</span></span>
             <span class="software-chain__arrow" aria-hidden="true">→</span>
             <span class="software-term" data-past="1"><span class="software-term__word">Prompt</span></span>
             <span class="software-chain__arrow" aria-hidden="true">→</span>
@@ -353,7 +353,7 @@ export const part2Slides = [
           </div>
         </div>
       </section>`,
-    notes: 'Open source plus agents changes who gets to change software. Start on User → Prompt → API. Each click scratches the next word and reveals Everyone, then Agent, then AAI. AAI expands to Application Agent Interface.'
+    notes: 'Open source plus agents changes who gets to change software. Start on Developer → Prompt → API. Each click scratches the next word and reveals Everyone, then Agent, then AAI. AAI expands to Application Agent Interface.'
   },
   {
     id: 'part2-everyone-developer',
@@ -376,13 +376,13 @@ export const part2Slides = [
             <strong class="yours-screen__title">App</strong>
           </div>
           <div class="maker-panels">
-            <button type="button" class="maker-panel" data-maker="change" tabindex="-1" aria-pressed="false"><span class="maker-glyph" aria-hidden="true">✦</span><strong><span class="maker-word">Change</span> <span class="maker-rest">any software</span></strong></button>
-            <button type="button" class="maker-panel" data-maker="ask" tabindex="-1" aria-pressed="false"><span class="maker-glyph" aria-hidden="true">↻</span><strong><span class="maker-word">Ask</span><span class="maker-rest">, <span class="maker-code">don’t code<span class="maker-strike" aria-hidden="true"></span></span></span></strong></button>
-            <button type="button" class="maker-panel" data-maker="yours" tabindex="-1" aria-pressed="false"><span class="maker-glyph" aria-hidden="true">∞</span><strong>Make it yours</strong></button>
+            <button type="button" class="maker-panel" data-maker="change" tabindex="-1" aria-pressed="false"><span class="maker-glyph" aria-hidden="true">✦</span><strong><span class="maker-word">Create</span> <span class="maker-rest">any software</span></strong></button>
+            <button type="button" class="maker-panel" data-maker="ask" tabindex="-1" aria-pressed="false"><span class="maker-glyph" aria-hidden="true">↻</span><strong><span class="maker-word">Tweak</span><span class="maker-rest">, <span class="maker-code">don’t code<span class="maker-strike" aria-hidden="true"></span></span></span></strong></button>
+            <button type="button" class="maker-panel" data-maker="yours" tabindex="-1" aria-pressed="false"><span class="maker-glyph" aria-hidden="true">∞</span><strong><span class="maker-rest">Make it </span><span class="maker-word">Yours</span></strong></button>
           </div>
         </div>
       </section>`,
-    notes: 'You will not need permission from the software maker—or a computer-science degree—to adapt the tool. Click “Change any software” and the word change grows to fill a white card. Click “Ask, don’t code” and ask grows, don’t code is crossed out, and that card turns white. “Make it yours” stays black.'
+    notes: 'You will not need permission from the software maker—or a computer-science degree—to adapt the tool. Click “Create any software” and Create grows to fill a white card. Click “Tweak, don’t code” and Tweak grows, don’t code is crossed out, and that card turns white. Yours grows large and that card stays black.'
   },
   {
     id: 'part2-hyper-personalized',

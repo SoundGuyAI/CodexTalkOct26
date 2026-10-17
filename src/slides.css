@@ -177,9 +177,13 @@
   flex-direction:column;
   align-items:center;
   gap:.18rem;
-  pointer-events:none;
+  pointer-events:auto;
+  cursor:grab;
+  touch-action:none;
+  user-select:none;
   will-change:transform;
 }
+.final-bubble.is-dragging{cursor:grabbing;z-index:2}
 .final-bubble img{
   width:100%;
   aspect-ratio:1;
@@ -617,7 +621,7 @@
 .slide-content--guardrails .plan-reset{margin-top:.9rem;color:#aaa3ae;font-weight:700}
 .slide-content--guardrails .plan-reset strong{color:#c9ff4a}
 
-/* Software is changing: big User → Prompt → API, then click to scratch and reveal. */
+/* Software is changing: big Developer → Prompt → API, then click to scratch and reveal. */
 .slide--software-changing .slide-content--type-shift{justify-content:center!important;gap:clamp(.6rem,2vh,1.4rem)}
 .slide--software-changing .software-chains{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(1.1rem,3.2vh,2.2rem);width:100%;max-width:min(100%,1600px);margin:0;padding:.4rem .5rem 1.6rem;border:0;background:transparent;color:inherit;cursor:pointer;font:inherit}
 .slide--software-changing .software-chains:focus-visible{outline:2px solid #c9ff4a;outline-offset:8px}
@@ -628,7 +632,7 @@
 .slide--software-changing .software-expansion[hidden]{display:none!important}
 .slide--software-changing .software-term{position:relative;display:inline-flex;align-items:center;justify-content:center}
 .slide--software-changing .software-term__word,
-.slide--software-changing .software-chain--past .software-chain__arrow{font-family:"Archivo Black",Arial Black,sans-serif;font-size:clamp(3.4rem,8.6vw,8.4rem);line-height:.9;letter-spacing:-.05em;text-transform:uppercase;color:#f6f0e4;text-shadow:0 0 1.2rem #42e8e077;transition:font-size .28s ease,color .2s ease,text-shadow .2s ease}
+.slide--software-changing .software-chain--past .software-chain__arrow{font-family:"Archivo Black",Arial Black,sans-serif;font-size:clamp(2.1rem,4.7vw,5.4rem);line-height:.9;letter-spacing:-.05em;text-transform:uppercase;color:#f6f0e4;text-shadow:0 0 1.2rem #42e8e077;transition:font-size .28s ease,color .2s ease,text-shadow .2s ease}
 .slide--software-changing .software-chain--past .software-chain__arrow{flex:0 0 auto;color:#42e8e0;text-shadow:0 0 1rem #42e8e0}
 .slide--software-changing .software-chains:not([data-step="0"]) .software-term__word,
 .slide--software-changing .software-chains:not([data-step="0"]) .software-chain--past .software-chain__arrow{font-size:clamp(1.8rem,4vw,4.1rem)}
@@ -1128,7 +1132,8 @@
     transition: transform .56s cubic-bezier(.2, .75, .2, 1) !important;
   }
   .slide--everyone-developer .maker-stage.is-changed .maker-panel[data-maker="change"] .maker-word,
-  .slide--everyone-developer .maker-stage.is-struck .maker-panel[data-maker="ask"] .maker-word {
+  .slide--everyone-developer .maker-stage.is-struck .maker-panel[data-maker="ask"] .maker-word,
+  .slide--everyone-developer .maker-stage.is-yours .maker-panel[data-maker="yours"] .maker-word {
     animation: maker-word-grow 1.15s cubic-bezier(.16, 1, .3, 1) both !important;
   }
 }

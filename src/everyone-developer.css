@@ -238,10 +238,14 @@
   min-height: 0;
 }
 
+.slide--everyone-developer .maker-stage.is-struck .maker-panel[data-maker="ask"] {
+  overflow: hidden;
+}
+
 .slide--everyone-developer .maker-stage.is-struck .maker-panel[data-maker="ask"] .maker-word {
   color: #09090b;
-  font-size: clamp(4rem, 6vw, 6.6rem);
-  font-size: 30cqi;
+  font-size: clamp(3.2rem, 4.6vw, 5.2rem);
+  font-size: 18cqi;
   line-height: 0.8;
   letter-spacing: -0.045em;
   transform-origin: left center;
@@ -318,6 +322,22 @@
   font-size: clamp(2.8rem, 5.6vw, 6rem);
 }
 
+.slide--everyone-developer .maker-stage.is-yours .maker-panel[data-maker="yours"] .maker-rest {
+  display: block;
+  font-size: clamp(1rem, 1.6vw, 1.45rem);
+  line-height: 1;
+  opacity: 0.72;
+}
+
+.slide--everyone-developer .maker-stage.is-yours .maker-panel[data-maker="yours"] .maker-word {
+  color: #f6f0e4;
+  font-size: clamp(4.2rem, 8vw, 7.6rem);
+  line-height: 0.82;
+  letter-spacing: -0.05em;
+  transform-origin: right center;
+  animation: maker-word-grow 1.15s cubic-bezier(.16, 1, .3, 1) both;
+}
+
 .slide--everyone-developer .maker-stage.is-yours .maker-panel[data-maker="change"],
 .slide--everyone-developer .maker-stage.is-yours .maker-panel[data-maker="ask"] {
   position: absolute;
@@ -379,7 +399,8 @@
    These words still have to grow. Higher specificity keeps the 1.15s tween. */
 @media (prefers-reduced-motion: reduce) {
   .slide--everyone-developer .maker-stage.is-changed .maker-panel[data-maker="change"] .maker-word,
-  .slide--everyone-developer .maker-stage.is-struck .maker-panel[data-maker="ask"] .maker-word {
+  .slide--everyone-developer .maker-stage.is-struck .maker-panel[data-maker="ask"] .maker-word,
+  .slide--everyone-developer .maker-stage.is-yours .maker-panel[data-maker="yours"] .maker-word {
     animation: maker-word-grow 1.15s cubic-bezier(.16, 1, .3, 1) both !important;
   }
 }

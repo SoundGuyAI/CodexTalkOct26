@@ -1,3 +1,5 @@
+import { playSfx } from './sfx.js';
+
 /**
  * Slide part2-how: drag a pillar card, and on pointerup it spirals into
  * the center void (tightening orbit, shrink, fade). Other cards are untouched.
@@ -53,6 +55,7 @@ function spiralIntoVoid(card, hole, { gsap, reducedMotion }) {
 
   card.classList.add('is-falling');
   card.classList.remove('is-dragging');
+  playSfx('suck');
   syncDevouring(hole);
   releaseFocus(card);
 

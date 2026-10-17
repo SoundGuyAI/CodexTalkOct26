@@ -8,6 +8,7 @@ import { part1Slides } from './slides/part1.js';
 import { part2Slides } from './slides/part2.js';
 import { wireSlotMachine, spinSlotReels } from './slot-machine.js';
 import { wireHowVoid } from './how-void.js';
+import { playSfx, setSfxEnabled, sfxEnabled } from './sfx.js';
 import './styles.css';
 import './slides.css';
 
@@ -73,12 +74,13 @@ deck.innerHTML = `
     <button class="timer countdown-timer" data-testid="countdown-timer" data-action="timer" aria-label="Pause or resume countdown timer">6:00</button>
     <span class="counter" aria-live="polite"></span>
     <button class="icon-button" data-action="mute" aria-label="Toggle sound">Sound off</button>
+    <button class="icon-button" data-action="sfx" aria-pressed="false" aria-label="Toggle interaction sound effects">SFX off</button>
     <button class="icon-button" data-action="help" aria-label="Keyboard help">?</button>
   </div>
   <dialog class="help-dialog">
     <button class="dialog-close" data-action="help">×</button>
     <h2>Controls</h2>
-    <p>Next: → ↓ PageDown Space · Previous: ← ↑ PageUp · Home/End · F fullscreen · P notes · M sound · T pause / double-T reset · H hide timer</p>
+    <p>Next: → ↓ PageDown Space · Previous: ← ↑ PageUp · Home/End · F fullscreen · P notes · M sound · SFX interaction sounds · T pause / double-T reset · H hide timer</p>
   </dialog>
   <dialog class="notes-dialog">
     <button class="dialog-close" data-action="notes">×</button>
@@ -88,6 +90,15 @@ deck.innerHTML = `
 const slideEls = [...document.querySelectorAll('.slide')];
 const counter = document.querySelector('.counter');
 const timerEl = document.querySelector('.timer');
+const sfxButton = document.querySelector('[data-action="sfx"]');
+
+function paintSfxButton() {
+  if (!sfxButton) return;
+  const on = sfxEnabled();
+  sfxButton.textContent = on ? 'SFX on' : 'SFX off';
+  sfxButton.setAttribute('aria-pressed', on ? 'true' : 'false');
+}
+paintSfxButton();
 
 function beep(frequency = 330, duration = 0.045) {
   if (muted) return;
@@ -264,7 +275,7 @@ function moveCardToReview(card, reviewCol) {
   card.classList.remove('kanban-card--agent');
   reviewCol.appendChild(card);
   settleKanbanCard(card);
-  beep(midiToHz(79), 0.05);
+  playSfx('ding');
 }
 
 function startAgentWork(card, reviewCol) {
@@ -318,6 +329,7 @@ function wireKanban(root) {
           });
           const job = agentJobs.get(card);
           const enteringAgent = target.dataset.kanbanCol === 'agent';
+          playSfx('click');
           if (enteringAgent && job?.done && reviewCol) {
             moveCardToReview(card, reviewCol);
             return;
@@ -329,7 +341,6 @@ function wireKanban(root) {
           } else if (job) {
             stopAgentWork(card);
           }
-          beep(midiToHz(72), .04);
         },
       });
       if (col.dataset.kanbanCol === 'agent') startAgentWork(card, reviewCol);
@@ -432,7 +443,7 @@ function wireTypeShift(root) {
   });
 }
 
-/** Slide: Software is changing. Three clicks scratch User → Prompt → API and reveal Everyone → Agent → AAI. */
+/** Slide: Software is changing. Three clicks scratch Developer → Prompt → API and reveal Everyone → Agent → AAI. */
 function wireSoftwareShift(root) {
   const board = root.querySelector('[data-interaction="software-shift"]');
   if (!board || board.dataset.shiftWired === 'true') return;
@@ -443,10 +454,10 @@ function wireSoftwareShift(root) {
   const nowRow = board.querySelector('.software-chain--now');
   const expansion = board.querySelector('.software-expansion');
   const labels = [
-    'User, Prompt, API. Click to scratch the next word.',
-    'User struck. Everyone.',
-    'User and Prompt struck. Everyone, then Agent.',
-    'User, Prompt, and API struck. Everyone, then Agent, then AAI. Application Agent Interface.',
+    'Developer, Prompt, API. Click to scratch the next word.',
+    'Developer struck. Everyone.',
+    'Developer and Prompt struck. Everyone, then Agent.',
+    'Developer, Prompt, and API struck. Everyone, then Agent, then AAI. Application Agent Interface.',
   ];
 
   const paint = (step) => {
@@ -475,7 +486,8 @@ function wireSoftwareShift(root) {
     const step = Number(board.dataset.step || 0);
     if (step >= 3) return;
     paint(step + 1);
-    beep(midiToHz(60 + step * 4), .05);
+    playSfx('scratch');
+    playSfx('pop');
   };
 
   board.addEventListener('click', advance);
@@ -492,9 +504,12 @@ function wireGuardrailTaps(root) {
   if (!section || section.dataset.tapsWired === 'true') return;
   section.dataset.tapsWired = 'true';
   const taps = [...section.querySelectorAll('[data-tap]')];
+  let banned = false;
   const syncBan = () => {
     const allShut = taps.length > 0 && taps.every((tap) => tap.classList.contains('is-shut'));
     section.classList.toggle('is-fully-restricted', allShut);
+    if (allShut && !banned) playSfx('hit');
+    banned = allShut;
   };
   taps.forEach((tap) => {
     tap.addEventListener('click', (event) => {
@@ -502,7 +517,7 @@ function wireGuardrailTaps(root) {
       event.stopPropagation();
       const shut = tap.classList.toggle('is-shut');
       tap.setAttribute('aria-pressed', shut ? 'true' : 'false');
-      beep(midiToHz(shut ? 55 : 72), .04);
+      if (shut) playSfx('valve');
       syncBan();
     });
   });
@@ -923,7 +938,7 @@ function wireTheCut(root) {
     settle(name, from);
     if (victim && victimFrom) settle(victim, victimFrom);
     updateCount();
-    beep(midiToHz(zone === 'above' ? 76 : 64), 0.04);
+    playSfx(zone === 'above' ? 'thud' : 'tap');
   };
 
   window.addEventListener('pointerup', finish);
@@ -934,6 +949,7 @@ function revealSpendTotal(title) {
   if (!title || title.classList.contains('is-revealed')) return;
   title.classList.add('is-revealed');
   title.removeAttribute('aria-hidden');
+  playSfx('cash');
 }
 
 /** Slide 38: click the spend table to crop into the amounts, then show $20k. */
@@ -1134,6 +1150,7 @@ function wireStuffChest(root) {
     box.style.top = `${from.top + fixY}px`;
 
     chest.classList.add('is-open');
+    playSfx('creak');
     window.setTimeout(() => {
       const { rect, slot } = measureSlot(pile.querySelectorAll('[data-stuff-box]').length);
       const current = box.getBoundingClientRect();
@@ -1142,9 +1159,10 @@ function wireStuffChest(root) {
       const scale = Math.max(0.2, Math.min(rect.width / Math.max(current.width, 1), rect.height / Math.max(current.height, 1)));
       const finish = () => {
         dock(box, slot);
-        beep(midiToHz(67), 0.05);
+        playSfx('pop');
         window.setTimeout(() => {
           chest.classList.remove('is-open');
+          playSfx('latch');
           window.setTimeout(resolve, closeMs);
         }, CHEST_SETTLE_MS);
       };
@@ -1204,6 +1222,9 @@ function wireFinalBubbles(root) {
       phase: index * 0.73,
       freq: 0.55 + (index % 7) * 0.08,
       size,
+      dragging: false,
+      dragX: null,
+      dragY: null,
     };
   });
   const seeds = [
@@ -1252,6 +1273,7 @@ function wireFinalBubbles(root) {
         const h = bubble.el.offsetHeight || bubble.size + 28;
         bubble.w = w;
         bubble.h = h;
+        if (bubble.dragging) return;
         bubble.baseX += (tx - w / 2 - bubble.baseX) * 0.045 * dt;
         bubble.baseY += (ty - h / 2 - bubble.baseY) * 0.045 * dt;
       });
@@ -1260,6 +1282,7 @@ function wireFinalBubbles(root) {
           for (let j = i + 1; j < bubbles.length; j += 1) {
             const a = bubbles[i];
             const b = bubbles[j];
+            if (a.dragging || b.dragging) continue;
             const ax = a.baseX + a.w / 2;
             const ay = a.baseY + a.h / 2;
             const bx = b.baseX + b.w / 2;
@@ -1281,6 +1304,10 @@ function wireFinalBubbles(root) {
       }
       bubbles.forEach((bubble) => {
         const { w, h } = bubble;
+        if (bubble.dragging && bubble.dragX != null) {
+          bubble.el.style.transform = `translate3d(${bubble.dragX.toFixed(1)}px, ${bubble.dragY.toFixed(1)}px, 0)`;
+          return;
+        }
         const wobbleX = Math.sin(now * 0.001 * bubble.freq + bubble.phase) * 16;
         const wobbleY = Math.cos(now * 0.00085 * bubble.freq + bubble.phase) * 12;
         let x = bubble.baseX + wobbleX;
@@ -1319,6 +1346,60 @@ function wireFinalBubbles(root) {
     }
     requestAnimationFrame(tick);
   };
+
+  let activeDrag = null;
+  const endBubbleDrag = (event) => {
+    if (!activeDrag || (event && event.pointerId !== activeDrag.id)) return;
+    const bubble = activeDrag.bubble;
+    bubble.dragging = false;
+    bubble.el.classList.remove('is-dragging');
+    const stamp = performance.now();
+    const wobbleX = Math.sin(stamp * 0.001 * bubble.freq + bubble.phase) * 16;
+    const wobbleY = Math.cos(stamp * 0.00085 * bubble.freq + bubble.phase) * 12;
+    if (bubble.dragX != null) {
+      bubble.baseX = bubble.dragX - wobbleX;
+      bubble.baseY = bubble.dragY - wobbleY;
+    }
+    activeDrag = null;
+    playSfx('blip');
+    window.setTimeout(() => { suppressSwipe = false; }, 160);
+  };
+  bubbles.forEach((bubble) => {
+    bubble.el.addEventListener('pointerdown', (event) => {
+      if (event.button > 0) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const fieldRect = field.getBoundingClientRect();
+      const rect = bubble.el.getBoundingClientRect();
+      bubble.dragging = true;
+      bubble.dragX = rect.left - fieldRect.left;
+      bubble.dragY = rect.top - fieldRect.top;
+      activeDrag = {
+        bubble,
+        id: event.pointerId,
+        ox: event.clientX - rect.left,
+        oy: event.clientY - rect.top,
+      };
+      bubble.el.classList.add('is-dragging');
+      try { bubble.el.setPointerCapture(event.pointerId); } catch { /* ignore */ }
+      suppressSwipe = true;
+      playSfx('blip');
+    });
+    bubble.el.addEventListener('pointermove', (event) => {
+      if (!activeDrag || event.pointerId !== activeDrag.id || activeDrag.bubble !== bubble) return;
+      const fieldRect = field.getBoundingClientRect();
+      const w = bubble.w || bubble.el.offsetWidth || bubble.size;
+      const h = bubble.h || bubble.el.offsetHeight || bubble.size + 28;
+      const maxX = Math.max(6, fieldRect.width - w - 6);
+      const maxY = Math.max(6, fieldRect.height - h - 6);
+      bubble.dragX = Math.max(6, Math.min(maxX, event.clientX - fieldRect.left - activeDrag.ox));
+      bubble.dragY = Math.max(6, Math.min(maxY, event.clientY - fieldRect.top - activeDrag.oy));
+      bubble.el.style.transform = `translate3d(${bubble.dragX.toFixed(1)}px, ${bubble.dragY.toFixed(1)}px, 0)`;
+    });
+    bubble.el.addEventListener('pointerup', endBubbleDrag);
+    bubble.el.addEventListener('pointercancel', endBubbleDrag);
+  });
+
   requestAnimationFrame(tick);
 }
 
@@ -1468,6 +1549,7 @@ function runAction(action, trigger) {
     gsap.fromTo(trigger, { scale: .6, rotate: -20, opacity: 0 }, { scale: 1, rotate: -7, opacity: 1, duration: .35, ease: 'back.out(2)' });
   }
   if (action === 'pull-slot') {
+    playSfx('clack');
     spinSlotReels(root, { gsap, reducedMotion: reduced });
   }
   if (action === 'reorder-lanes') {
@@ -1583,6 +1665,10 @@ document.addEventListener('click', (event) => {
       beep(midiToHz(RICKROLL_MIDI[melodyIndex % RICKROLL_MIDI.length]), .08);
     }
   }
+  else if (action === 'sfx') {
+    setSfxEnabled(!sfxEnabled());
+    paintSfxButton();
+  }
   else if (action === 'help') { const d = document.querySelector('.help-dialog'); d.open ? d.close() : d.showModal(); }
   else if (action === 'notes') { const d = document.querySelector('.notes-dialog'); d.open ? d.close() : d.showModal(); }
   else if (action) runAction(action, actionButton);
@@ -1617,10 +1703,10 @@ let touchX = null;
 let suppressSwipe = false;
 document.addEventListener('touchstart', (e) => {
   touchX = e.changedTouches[0].clientX;
-  if (e.target.closest?.('.the-cut, [data-energy-card], .spend-evidence, .guardrail, .software-chains, [data-stuff-box], .stuff-chest')) suppressSwipe = true;
+  if (e.target.closest?.('.the-cut, [data-energy-card], .spend-evidence, .guardrail, .software-chains, [data-stuff-box], .stuff-chest, .final-bubble, [data-maker]')) suppressSwipe = true;
 }, { passive: true });
 document.addEventListener('touchend', (e) => {
-  const blocked = suppressSwipe || e.target.closest?.('.chart-callout, .show-card, .appraiser-pin, .fx-panel, .the-cut, [data-energy-card], .spend-evidence, .guardrail, .software-chains, [data-stuff-box], .stuff-chest');
+  const blocked = suppressSwipe || e.target.closest?.('.chart-callout, .show-card, .appraiser-pin, .fx-panel, .the-cut, [data-energy-card], .spend-evidence, .guardrail, .software-chains, [data-stuff-box], .stuff-chest, .final-bubble, [data-maker]');
   const dx = e.changedTouches[0].clientX - touchX;
   if (!blocked && Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
   suppressSwipe = false;

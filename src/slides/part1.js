@@ -750,21 +750,24 @@ export const part1Slides = [
         'LoveLink', 'Save Point', 'Glasses', 'Meditation', 'Feed The Feed', 'JigTrade', 'Improv',
         'CamSport', 'Kaiju QA', 'TaskSwipe', 'Currency', 'Servers', 'Music', 'Submissions', 'Symphony', 'Planning', 'Calendar', 'Talks', 'This deck',
       ];
+      const aboveLabels = ['Improv', 'Submissions'];
+      const above = aboveLabels.filter((label) => names.includes(label));
+      const below = names.filter((label) => !aboveLabels.includes(label));
       const chip = (label) => `<button type="button" class="cut-name" data-project="${label}">${label}</button>`;
       return `
       <section class="the-cut" data-interaction="the-cut" aria-labelledby="the-cut-title">
         <header class="the-cut__head">
           <h2 id="the-cut-title">The Cut.</h2>
-          <p class="the-cut__count" data-cut-count>7 this week</p>
+          <p class="the-cut__count" data-cut-count>${above.length} this week</p>
         </header>
-        <div class="the-cut__above" data-cut-zone="above" aria-label="This week">${names.slice(0, 7).map(chip).join('')}</div>
+        <div class="the-cut__above" data-cut-zone="above" aria-label="This week">${above.map(chip).join('')}</div>
         <div class="the-cut__line" role="separator" aria-hidden="true"><span>the cut</span></div>
         <p class="the-cut__later">not this week — drag a name through the line</p>
-        <div class="the-cut__below" data-cut-zone="below" aria-label="Not this week">${names.slice(7).map(chip).join('')}</div>
-        <p class="sr-only">Seven projects fit above the cut. Drag another one up and one drops below.</p>
+        <div class="the-cut__below" data-cut-zone="below" aria-label="Not this week">${below.map(chip).join('')}</div>
+        <p class="sr-only">Improv and Submissions start above the cut. Drag another name up. Seven fit; an eighth drops one below.</p>
       </section>`;
     })(),
-    notes: 'The cut: seven projects fit above the line in the same week. Drag a name up through the line — an eighth pushes one back down. Everything else stays crushed below. Transition: “So—how?”'
+    notes: 'The cut starts with Improv and Submissions above the line. Drag more names up — seven fit, and an eighth pushes one back down. Everything else starts below. Transition: “So—how?”'
   }
 ];
 

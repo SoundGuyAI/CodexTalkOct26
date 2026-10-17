@@ -1,3 +1,5 @@
+import { playSfx } from './sfx.js';
+
 /**
  * Slot-machine reels for part1-28 (Hackathons. Funds. Talks.).
  * Kept separate so pull/spin logic does not fight parallax/rickroll edits in main.js.
@@ -142,6 +144,7 @@ export function spinSlotReels(root, { gsap } = {}) {
         proxy.y = -land * h;
         reel.classList.remove('is-spinning', 'is-stopping');
         strip._slotProxy = null;
+        playSfx('tick');
         done();
       },
     });
