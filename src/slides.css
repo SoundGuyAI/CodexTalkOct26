@@ -715,11 +715,13 @@
   text-align:left;
 }
 .now-year{
-  margin:0;
+  display:inline-block;
+  margin:0 0 0 .2em;
   font-family:"Archivo Black",Arial Black,sans-serif;
-  font-size:clamp(1.8rem,3.4vw,3.4rem);
-  line-height:.9;
-  letter-spacing:.06em;
+  font-size:clamp(4.2rem,9vw,9rem);
+  line-height:.82;
+  letter-spacing:.04em;
+  vertical-align:baseline;
   color:#42e8e0;
   text-shadow:0 0 1.1rem #42e8e099;
 }

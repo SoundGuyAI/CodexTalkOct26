@@ -352,7 +352,7 @@ export const part1Slides = [
   {
     id: 'part1-14b-current-projects',
     duration: 10,
-    title: 'Current projects: 2026',
+    title: 'Current projects in 2026',
     className: 'slide-now-projects',
     html: (() => {
       const projects = [
@@ -375,8 +375,7 @@ export const part1Slides = [
       return `
         <section class="now-projects" data-interaction="now-projects" aria-labelledby="now-projects-title">
           <header class="now-projects__head">
-            <h2 id="now-projects-title">Current projects</h2>
-            <p class="now-year">2026</p>
+            <h2 id="now-projects-title">Current projects in <span class="now-year">2026</span></h2>
           </header>
           <div class="now-stage">${projects.map(tile).join('')}</div>
           <p class="now-hint">click a project — it comes forward</p>
