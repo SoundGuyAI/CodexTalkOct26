@@ -96,7 +96,7 @@ const yearlyProjectPins = (throughYear, highlightYear = null) => {
       return `
     <div class="year-pin-slot" style="--bar-height:${barHeightPct(count)}%" data-year="${year}">
       ${showPin ? `
-        <figure class="year-project-pin pin-${pin.year}" data-draggable="true" data-year="${pin.year}">
+        <figure class="year-project-pin pin-${pin.year}" data-draggable="true" data-year="${pin.year}" data-leader="${pin.year}">
           <img src="./assets/${pin.image}" alt="" draggable="false">
           <figcaption>${pin.label}</figcaption>
           <i class="year-project-pin__stem" aria-hidden="true"></i>
@@ -104,6 +104,24 @@ const yearlyProjectPins = (throughYear, highlightYear = null) => {
     </div>`;
     }).join('');
   return `<div class="year-project-pins" aria-hidden="true">${slots}</div>`;
+};
+
+/** Slides 11–12: one leader per pin. Arrow stays on that year's bar tip. */
+const pinLeaderMarkup = (throughYear) => {
+  const years = yearlyProjects
+    .filter(([year]) => year <= throughYear && chartPinByYear[year])
+    .map(([year]) => year);
+  if (!years.length) return '';
+  const markerId = `chart-pin-arrow-${throughYear}`;
+  return `
+    <svg class="chart-leaders chart-leaders--pins" aria-hidden="true">
+      <defs>
+        <marker id="${markerId}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0 0 L10 5 L0 10 Z" fill="#ff3b81"></path>
+        </marker>
+      </defs>
+      ${years.map((year) => `<line data-leader="${year}" marker-end="url(#${markerId})"></line>`).join('')}
+    </svg>`;
 };
 
 const yearlyChart = ({ throughYear, highlightYear = null, phase }) => `
@@ -117,6 +135,7 @@ const yearlyChart = ({ throughYear, highlightYear = null, phase }) => `
       ${yearlyProjectBars(throughYear, highlightYear)}
     </div>
     ${yearlyProjectPins(throughYear, highlightYear)}
+    ${highlightYear === 2026 ? '' : pinLeaderMarkup(throughYear)}
     ${highlightYear === 2026 ? `
       <svg class="chart-leaders" aria-hidden="true">
         <defs>
@@ -191,7 +210,7 @@ export const part1Slides = [
     duration: 2,
     title: 'Adventure games',
     className: 'slide-collage scrapbook',
-    html: `<section class="scrapbook-collage collage--logos" data-interaction="snap-collage"><h2 class="sr-only">Adventure games</h2>${cards([
+    html: `<section class="scrapbook-collage collage--logos tile-grid tile-grid--logos" data-interaction="snap-collage"><h2 class="sr-only">Adventure games</h2>${cards([
       { label: 'Zbang', image: 'history/zbang-logo.png' },
       { label: 'Pizza Morgana', image: 'history/pizza-morgana-tile.png' },
       { label: 'KISA', image: 'history/kisa-logo.png' },
@@ -204,7 +223,7 @@ export const part1Slides = [
     duration: 2,
     title: 'Different platforms',
     className: 'slide-collage platforms',
-    html: `<section class="platform-collage collage--logos" data-interaction="snap-collage"><h2 class="sr-only">Different platforms</h2>${cards([
+    html: `<section class="platform-collage collage--logos tile-grid tile-grid--logos" data-interaction="snap-collage"><h2 class="sr-only">Different platforms</h2>${cards([
       { label: 'Star Shipping', image: 'history/star-shipping-logo.png' },
       { label: 'Spinning Cube', image: 'history/spinning-cube-logo.png' },
       { label: "Larry demo", image: 'history/larry-demo-placeholder.png' },
@@ -217,7 +236,7 @@ export const part1Slides = [
     duration: 2,
     title: 'Adventure games and publishing',
     className: 'slide-collage publishing',
-    html: `<section class="publishing-collage collage--logos" data-interaction="snap-collage"><h2 class="sr-only">Adventure games and publishing</h2>${cards([
+    html: `<section class="publishing-collage collage--logos tile-grid tile-grid--logos" data-interaction="snap-collage"><h2 class="sr-only">Adventure games and publishing</h2>${cards([
       { label: 'Bolt Riley', image: 'history/bolt-riley-intro.jpg' },
       { label: 'Avner', image: 'history/avner-icon.jpg' },
       { label: "Herbert's Quest", image: 'history/herberts-quest.jpg' },
@@ -230,7 +249,7 @@ export const part1Slides = [
     duration: 2,
     title: 'Organize, teach, speak, jam',
     className: 'slide-collage community',
-    html: `<section class="community-collage" data-interaction="snap-collage"><h2 class="sr-only">Community</h2>${cards([
+    html: `<section class="community-collage tile-grid tile-grid--logos" data-interaction="snap-collage"><h2 class="sr-only">Community</h2>${cards([
       { label: 'GDC stages', image: 'community/gdc-stages-placeholder.png' },
       { label: 'Game Dev Day', image: 'community/game-dev-day-placeholder.png' },
       { label: 'GGJ groups', image: 'community/ggj-groups-placeholder.png' },
@@ -243,7 +262,7 @@ export const part1Slides = [
     duration: 2,
     title: 'XR added more worlds',
     className: 'slide-collage xr',
-    html: `<section class="xr-collage collage--logos" data-interaction="snap-collage"><h2 class="sr-only">XR worlds</h2>${cards([
+    html: `<section class="xr-collage collage--logos tile-grid tile-grid--logos" data-interaction="snap-collage"><h2 class="sr-only">XR worlds</h2>${cards([
       { label: 'Star Mates', image: 'history/star-mates-gdc.jpg' },
       { label: 'BRCvr', image: 'history/brcvr-playa.jpg' },
       { label: 'Oh SHIP!', image: 'history/oh-ship-logo.jpg' },
@@ -256,7 +275,7 @@ export const part1Slides = [
     duration: 2,
     title: 'The side quests did not stop',
     className: 'slide-collage sidequests',
-    html: `<section class="sidequest-collage" data-interaction="snap-collage"><h2 class="sr-only">Side quests</h2>${cards([
+    html: `<section class="sidequest-collage tile-grid tile-grid--photos" data-interaction="snap-collage"><h2 class="sr-only">Side quests</h2>${cards([
       { label: 'Geekcon', image: 'sidequests/geekcon-steam-engine.jpg' },
       { label: 'Midburn pyro', image: 'about/burning-man-sculpture.jpg' },
       { label: 'Fireworks', image: 'about/fireworks.jpg' },
@@ -269,7 +288,7 @@ export const part1Slides = [
     duration: 5,
     title: '20 years.',
     className: 'slide-mosaic-collapse',
-    html: `<section class="mosaic-collapse" data-interaction="pull-tiles"><h2 data-depth="1">20 years.</h2><div class="tiny-mosaic" data-depth="3">${cards([
+    html: `<section class="mosaic-collapse" data-interaction="pull-tiles"><h2 data-depth="1">20 years.</h2><div class="tiny-mosaic tile-grid tile-grid--mosaic" data-depth="3">${cards([
       { label: 'making', image: 'about/oded-maker.jpg' },
       { label: 'worlds', image: 'history/brcvr-playa.jpg' },
       { label: 'games', image: 'history/bolt-riley.jpg' },

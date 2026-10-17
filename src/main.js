@@ -366,64 +366,88 @@ function wireRepoPreview(root) {
 }
 
 /**
- * Leader lines for the 2026 chart. Arrowheads stay on fixed fractions of the
- * smash bar; bubble drag only moves the other end.
+ * Leader lines. The arrowhead stays on a fixed point on a bar; dragging a
+ * bubble only moves the other end.
+ * Slide 13: fixed fraction of the 2026 smash bar.
+ * Slides 11–12: top center of that pin's own year bar (not the chart top).
  */
+function layoutLeaderLine(line, toLocal, scaleX, scaleY, bubbleRect, anchorX, anchorY) {
+  const anchor = toLocal(anchorX, anchorY);
+  const center = toLocal(bubbleRect.left + bubbleRect.width / 2, bubbleRect.top + bubbleRect.height / 2);
+  const dx = anchor.x - center.x;
+  const dy = anchor.y - center.y;
+  const halfW = (bubbleRect.width / scaleX) / 2;
+  const halfH = (bubbleRect.height / scaleY) / 2;
+  const denom = Math.max(Math.abs(dx) / Math.max(halfW, 1), Math.abs(dy) / Math.max(halfH, 1), 0.001);
+  line.setAttribute('x1', (center.x + dx / denom).toFixed(1));
+  line.setAttribute('y1', (center.y + dy / denom).toFixed(1));
+  line.setAttribute('x2', anchor.x.toFixed(1));
+  line.setAttribute('y2', anchor.y.toFixed(1));
+}
+
 function layoutChartCallouts(root) {
-  const chart = root?.querySelector?.('.yearly-chart--agents');
-  if (!chart) return;
-  const bar = chart.querySelector('.year-bar.is-smash');
-  const svg = chart.querySelector('.chart-leaders');
-  if (!bar || !svg) return;
-  const chartRect = chart.getBoundingClientRect();
-  if (chartRect.width < 2 || chartRect.height < 2) return;
-  const barRect = bar.getBoundingClientRect();
-  const scaleX = chartRect.width / (chart.offsetWidth || chartRect.width) || 1;
-  const scaleY = chartRect.height / (chart.offsetHeight || chartRect.height) || 1;
-  svg.setAttribute('viewBox', `0 0 ${chart.offsetWidth} ${chart.offsetHeight}`);
-  const toLocal = (vx, vy) => ({
-    x: (vx - chartRect.left) / scaleX,
-    y: (vy - chartRect.top) / scaleY,
+  root?.querySelectorAll?.('.yearly-chart').forEach((chart) => {
+    const svg = chart.querySelector('.chart-leaders');
+    if (!svg) return;
+    const chartRect = chart.getBoundingClientRect();
+    if (chartRect.width < 2 || chartRect.height < 2) return;
+    const scaleX = chartRect.width / (chart.offsetWidth || chartRect.width) || 1;
+    const scaleY = chartRect.height / (chart.offsetHeight || chartRect.height) || 1;
+    svg.setAttribute('viewBox', `0 0 ${chart.offsetWidth} ${chart.offsetHeight}`);
+    const toLocal = (vx, vy) => ({
+      x: (vx - chartRect.left) / scaleX,
+      y: (vy - chartRect.top) / scaleY,
+    });
+    const smash = chart.querySelector('.year-bar.is-smash');
+    if (smash) {
+      const barRect = smash.getBoundingClientRect();
+      chart.querySelectorAll('.chart-callout').forEach((node) => {
+        const line = svg.querySelector(`line[data-leader="${node.dataset.leader}"]`);
+        if (!line) return;
+        const anchorT = Number(node.dataset.anchor || 0.5);
+        layoutLeaderLine(
+          line, toLocal, scaleX, scaleY, node.getBoundingClientRect(),
+          barRect.left + 6 * scaleX,
+          barRect.top + barRect.height * anchorT,
+        );
+      });
+    }
+    chart.querySelectorAll('.year-project-pin[data-leader]').forEach((node) => {
+      const line = svg.querySelector(`line[data-leader="${node.dataset.leader}"]`);
+      const bar = chart.querySelector(`.year-bar[data-year="${node.dataset.year}"]`);
+      if (!line || !bar) return;
+      const barRect = bar.getBoundingClientRect();
+      layoutLeaderLine(
+        line, toLocal, scaleX, scaleY, node.getBoundingClientRect(),
+        barRect.left + barRect.width / 2,
+        barRect.top,
+      );
+    });
+    svg.classList.add('is-ready');
   });
-  chart.querySelectorAll('.chart-callout').forEach((node) => {
-    const line = svg.querySelector(`line[data-leader="${node.dataset.leader}"]`);
-    if (!line) return;
-    const anchorT = Number(node.dataset.anchor || 0.5);
-    const anchor = toLocal(barRect.left + 6 * scaleX, barRect.top + barRect.height * anchorT);
-    const bubble = node.getBoundingClientRect();
-    const center = toLocal(bubble.left + bubble.width / 2, bubble.top + bubble.height / 2);
-    const dx = anchor.x - center.x;
-    const dy = anchor.y - center.y;
-    const halfW = (bubble.width / scaleX) / 2;
-    const halfH = (bubble.height / scaleY) / 2;
-    const denom = Math.max(Math.abs(dx) / Math.max(halfW, 1), Math.abs(dy) / Math.max(halfH, 1), 0.001);
-    line.setAttribute('x1', (center.x + dx / denom).toFixed(1));
-    line.setAttribute('y1', (center.y + dy / denom).toFixed(1));
-    line.setAttribute('x2', anchor.x.toFixed(1));
-    line.setAttribute('y2', anchor.y.toFixed(1));
-  });
-  svg.classList.add('is-ready');
 }
 
 function wireChartCallouts(root) {
   if (!root || root.dataset.calloutsWired === 'true') return;
-  const chart = root.querySelector('.yearly-chart--agents');
-  if (!chart) return;
+  if (!root.querySelector('.yearly-chart')) return;
   root.dataset.calloutsWired = 'true';
-  chart.querySelectorAll('.chart-callout').forEach((node) => {
-    Draggable.create(node, {
-      type: 'x,y',
-      bounds: chart,
-      inertia: false,
-      onPress() { node.classList.add('is-lifted'); },
-      onDrag() { layoutChartCallouts(root); },
-      onRelease() {
-        node.classList.remove('is-lifted');
-        layoutChartCallouts(root);
-      },
+  const chart = root.querySelector('.yearly-chart--agents');
+  if (chart) {
+    chart.querySelectorAll('.chart-callout').forEach((node) => {
+      Draggable.create(node, {
+        type: 'x,y',
+        bounds: chart,
+        inertia: false,
+        onPress() { node.classList.add('is-lifted'); },
+        onDrag() { layoutChartCallouts(root); },
+        onRelease() {
+          node.classList.remove('is-lifted');
+          layoutChartCallouts(root);
+        },
+      });
     });
-  });
-  chart.querySelectorAll('.chart-callout img').forEach((img) => {
+  }
+  root.querySelectorAll('.chart-callout img, .year-project-pin img').forEach((img) => {
     img.addEventListener('load', () => layoutChartCallouts(root));
   });
 }
@@ -781,8 +805,12 @@ function wireSlideInteractions(slideEl) {
         onPress() {
           gsap.to(node, { scale: 1.06, duration: .15, zIndex: 30 });
         },
+        onDrag() {
+          if (node.classList.contains('year-project-pin')) layoutChartCallouts(root);
+        },
         onRelease() {
           gsap.to(node, { scale: 1, duration: .25, ease: 'back.out(2)' });
+          if (node.classList.contains('year-project-pin')) layoutChartCallouts(root);
         },
 
       });
