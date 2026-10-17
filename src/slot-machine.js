@@ -51,8 +51,14 @@ function landingEndPos(pos, land, symbols, minTravel) {
 
 /**
  * Spin all three reel strips. Safe to call on slide enter and on lever pull.
+ *
+ * Always animates. `prefers-reduced-motion: reduce` is common on this Windows
+ * talk machine (animation effects off). Honoring it used to `gsap.set` each
+ * strip straight to the landing tile, so Pull looked like an instant image swap
+ * even though the translateY timeline existed. Parallax is already ungated for
+ * the same reason. Callers may still pass reducedMotion; it is ignored.
  */
-export function spinSlotReels(root, { gsap, reducedMotion = false } = {}) {
+export function spinSlotReels(root, { gsap } = {}) {
   if (!root || !gsap) return;
   const machine = root.querySelector('.slot-machine');
   if (!machine) return;
@@ -67,7 +73,7 @@ export function spinSlotReels(root, { gsap, reducedMotion = false } = {}) {
   machine.dataset.slotSpinning = 'true';
   lever?.classList.add('is-busy');
 
-  if (lever && !reducedMotion) {
+  if (lever) {
     gsap.fromTo(
       lever,
       { rotate: 0 },
@@ -108,13 +114,6 @@ export function spinSlotReels(root, { gsap, reducedMotion = false } = {}) {
     gsap.set(strip, { y: startY });
 
     const land = Math.floor(Math.random() * symbols);
-
-    if (reducedMotion) {
-      gsap.set(strip, { y: -land * h });
-      reel.classList.remove('is-spinning', 'is-stopping');
-      done();
-      return;
-    }
 
     // Per-reel personality: different speeds + staggered stop windows.
     const tilesPerSec = 22 + i * 7; // reel 0 slowest, reel 2 fastest
