@@ -1,3 +1,5 @@
+import '../everyone-developer.js';
+
 const esc = (value) => String(value)
   .replaceAll('&', '&amp;')
   .replaceAll('<', '&lt;')
@@ -335,13 +337,24 @@ export const part2Slides = [
         <header class="slide-heading" data-depth="5">
           <h2 id="part2-everyone-developer-title">Everyone is a developer.</h2>
         </header>
-        <div class="maker-panels" data-depth="2">
-          <article class="maker-panel" data-draggable="true"><span class="maker-glyph">✦</span><strong>Change any software</strong></article>
-          <article class="maker-panel" data-draggable="true"><span class="maker-glyph">↻</span><strong>Ask, don’t code</strong></article>
-          <article class="maker-panel" data-draggable="true"><span class="maker-glyph">∞</span><strong>Make it yours</strong></article>
+        <div class="maker-stage" data-interaction="everyone-developer" data-depth="2">
+          <div class="yours-screen" aria-hidden="true">
+            <span class="yours-row"></span>
+            <span class="yours-row"></span>
+            <span class="yours-row"></span>
+          </div>
+          <div class="yours-screen__bar" aria-hidden="true">
+            <span class="yours-screen__dots"><i></i><i></i><i></i></span>
+            <strong class="yours-screen__title">App</strong>
+          </div>
+          <div class="maker-panels">
+            <button type="button" class="maker-panel" data-maker="change" tabindex="-1"><span class="maker-glyph" aria-hidden="true">✦</span><strong>Change any software</strong></button>
+            <button type="button" class="maker-panel" data-maker="ask" tabindex="-1" aria-pressed="false"><span class="maker-glyph" aria-hidden="true">↻</span><strong>Ask, don’t <span class="maker-code">code<span class="maker-strike" aria-hidden="true"></span></span></strong></button>
+            <button type="button" class="maker-panel" data-maker="yours" tabindex="-1" aria-pressed="false"><span class="maker-glyph" aria-hidden="true">∞</span><strong>Make it yours</strong></button>
+          </div>
         </div>
       </section>`,
-    notes: 'You will not need permission from the software maker—or a computer-science degree—to adapt the tool. Drag the panels into a new tool.'
+    notes: 'You will not need permission from the software maker—or a computer-science degree—to adapt the tool. Click “Ask, don’t code” to strike through code and brighten the other cards. Click “Make it yours” to shrink the first two, fill the slide with the third, and turn the app behind it into Yours.'
   },
   {
     id: 'part2-hyper-personalized',
