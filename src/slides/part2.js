@@ -342,9 +342,9 @@ export const part2Slides = [
           <h2 id="part2-everyone-developer-title">Everyone is a developer.</h2>
         </header>
         <div class="maker-panels" data-depth="2">
-          <article class="maker-panel" data-draggable="true"><span class="maker-glyph">✦</span><strong>make a tiny tool</strong></article>
-          <article class="maker-panel" data-draggable="true"><span class="maker-glyph">↻</span><strong>change the default</strong></article>
-          <article class="maker-panel" data-draggable="true"><span class="maker-glyph">∞</span><strong>share the recipe</strong></article>
+          <article class="maker-panel" data-draggable="true"><span class="maker-glyph">✦</span><strong>Change any software</strong></article>
+          <article class="maker-panel" data-draggable="true"><span class="maker-glyph">↻</span><strong>Ask, don’t code</strong></article>
+          <article class="maker-panel" data-draggable="true"><span class="maker-glyph">∞</span><strong>Make it yours</strong></article>
         </div>
       </section>`,
     notes: 'You will not need permission from the software maker—or a computer-science degree—to adapt the tool. Drag the panels into a new tool.'
