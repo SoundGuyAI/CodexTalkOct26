@@ -5,8 +5,8 @@ const esc = (value) => String(value)
   .replaceAll('"', '&quot;')
   .replaceAll("'", '&#039;');
 
-const card = ({ label, title, detail = '', tone = 'pink', depth = 2, asset = '', draggable = true }) => `
-  <article class="project-card project-card--${tone}" data-depth="${depth}" ${draggable ? 'data-draggable="true"' : ''} tabindex="0">
+const card = ({ label, title, detail = '', tone = 'pink', depth = 2, asset = '', draggable = true, attrs = '', tabIndex = 0 }) => `
+  <article class="project-card project-card--${tone}" data-depth="${depth}" ${draggable ? 'data-draggable="true"' : ''} ${attrs} tabindex="${tabIndex}">
     ${asset ? `<img src="${esc(asset)}" alt="" loading="lazy" draggable="false">` : '<span class="project-card__mark" aria-hidden="true"></span>'}
     <div class="project-card__copy">
       <small>${esc(label)}</small>
@@ -22,13 +22,13 @@ export const part2Slides = [
     title: 'How?',
     className: 'slide--how slide--vortex',
     html: `
-      <section class="slide-content slide-content--how" aria-labelledby="part2-how-title">
+      <section class="slide-content slide-content--how" data-interaction="how-void" aria-labelledby="part2-how-title">
         <div class="how-void" data-depth="1" aria-hidden="true"></div>
         <h1 id="part2-how-title" data-depth="5">How?</h1>
         <div class="how-pillars" data-depth="2" aria-label="Three system pillars">
-          ${card({ label: '01', title: 'memory', tone: 'cyan', depth: 2, draggable: true })}
-          ${card({ label: '02', title: 'handoffs', tone: 'lime', depth: 3, draggable: true })}
-          ${card({ label: '03', title: 'limits', tone: 'orange', depth: 2, draggable: true })}
+          ${card({ label: '01', title: 'memory', tone: 'cyan', depth: 2, draggable: true, attrs: 'data-how-card="true"', tabIndex: -1 })}
+          ${card({ label: '02', title: 'handoffs', tone: 'lime', depth: 3, draggable: true, attrs: 'data-how-card="true"', tabIndex: -1 })}
+          ${card({ label: '03', title: 'limits', tone: 'orange', depth: 2, draggable: true, attrs: 'data-how-card="true"', tabIndex: -1 })}
         </div>
       </section>`,
     notes: 'Bad news: I do not manage them. Good news: I built a system that lets me fail in parallel. Three pillars: memory, handoffs, limits. Drag a card if you want.'

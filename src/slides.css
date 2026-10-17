@@ -375,6 +375,15 @@
 .spend-evidence.is-zoomed .spend-caption{display:none}
 @media(max-width:900px){.savepoint-shots{grid-template-columns:1fr}}
 
+/* part2-how (slide 30): pillar cards drag, then spiral into the void */
+.slide-content--how .how-pillars{translate:none}
+.slide-content--how [data-how-card]{cursor:grab;touch-action:none;user-select:none;transform-origin:center center}
+.slide-content--how [data-how-card].is-dragging{cursor:grabbing;z-index:30}
+.slide-content--how [data-how-card].is-falling{pointer-events:none;z-index:40;box-shadow:0 0 1.2rem #42e8e0aa,0 0 2.6rem #ff3b8177;border-color:#42e8e0}
+.slide-content--how [data-how-card].is-consumed{visibility:hidden;pointer-events:none}
+.slide-content--how .how-void.is-devouring{opacity:.95;animation:spin 4.5s linear infinite;filter:blur(.3px) drop-shadow(0 0 1.5rem #ff3b81) drop-shadow(0 0 2.2rem #42e8e0)}
+.slide-content--how .how-void.is-devouring:after{box-shadow:inset 0 0 2.4rem #000,0 0 1.6rem #ff3b8188}
+
 /* Slide 29 — The Cut. Seven names above one line; the rest crushed below. */
 .slide-the-cut .slide-inner{justify-content:center}
 .slide-inner>.the-cut{display:flex;flex-direction:column;align-items:stretch;justify-content:center;width:min(94vw,1500px);height:auto;max-height:100%;gap:clamp(.25rem,1vh,.7rem);user-select:none;touch-action:none;overflow:visible}

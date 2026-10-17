@@ -7,6 +7,7 @@ import QRCode from 'qrcode';
 import { part1Slides } from './slides/part1.js';
 import { part2Slides } from './slides/part2.js';
 import { wireSlotMachine, spinSlotReels } from './slot-machine.js';
+import { wireHowVoid } from './how-void.js';
 import './styles.css';
 import './slides.css';
 
@@ -891,7 +892,7 @@ function wireSlideInteractions(slideEl) {
     }
 
     root.querySelectorAll('[data-draggable="true"]').forEach((node) => {
-      if (node.closest('[data-interaction="symphony-kanban"], [data-interaction="taskswipe"]')) return;
+      if (node.closest('[data-interaction="symphony-kanban"], [data-interaction="taskswipe"], [data-interaction="how-void"]')) return;
       if (node.classList.contains('chart-callout')) return;
       Draggable.create(node, {
         type: 'x,y',
@@ -924,6 +925,7 @@ function wireSlideInteractions(slideEl) {
   wireTypeShift(root);
   wireRepoPreview(root);
   wireSlotMachine(root, { gsap, reducedMotion: prefersReducedMotion() });
+  wireHowVoid(root, { gsap, reducedMotion: prefersReducedMotion() });
   wireTheCut(root);
   wireFocusEnergy(root);
   wireSpendZoom(root);
