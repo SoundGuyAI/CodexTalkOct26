@@ -1718,4 +1718,11 @@ initInteractions();
 requestAnimationFrame(updateTimer);
 
 const liveDeckUrl = 'https://soundguyai.github.io/CodexTalkOct26/';
-QRCode.toDataURL(liveDeckUrl, { width: 520, margin: 1, color: { dark: '#09090B', light: '#F6F0E4' } }).then((url) => document.querySelectorAll('[data-qr]').forEach((img) => { img.src = url; img.dataset.qrUrl = liveDeckUrl; }));
+const linkedInUrl = 'https://www.linkedin.com/in/soundguy';
+const paintQr = (selector, target) => {
+  QRCode.toDataURL(target, { width: 520, margin: 1, color: { dark: '#09090B', light: '#F6F0E4' } }).then((url) => {
+    document.querySelectorAll(selector).forEach((img) => { img.src = url; img.dataset.qrUrl = target; });
+  });
+};
+paintQr('[data-qr]', liveDeckUrl);
+paintQr('[data-qr-linkedin]', linkedInUrl);

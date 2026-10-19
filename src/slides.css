@@ -165,7 +165,11 @@
 .qr-placeholder{justify-self:end;max-width:100%;overflow:hidden}
 .qr-placeholder img{width:min(28vw,380px)!important;max-width:100%}
 .final-project-drift{overflow:hidden;z-index:1;pointer-events:none}
-.final-copy,.qr-placeholder{z-index:4}
+.final-copy,.qr-placeholder,.qr-pair{z-index:4}
+.qr-pair{display:grid;grid-template-columns:1fr 1fr;gap:clamp(.6rem,1.2vw,1.1rem);align-items:end;justify-self:end;width:100%;max-width:min(38vw,540px);min-width:0}
+.qr-pair .qr-placeholder{justify-self:stretch;width:100%}
+.qr-pair .qr-placeholder img{width:100%!important;height:auto}
+@media(max-width:900px){.qr-pair{max-width:min(88vw,420px);justify-self:center}.qr-pair .qr-placeholder img{width:100%!important}}
 .final-bubble{
   position:absolute;
   left:0;

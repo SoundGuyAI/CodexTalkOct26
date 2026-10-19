@@ -515,14 +515,17 @@ export const part2Slides = [
         <div class="final-copy">
           <h2 id="part2-qr-title">How do I manage 19 projects?</h2>
           <p class="final-answer"><span>I don’t.</span><strong>But here we are.</strong></p>
-          <p class="final-url">Scan to open the deck</p>
+          <p class="final-url">Scan the deck or LinkedIn</p>
           <p class="final-controls">← → · T timer · H hide timer</p>
         </div>
-        <a class="qr-placeholder" href="https://soundguyai.github.io/CodexTalkOct26/" target="_blank" rel="noreferrer" data-depth="2"><img data-qr alt="QR code to open the live deck"><small>open the live deck</small></a>
+        <div class="qr-pair" data-depth="2">
+          <a class="qr-placeholder" href="https://soundguyai.github.io/CodexTalkOct26/" target="_blank" rel="noreferrer"><img data-qr alt="QR code to open the live deck"><small>open the live deck</small></a>
+          <a class="qr-placeholder" href="https://www.linkedin.com/in/soundguy" target="_blank" rel="noreferrer"><img data-qr-linkedin alt="QR code to LinkedIn"><small>LinkedIn</small></a>
+        </div>
         <div class="final-project-drift" aria-hidden="true">
           ${finalBubbleHtml}
         </div>
       </section>`,
-    notes: 'Close with: “How do I manage 19 projects? I don’t. But here we are.” Nineteen real projects drift toward the bagel. QR → live GitHub Pages deck. Next still plays the next chorus note.'
+    notes: 'Close with: “How do I manage 19 projects? I don’t. But here we are.” Nineteen real projects drift toward the bagel. Left QR → live GitHub Pages deck. Right QR → https://www.linkedin.com/in/soundguy. Next still plays the next chorus note.'
   }
 ];

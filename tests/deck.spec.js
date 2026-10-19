@@ -103,11 +103,16 @@ test.describe('deck verification', () => {
     await expectActiveSlide(page, TOTAL_SLIDES);
   });
 
-  test('final QR points to the deployed deck', async ({ page }) => {
+  test('final QR points to the deployed deck and LinkedIn', async ({ page }) => {
     await goToSlide(page, TOTAL_SLIDES);
-    const qrLink = page.locator('.qr-placeholder');
-    await expect(qrLink).toHaveAttribute('href', 'https://soundguyai.github.io/CodexTalkOct26/');
-    await expect(qrLink.locator('img[data-qr]')).toHaveAttribute('data-qr-url', 'https://soundguyai.github.io/CodexTalkOct26/', { timeout: 15_000 });
+    const deckLink = page.locator('.qr-placeholder').first();
+    await expect(deckLink).toHaveAttribute('href', 'https://soundguyai.github.io/CodexTalkOct26/');
+    await expect(deckLink.locator('img[data-qr]')).toHaveAttribute('data-qr-url', 'https://soundguyai.github.io/CodexTalkOct26/', { timeout: 15_000 });
+
+    const linkedInUrl = 'https://www.linkedin.com/in/soundguy';
+    const linkedInLink = page.locator('.qr-placeholder').nth(1);
+    await expect(linkedInLink).toHaveAttribute('href', linkedInUrl);
+    await expect(linkedInLink.locator('img[data-qr-linkedin]')).toHaveAttribute('data-qr-url', linkedInUrl, { timeout: 15_000 });
   });
 
   test('captures one screenshot per slide', async ({ page }) => {
