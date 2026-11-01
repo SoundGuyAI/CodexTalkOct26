@@ -165,6 +165,7 @@ export const part1Slides = [
       <section class="hero-grid" data-interaction="tilt-grid" aria-label="Nineteen projects">
         <h1 data-depth="1">Everything Everywhere<br><em>All at Once</em></h1>
         <p data-depth="2">how to work on 19 projects simultaneously</p>
+        <button type="button" class="big-play" data-depth="2" aria-pressed="false" aria-label="Play the talk with narration and auto-advance">▶ Play talk</button>
         <div class="project-grid" data-depth="3">
           ${cards([
             { label: 'LoveLink', image: 'projects/lovelink.jpg' },
