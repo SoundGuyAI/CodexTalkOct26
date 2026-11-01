@@ -27,7 +27,7 @@ let narration = null;
 let timerStartedAt = null;
 let pausedAt = null;
 let pausedTotal = 0;
-let muted = true;
+let muted = false;
 let audioContext;
 let lastTKeyAt = 0;
 let melodyIndex = 0;
@@ -75,7 +75,7 @@ deck.innerHTML = `
     <button class="nav next" data-action="next" aria-label="Next slide">→</button>
     <button class="timer countdown-timer" data-testid="countdown-timer" data-action="timer" aria-label="Pause or resume countdown timer">6:00</button>
     <span class="counter" aria-live="polite"></span>
-    <button class="icon-button" data-action="mute" aria-label="Toggle sound">Sound off</button>
+    <button class="icon-button" data-action="mute" aria-label="Toggle sound">Sound on</button>
     <button class="icon-button" data-action="sfx" aria-pressed="false" aria-label="Toggle interaction sound effects">SFX off</button>
     <button class="icon-button" data-action="help" aria-label="Keyboard help">?</button>
   </div>
