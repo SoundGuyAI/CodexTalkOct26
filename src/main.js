@@ -9,6 +9,7 @@ import { part2Slides } from './slides/part2.js';
 import { wireSlotMachine, spinSlotReels } from './slot-machine.js';
 import { wireHowVoid } from './how-void.js';
 import { playSfx, setSfxEnabled, sfxEnabled } from './sfx.js';
+import { initNarration } from './narration.js';
 import './styles.css';
 import './slides.css';
 
@@ -22,6 +23,7 @@ const indexFromHash = () => {
   return Math.max(0, Math.min(slides.length - 1, Number(match?.[1] || 1) - 1));
 };
 let current = indexFromHash();
+let narration = null;
 let timerStartedAt = null;
 let pausedAt = null;
 let pausedTotal = 0;
@@ -80,7 +82,7 @@ deck.innerHTML = `
   <dialog class="help-dialog">
     <button class="dialog-close" data-action="help">×</button>
     <h2>Controls</h2>
-    <p>Next: → ↓ PageDown Space · Previous: ← ↑ PageUp · Home/End · F fullscreen · P notes · M sound · SFX interaction sounds · T pause / double-T reset · H hide timer</p>
+    <p>Next: → ↓ PageDown Space · Previous: ← ↑ PageUp · Home/End · F fullscreen · P notes · M sound · SFX interaction sounds · T pause / double-T reset · H hide timer · N narration + auto-play</p>
   </dialog>
   <dialog class="notes-dialog">
     <button class="dialog-close" data-action="notes">×</button>
@@ -182,6 +184,7 @@ function showSlide(index, direction = 1) {
   }
   // Re-apply pointer offsets after slide change so layers are not stuck at 0,0.
   if (!parallaxRaf) parallaxRaf = requestAnimationFrame(applyParallax);
+  narration?.onSlideChanged(current);
 }
 
 function navigate(delta) {
@@ -1714,6 +1717,7 @@ document.addEventListener('touchend', (e) => {
 window.addEventListener('hashchange', () => showSlide(indexFromHash()));
 
 showSlide(current);
+narration = initNarration({ slides, getCurrent: () => current, showSlide });
 initInteractions();
 requestAnimationFrame(updateTimer);
 
