@@ -10,7 +10,7 @@ let audioContext = null;
 let enabled = false;
 
 try {
-  enabled = sessionStorage.getItem(STORAGE_KEY) === 'on';
+  enabled = sessionStorage.getItem(STORAGE_KEY) !== 'off';
 } catch {
   enabled = false;
 }
