@@ -152,6 +152,33 @@ export function initNarration({ slides, getCurrent, showSlide }) {
     if (event.key.toLowerCase() === 'n') (playing ? stop() : start());
   });
   audio.addEventListener('ended', stop);
+  
+  // Big in-slide play buttons (hero slide cover button): mirror the toggle.
+  
+  const bigButtons = [...document.querySelectorAll('.big-play')];
+  
+  const syncBig = () => bigButtons.forEach((big) => {
+    
+    big.textContent = button.textContent;
+    
+    big.setAttribute('aria-pressed', button.getAttribute('aria-pressed'));
+    
+  });
+  
+  new MutationObserver(syncBig).observe(button, { attributes: true, childList: true });
+  
+  bigButtons.forEach((big) => big.addEventListener('click', () => (playing ? stop() : start())));
+  
+  syncBig();
+
+
+
+
+
+
+
+
+
 
   window.__narration = { audio, onSlideChanged };
   return { onSlideChanged };
